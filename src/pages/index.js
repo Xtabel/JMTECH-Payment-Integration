@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import "./style.css";
 import AppBar from "@material-ui/core/AppBar";
 import validators from "../utils/Validators";
 import Toolbar from "@material-ui/core/Toolbar";
-import { makeStyles,createTheme, MuiThemeProvider  } from "@material-ui/core/styles";
+import {Link} from 'react-router-dom';
+import {
+  makeStyles,
+  createTheme,
+  MuiThemeProvider,
+} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
@@ -17,15 +23,21 @@ import Zoom from "@material-ui/core/Zoom";
 import { Button, Grid, Paper, TextField } from "@material-ui/core";
 import newlogo from "../assets/newlogo.png";
 import image from "../assets/image.gif";
+import image2 from "../assets/image2.gif";
+import newimg from "../assets/newimg.jpg";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import DescriptionIcon from "@material-ui/icons/Description";
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from "@material-ui/core";
 import AuthenticationForm from "../AuthenticationForm";
+import ProceedToPayForm from "./ProceedToPayForm";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
 
 // axios.defaults.baseURL = "http://jmtechcentre.azurewebsites.net/api/Applicant/";
 // axios.defaults.baseURL = "https://www.waeconline.org.ng/JMTechAPI/swagger/index.html";
-
 
 const getMuiTheme = createTheme({
   palette: {
@@ -38,6 +50,22 @@ const getMuiTheme = createTheme({
         justifyContent: "space-between",
       },
     },
+    // MuiContainer:{
+    //   maxWidthLg:{
+    //     maxWidth:''
+    //   }
+    // },
+    MuiGrid:{
+      container:{
+        display:'block',
+      }
+    },
+    MuiFormControl: {
+      root: {
+        // display:'flex',
+        // marging:'0px 100px'
+      },
+    },
   },
 });
 
@@ -48,21 +76,22 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(2),
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
     textAlign: "center",
     color: theme.palette.text.secondary,
-    transition:'all easein 1s', 
+    transition: "all easein 1s",
   },
-  papers:{
-    padding: theme.spacing(2),
+  papers: {
+    padding: theme.spacing(5),
     textAlign: "center",
     color: theme.palette.text.secondary,
-    transition:'all easein 1s', 
-    [theme.breakpoints.only('xs')]:{
-     marginTop:'0px !important',
-     fontSize:'9px',
-     padding: '0px',
-    }
+    transition: "all easein 1s",
+    backgroundColor: "rgba(255,255,255,0.95)",
+    [theme.breakpoints.only("xs")]: {
+      marginTop: "0px !important",
+      fontSize: "9px",
+      padding: "0px",
+    },
   },
   ApplyHereBtn: {
     textTransform: "capitalize",
@@ -71,58 +100,56 @@ const useStyles = makeStyles((theme) => ({
     margin: "30px",
   },
   homePage: {
-    transition:'all easein 1s',
+    transition: "all easein 1s",
     [theme.breakpoints.down("xs")]: {
       flexWrap: "wrap",
     },
   },
   grids: {
-     marginRight: "20px", 
-     transition:'all easein 1s',
+    marginRight: "20px",
+    transition: "all easein 1s",
     [theme.breakpoints.only("xs")]: {
       marginRight: "0px !important",
-   
     },
   },
-  theImage:{
-    [theme.breakpoints.only("xs")]:{
-      width:'300px',
-      height:'auto'
-   
+  theImage: {
+    width:'80%',
+    [theme.breakpoints.only("xs")]: {
+      width: "300px",
+      height: "auto",
     },
   },
-  applyNow:{
-    marginBottom:'10px'
+  applyNow: {
+    marginBottom: "10px",
+    marginTop: "20px",
   },
-  buttonUploadPhoto:{
-    [theme.breakpoints.only('xs')]:{
-      padding:'10px',
-      marginBottom:'10px'
+  buttonUploadPhoto: {
+    [theme.breakpoints.only("xs")]: {
+      padding: "10px",
+      marginBottom: "10px",
     },
   },
-  formText:{
-    [theme.breakpoints.only('xs')]:{
-     fontSize:'1.4em'
+  formText: {
+    [theme.breakpoints.only("xs")]: {
+      fontSize: "1.4em",
     },
   },
-  programText:{
-    [theme.breakpoints.only('xs')]:{
-      fontSize:'1em'
+  programText: {
+    [theme.breakpoints.only("xs")]: {
+      fontSize: "1em",
     },
   },
-  cvformatError:{
-    color:'#fe0000',
-    [theme.breakpoints.only('xs')]:{
-      fontSize:'1em'
+  cvformatError: {
+    color: "#fe0000",
+    [theme.breakpoints.only("xs")]: {
+      fontSize: "1em",
     },
   },
-  Logo:{
-    '&:hover':{
-      cursor:'pointer'
-    }
+  Logo: {
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
- 
-  
 }));
 
 function ScrollTop(props) {
@@ -168,6 +195,7 @@ ScrollTop.propTypes = {
 export default function BackToTop(props) {
   // const dispatch = useDispatch();
 
+  
   const genders = [
     {
       value: "Male",
@@ -201,7 +229,6 @@ export default function BackToTop(props) {
       label: "Others",
     },
   ];
-  
 
   const initialFormValues = {
     userid: "",
@@ -209,17 +236,21 @@ export default function BackToTop(props) {
     middleName: "",
     lastName: "",
     emailAddress: "",
-    emailAddressConfirm:"",
+    emailAddressLogin: "",
+    phoneNumberAddressLogin: "",
+    countryCodeLogin: "",
+    emailAddressConfirm: "",
     phoneNumber: "",
-    phoneNumberConfirm:"",
+    phoneNumberConfirm: "",
     states: "",
-    lga:"",
+    lga: "",
     city: "",
     cityid: "",
     sex: "",
-    countryCode:"234",
+    countryCode: "234",
     highestQualification: "",
     courseOfStudy: "",
+    nameOfInstitution: "",
     courseChoice: "",
     passport: "",
     cv: "",
@@ -232,35 +263,39 @@ export default function BackToTop(props) {
     lastNameErrorMsg: "",
     emailAddressError: false,
     emailAddressErrorMsg: "",
-    emailAddressConfirmError:false,
-    emailAddressConfirmErrorMsg:"",
+    emailAddressConfirmError: false,
+    emailAddressConfirmErrorMsg: "",
     phoneNumberError: false,
     phoneNumberErrorMsg: "",
-    phoneNumberConfirmError:false,
-    phoneNumberConfirmErrorMsg:"",
+    phoneNumberConfirmError: false,
+    phoneNumberConfirmErrorMsg: "",
     stateError: false,
     stateErrorMsg: "",
-    lgaError:false,
-    lgaErrorMsg:"Select a state before choosing LGA",
+    lgaError: false,
+    lgaErrorMsg: "Select a state before choosing LGA",
     cityError: false,
     cityErrorMsg: "",
     highestQualificationError: false,
     highestQualificationErrorMsg: "",
     courseOfStudyError: false,
     courseOfStudyErrorMsg: "",
+    nameOfInstitutionError: false,
+    nameOfInstitutionErrorMsg: "",
     genderError: false,
     genderErrorMsg: "",
-    countryCodeError:false,
-    countryCodeErrorMsg:"",
-    countryCodeConfirmError:false,
-    countryCodeConfirmErrorMsg:"",
+    countryCodeError: false,
+    countryCodeErrorMsg: "",
+    countryCodeConfirmError: false,
+    countryCodeConfirmErrorMsg: "",
     uploadPassportError: false,
     uploadPassportErrorMsg: "",
     uploadCVError: false,
     uploadCVErrorMsg: "",
-  }
+  };
   const [open, setOpen] = useState(false);
+  const[toPage,setToPage]=useState("");
 
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -271,19 +306,48 @@ export default function BackToTop(props) {
   const [responseRegistrationCode, setResponseRegistrationCode] = useState("");
   const [formStates, setFormStates] = React.useState(initialFormState);
   const [lgaDisable, setLgaDisable] = useState(true);
-  const[loader,setLoader] = useState(true);
-  const[submitLoader, setSubmitLoader]= useState(false);
-  const[imageFormatMsg, setImageFormatMsg] = useState("");
-  const[cvFormatMsg, setCvFormatMsg]=useState("");
-  const [generalErrorMsg,setGeneralErrorMsg]=useState("");
+  const [loader, setLoader] = useState(true);
+  const [submitLoader, setSubmitLoader] = useState(false);
+  const [imageFormatMsg, setImageFormatMsg] = useState("");
+  const [cvFormatMsg, setCvFormatMsg] = useState("");
+  const [generalErrorMsg, setGeneralErrorMsg] = useState("");
   const [file, setFile] = useState(null);
   const [fileCV, setFileCV] = useState(null);
   const [displayPicture, setDisplayPicture] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isPayLater, setIsPayLater] = useState(false);
   const [theState, setTheState] = useState([]);
-  const[theLga, setTheLga] = useState([]);
+  const [theLga, setTheLga] = useState([]);
   const [disable, setDisable] = useState(true);
+  const [answer, setAnswer] = React.useState("");
+  const [hideSchool, setHideSchool] = useState(true);
+  const [openPay,setOpenPay]= useState(false);
+
+  const handleClickPayLater = ()=>{
+    submitBtnHandler();
+    setIsSubmitted(true);
+    handleClosePay();
+    setIsPayLater(true);
+  }
+  const handleClickPay = ()=>{
+    setOpenPay(true)
+  };
+  const handleClosePay = () =>{
+    setOpenPay(false);
+  }
+
+  const handleChangeAnswer = (event) => {
+    const answers = event.target.value;
+    setAnswer(answers);
+    setHideSchool(false);
+  };
+  const handlePickNo = (event)=>{
+    const answers = event.target.value;
+    setAnswer(answers);
+
+  }
   
+
   // Form Values
   const [formValues, setFormValues] = useState(initialFormValues);
 
@@ -301,11 +365,13 @@ export default function BackToTop(props) {
     select = false
   ) => {
     if (!validators.isRequired(value, len, max, select)) {
-      setFormStates(prevState => [{
-        ...prevState,
-        [stateError]: true,
-        [stateErrorMsg]: errorMsg,
-      }]);
+      setFormStates((prevState) => [
+        {
+          ...prevState,
+          [stateError]: true,
+          [stateErrorMsg]: errorMsg,
+        },
+      ]);
       return false;
     }
 
@@ -327,22 +393,19 @@ export default function BackToTop(props) {
   // },[])
 
   function toTitleCase(str) {
-    return str.replace(
-      /\w\S*/g,
-      function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-      }
-    );
+    return str.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
   }
 
   const [dataDropDown, setDataDropDown] = useState([]);
   const [countryCodeDropDown, setCountryCodeDropDown] = useState([]);
   const fetchCountryCode = () => {
-    
     axios
-      .post(`https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetCountryCode`)
+      .post(
+        `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetCountryCode`
+      )
       .then(function (response) {
-        
         // handle success
         setCountryCodeDropDown(response.data.Data);
       })
@@ -362,7 +425,6 @@ export default function BackToTop(props) {
         `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetCoursePrograms`
       )
       .then(function (response) {
-        
         // handle success
         setDataDropDown(response.data.Data);
       })
@@ -372,15 +434,13 @@ export default function BackToTop(props) {
         // alert('Error occured in loading All Data');
       })
       .then(function () {
-        setLoader(false)
+        setLoader(false);
       });
   };
   const fetchStates = () => {
-    
     axios
       .post(`https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetStates`)
       .then(function (response) {
-        
         // handle success
         setTheState(response.data.Data);
       })
@@ -400,9 +460,8 @@ export default function BackToTop(props) {
         `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetLGAByStateId?stateId=${stateIds}`
       )
       .then(function (response) {
-        
         // handle success
-        setLgaDisable(false)
+        setLgaDisable(false);
         setTheLga(response.data.Data);
       })
       .catch(function (error) {
@@ -420,18 +479,18 @@ export default function BackToTop(props) {
     fetchStates();
     fetchCountryCode();
   }, []);
-  const logoFunction = ()=>{
+  const logoFunction = () => {
     // var HomePageArea = document.getElementById("HomePage");
     // HomePageArea.style = "display:flex";
     // var applicationForms = document.getElementById("forms");
     // applicationForms.style="display:none";
     handleClickOpen();
     CancelBtnHandler();
-  }
+  };
   const genderHandler = (e) => {
     if (e) {
       let genderValue = e.target.value;
-      
+
       // let genderName = e.currentTarget.textContent;
       e.preventDefault();
 
@@ -440,19 +499,23 @@ export default function BackToTop(props) {
     }
   };
   const countryCodeHandler = (e) => {
-      debugger
+    debugger;
     if (e) {
       let countryCodeValue = e.target.value;
       e.preventDefault();
 
-      setFormValues({ ...formValues, countryCode: countryCodeValue});
-      return SetIsRequiredError(countryCodeValue, "countryCodeError", "countryCodeErrorMsg");
+      setFormValues({ ...formValues, countryCode: countryCodeValue });
+      return SetIsRequiredError(
+        countryCodeValue,
+        "countryCodeError",
+        "countryCodeErrorMsg"
+      );
     }
   };
 
   const QualificationHandler = (e) => {
     if (e) {
-      let qualificationValue = e.target.value
+      let qualificationValue = e.target.value;
       // let qualificationName = e.currentTarget.textContent;
       e.preventDefault();
 
@@ -468,7 +531,6 @@ export default function BackToTop(props) {
     }
   };
   const StateHandler = (e) => {
-    
     const stateIds = e.target.value;
     setFormValues({ ...formValues, states: stateIds });
     fetchLGA(stateIds);
@@ -478,26 +540,24 @@ export default function BackToTop(props) {
   const handleChange = (e) => {
     setDisable(false);
     setFormValues({ ...formValues, courseChoice: e.target.value });
-    
   };
 
   const applicationForm = React.useRef();
 
   const applicationDiv = () => {
-   
-    if(dataDropDown.length >0){
-       var applicationForms = document.getElementById("forms");
-    var coursechoice = document.getElementById("CourseChoice");
-    var applyhere = document.getElementById("ApplyHereBtn");
-    applyhere.style = "display:none";
-    coursechoice.style = "display:none";
-    applicationForms.style = "display:block";
-    // if (!ref.current) return;
-    // ref.current.scrollIntoView({ behavior: "smooth" });
-    var HomePageArea = document.getElementById("HomePage");
-    HomePageArea.style = "display:none";
-    setSubmitLoader(false);
-    // setFormValues({})
+    if (dataDropDown.length < 0) {
+      var applicationForms = document.getElementById("forms");
+      var coursechoice = document.getElementById("CourseChoice");
+      var applyhere = document.getElementById("ApplyHereBtn");
+      applyhere.style = "display:none";
+      coursechoice.style = "display:none";
+      applicationForms.style = "display:block";
+      // if (!ref.current) return;
+      // ref.current.scrollIntoView({ behavior: "smooth" });
+      var HomePageArea = document.getElementById("HomePage");
+      HomePageArea.style = "display:none";
+      setSubmitLoader(false);
+      // setFormValues({})
     }
   };
   const submitBtnHandler = () => {
@@ -507,7 +567,7 @@ export default function BackToTop(props) {
     applyhere.style = "display:block";
     HomePageArea.style = "display:flex";
     applicationForms.style = "display:none";
-  }
+  };
 
   const CancelBtnHandler = () => {
     var HomePageArea = document.getElementById("HomePage");
@@ -517,53 +577,54 @@ export default function BackToTop(props) {
     HomePageArea.style = "display:flex";
     applicationForms.style = "display:none";
     setDisable(true);
-    setFormStates({...initialFormState});
-    setFormValues({...initialFormValues});
+    setFormStates({ ...initialFormState });
+    setFormValues({ ...initialFormValues });
     setFileCV(null);
-    setFile(null)
+    setFile(null);
     setIsSubmitted(false);
-    setGeneralErrorMsg('');
-    setCvFormatMsg('');
-    setImageFormatMsg('');
+    setIsPayLater(false);
+    setGeneralErrorMsg("");
+    setCvFormatMsg("");
+    setImageFormatMsg("");
   };
   const backToHomeHandler = () => {
     var HomePageArea = document.getElementById("HomePage");
     var applicationForms = document.getElementById("forms");
     var applyhere = document.getElementById("ApplyHereBtn");
-    applyhere.style = "display:block";
-    HomePageArea.style = "display:flex";
-    applicationForms.style = "display:none";
+    // applyhere.style = "display:block";
+    // HomePageArea.style = "display:flex";
+    // applicationForms.style = "display:none";
     setDisable(true);
-    setFormStates({...initialFormState});
-    setFormValues({...initialFormValues})
+    setFormStates({ ...initialFormState });
+    setFormValues({ ...initialFormValues });
     setIsSubmitted(false);
     setFileCV(null);
-    setFile(null)
+    setFile(null);
   };
 
-  const validateImage = (e) =>{
-    setDisplayPicture(null)
+  const validateImage = (e) => {
+    setDisplayPicture(null);
     setFile(null);
     const NewImage = e.target.files[0];
-    if(NewImage  && NewImage !== null){
-          if (!NewImage.name.match(/\.(jpg|jpeg|png)$/)) {
-            setImageFormatMsg("Image format must be in jpg, jpeg or png")
-            return false;
-          }else{
-            setImageFormatMsg("")
-          }
-          if (NewImage.size > 1024000) {
-          setImageFormatMsg("*File is too large, Size must be less than 1MB" );
-            return false;
-          }else{
-            setImageFormatMsg("")
-          }
-       setFile(NewImage);
-       setDisplayPicture(URL.createObjectURL(NewImage))
-    }else{
-        setFile(null)
+    if (NewImage && NewImage !== null) {
+      if (!NewImage.name.match(/\.(jpg|jpeg|png)$/)) {
+        setImageFormatMsg("Image format must be in jpg, jpeg or png");
+        return false;
+      } else {
+        setImageFormatMsg("");
+      }
+      if (NewImage.size > 1024000) {
+        setImageFormatMsg("*File is too large, Size must be less than 1MB");
+        return false;
+      } else {
+        setImageFormatMsg("");
+      }
+      setFile(NewImage);
+      setDisplayPicture(URL.createObjectURL(NewImage));
+    } else {
+      setFile(null);
     }
-  }
+  };
 
   const passportUploadHandler = (e) => {};
 
@@ -571,31 +632,31 @@ export default function BackToTop(props) {
     validateImage(e);
   };
 
-  const validateCV = (e) =>{
-    setCVName(null)
+  const validateCV = (e) => {
+    setCVName(null);
     setFileCV(null);
     const NewCV = e.target.files[0];
-    if(NewCV  && NewCV != null){
-          if (!NewCV.name.match(/\.(pdf|doc|docx)$/)) {
-            setCvFormatMsg("CV format must be in pdf, doc or docx")
-            return false;
-          }else{
-            setCvFormatMsg("")
-          }
-          if (NewCV.size > 1024000) {
-            setCvFormatMsg("File too large", "Size must be less than one megabyte" );
-            return false;
-          }else{
-            setCvFormatMsg("")
-          }
-       setFileCV(NewCV);
-       setCVName(URL.createObjectURL(NewCV))
-    }else{
-        setFile(null)
+    if (NewCV && NewCV != null) {
+      if (!NewCV.name.match(/\.(pdf|doc|docx)$/)) {
+        setCvFormatMsg("CV format must be in pdf, doc or docx");
+        return false;
+      } else {
+        setCvFormatMsg("");
+      }
+      if (NewCV.size > 1024000) {
+        setCvFormatMsg("File too large", "Size must be less than one megabyte");
+        return false;
+      } else {
+        setCvFormatMsg("");
+      }
+      setFileCV(NewCV);
+      setCVName(URL.createObjectURL(NewCV));
+    } else {
+      setFile(null);
     }
-  }
+  };
   const onInputCVChange = (e) => {
-   validateCV(e);
+    validateCV(e);
   };
 
   useEffect(() => {
@@ -634,7 +695,6 @@ export default function BackToTop(props) {
 
   const firstNameHandler = (e) => {
     if (e) {
-      
       e.preventDefault();
       let firstNameValue = e.target.value;
       setFormValues({ ...formValues, firstName: firstNameValue });
@@ -647,16 +707,13 @@ export default function BackToTop(props) {
   };
   const middleNameHandler = (e) => {
     if (e) {
-      
       e.preventDefault();
       let middleNameValue = e.target.value;
       setFormValues({ ...formValues, middleName: middleNameValue });
     }
   };
   const lastNameHandler = (e) => {
-   
     if (e) {
-      
       e.preventDefault();
       let lastNameValue = e.target.value;
       setFormValues({ ...formValues, lastName: lastNameValue });
@@ -693,14 +750,13 @@ export default function BackToTop(props) {
       return false;
     }
     if (validators.isYahoo(emailAddressValue)) {
-        setFormStates({
-          ...formStates,
-          emailAddressError: true,
-          emailAddressErrorMsg:
-            "Please do not enter a yahoo mail or ymail",
-        });
-        return false;
-      }
+      setFormStates({
+        ...formStates,
+        emailAddressError: true,
+        emailAddressErrorMsg: "Please do not enter a yahoo mail or ymail",
+      });
+      return false;
+    }
     setFormStates({
       ...formStates,
       emailAddressError: false,
@@ -712,10 +768,16 @@ export default function BackToTop(props) {
     let emailAddressConfirmValue = e.target.value.trim();
     if (e) {
       e.preventDefault();
-      setFormValues({ ...formValues, emailAddressConfirm: emailAddressConfirmValue });
+      setFormValues({
+        ...formValues,
+        emailAddressConfirm: emailAddressConfirmValue,
+      });
     }
 
-    if (emailAddressConfirmValue === "" || emailAddressConfirmValue === undefined) {
+    if (
+      emailAddressConfirmValue === "" ||
+      emailAddressConfirmValue === undefined
+    ) {
       setFormStates({
         ...formStates,
         emailAddressConfirmError: false,
@@ -723,25 +785,25 @@ export default function BackToTop(props) {
       });
       return true;
     }
-    if((formValues.emailAddress)==="" ||(formValues.emailAddress)===undefined){
-        setFormStates({
-            ...formStates,
-            emailAddressConfirmError: true,
-            emailAddressConfirmErrorMsg:
-              "Kindly fill in the first email!",
-          });
-          return false;
+    if (
+      formValues.emailAddress === "" ||
+      formValues.emailAddress === undefined
+    ) {
+      setFormStates({
+        ...formStates,
+        emailAddressConfirmError: true,
+        emailAddressConfirmErrorMsg: "Kindly fill in the first email!",
+      });
+      return false;
     }
-    if((emailAddressConfirmValue)!== (formValues.emailAddress)){
-        setFormStates({
-            ...formStates,
-            emailAddressConfirmError: true,
-            emailAddressConfirmErrorMsg:
-              "Email Adresses do not match!",
-          });
-          return false;
+    if (emailAddressConfirmValue !== formValues.emailAddress) {
+      setFormStates({
+        ...formStates,
+        emailAddressConfirmError: true,
+        emailAddressConfirmErrorMsg: "Email Adresses do not match!",
+      });
+      return false;
     }
-  
 
     if (!validators.isValidEmail(emailAddressConfirmValue)) {
       setFormStates({
@@ -753,109 +815,114 @@ export default function BackToTop(props) {
       return false;
     }
     if (validators.isYahoo(emailAddressConfirmValue)) {
-        setFormStates({
-          ...formStates,
-          emailAddressConfirmError: true,
-          emailAddressConfirmErrorMsg:
-            "Please do not enter a yahoo mail or ymail",
-        });
-        return false;
-      }
+      setFormStates({
+        ...formStates,
+        emailAddressConfirmError: true,
+        emailAddressConfirmErrorMsg:
+          "Please do not enter a yahoo mail or ymail",
+      });
+      return false;
+    }
 
     setFormStates({
       ...formStates,
       emailAddressConfirmError: false,
+
       emailAddressConfirmErrorMsg: "",
     });
     return true;
   };
   const phoneNumberHandler = (e) => {
-    let phoneNumberValue = e.target.value;   
+    let phoneNumberValue = e.target.value;
     if (e) {
       e.preventDefault();
       setFormValues({ ...formValues, phoneNumber: phoneNumberValue });
-      if (phoneNumberValue.charAt(0)=== "0") {
-        phoneNumberValue = phoneNumberValue.substring(1)
+      if (phoneNumberValue.charAt(0) === "0") {
+        phoneNumberValue = phoneNumberValue.substring(1);
         setFormValues({ ...formValues, phoneNumber: phoneNumberValue });
-       
-      }else{
+      } else {
         setFormValues({ ...formValues, phoneNumber: phoneNumberValue });
       }
     }
-      if (!validators.isPhoneLength(phoneNumberValue)) {
-        setFormStates({
-          ...formStates,
-          phoneNumberError: true,
-          phoneNumberErrorMsg:
-            "Please enter a valid phone number or clear your selection",
-        });
-        
-        return false;
-      }
+    if (!validators.isPhoneLength(phoneNumberValue)) {
       setFormStates({
         ...formStates,
-        phoneNumberError: false,
-        phoneNumberErrorMsg: "",
+        phoneNumberError: true,
+        phoneNumberErrorMsg:
+          "Please enter a valid phone number or clear your selection",
       });
-      return true;  
+
+      return false;
+    }
+    setFormStates({
+      ...formStates,
+      phoneNumberError: false,
+      phoneNumberErrorMsg: "",
+    });
+    return true;
   };
 
   const phoneNumberConfirmHandler = (e) => {
-    let phoneNumberConfirmValue = e.target.value;   
+    let phoneNumberConfirmValue = e.target.value;
     if (e) {
       e.preventDefault();
-      setFormValues({ ...formValues, phoneNumberConfirm: phoneNumberConfirmValue });
+      setFormValues({
+        ...formValues,
+        phoneNumberConfirm: phoneNumberConfirmValue,
+      });
 
-      if (phoneNumberConfirmValue.charAt(0)=== "0") {
-        phoneNumberConfirmValue = phoneNumberConfirmValue.substring(1)
-        setFormValues({ ...formValues, phoneNumberConfirm: phoneNumberConfirmValue });
-       
-      }else{
-        setFormValues({ ...formValues, phoneNumberConfirm: phoneNumberConfirmValue });
-      }
-    }
-    if((formValues.phoneNumber)==="" || (formValues.phoneNumber)===undefined){
-        setFormStates({
-            ...formStates,
-            phoneNumberConfirmError: true,
-            phoneNumberConfirmErrorMsg:
-              "Kindly fill the phone number above",
-          });
-          
-          return false;
-    }
-    if((phoneNumberConfirmValue)!== (formValues.phoneNumber)){
-        setFormStates({
-            ...formStates,
-            phoneNumberConfirmError: true,
-            phoneNumberConfirmErrorMsg:
-              "Phone number is not similar to the one provided above",
-          });
-          
-          return false;
-    }
-      if (!validators.isPhoneLength(phoneNumberConfirmValue)) {
-        setFormStates({
-          ...formStates,
-          phoneNumberConfirmError: true,
-          phoneNumberConfirmErrorMsg:
-            "Please enter a valid phone number or clear your selection",
+      if (phoneNumberConfirmValue.charAt(0) === "0") {
+        phoneNumberConfirmValue = phoneNumberConfirmValue.substring(1);
+        setFormValues({
+          ...formValues,
+          phoneNumberConfirm: phoneNumberConfirmValue,
         });
-        
-        return false;
+      } else {
+        setFormValues({
+          ...formValues,
+          phoneNumberConfirm: phoneNumberConfirmValue,
+        });
       }
+    }
+    if (formValues.phoneNumber === "" || formValues.phoneNumber === undefined) {
       setFormStates({
         ...formStates,
-        phoneNumberConfirmError: false,
-        phoneNumberConfirmErrorMsg: "",
+        phoneNumberConfirmError: true,
+        phoneNumberConfirmErrorMsg: "Kindly fill the phone number above",
       });
-      return true;  
-  };
 
+      return false;
+    }
+    if (phoneNumberConfirmValue !== formValues.phoneNumber) {
+      setFormStates({
+        ...formStates,
+        phoneNumberConfirmError: true,
+        phoneNumberConfirmErrorMsg:
+          "Phone number is not similar to the one provided above",
+      });
+
+      return false;
+    }
+    if (!validators.isPhoneLength(phoneNumberConfirmValue)) {
+      setFormStates({
+        ...formStates,
+        phoneNumberConfirmError: true,
+        phoneNumberConfirmErrorMsg:
+          "Please enter a valid phone number or clear your selection",
+      });
+
+      return false;
+    }
+    setFormStates({
+      ...formStates,
+      phoneNumberConfirmError: false,
+      phoneNumberConfirmErrorMsg: "",
+    });
+    return true;
+  };
 
   const lgaHandler = (e) => {
     if (e) {
-      
       e.preventDefault();
       let lgaNameValue = e.target.value;
       setFormValues({ ...formValues, lga: lgaNameValue });
@@ -864,7 +931,6 @@ export default function BackToTop(props) {
   };
   const cityHandler = (e) => {
     if (e) {
-      
       e.preventDefault();
       let cityNameValue = e.target.value;
       setFormValues({ ...formValues, city: cityNameValue });
@@ -872,7 +938,6 @@ export default function BackToTop(props) {
   };
   const courseOfStudyHandler = (e) => {
     if (e) {
-      
       e.preventDefault();
       let courseOfStudyValue = e.target.value;
       setFormValues({ ...formValues, courseOfStudy: courseOfStudyValue });
@@ -884,17 +949,34 @@ export default function BackToTop(props) {
     }
   };
 
-
+  const nameOfInstitutionHandler = (e) => {
+    if (e) {
+      e.preventDefault();
+      let nameOfInstitutionValue = e.target.value;
+      setFormValues({
+        ...formValues,
+        nameOfInstitution: nameOfInstitutionValue,
+      });
+      return SetIsRequiredError(
+        nameOfInstitutionValue,
+        "nameOfInstitutionError",
+        "nameOfInstitutionErrorMsg"
+      );
+    }
+  };
 
   const registerHandler = () => {
     setSubmitLoader(true);
-    setGeneralErrorMsg('');
-     setIsSubmitted(true);
+    setGeneralErrorMsg("");
+    setIsSubmitted(true);
     let formData = new FormData();
     formData.append("FirstName", formValues.firstName);
     formData.append("LastName", formValues.lastName);
     formData.append("MiddleName", formValues.middleName);
-    formData.append("PhoneNumber", ((formValues.countryCode)+(formValues.phoneNumber)));
+    formData.append(
+      "PhoneNumber",
+      formValues.countryCode + formValues.phoneNumber
+    );
     formData.append("StateId", formValues.states);
     formData.append("Gender", formValues.sex);
     formData.append("EmailAddress", formValues.emailAddress);
@@ -906,101 +988,106 @@ export default function BackToTop(props) {
     formData.append("passportFilePath", file);
     formData.append("resumeFilePath", fileCV);
 
-    
-    if(file === null || fileCV === null){
+    if (file === null || fileCV === null) {
       setSubmitLoader(false);
-      setGeneralErrorMsg('*All necessary documents must be uploaded');
-      return true
+      setGeneralErrorMsg("*All necessary documents must be uploaded");
+      return true;
     }
     if (
-      (formValues.firstName !== "" &&
-        formValues.lastName !== "" &&
-        formValues.emailAddress !== "" &&
-        formValues.emailAddressConfirm !=="" &&
-        formValues.phoneNumber !== "" &&
-        formValues.phoneNumberConfirm !=="" &&
-        formValues.states !== "" &&
-        formValues.lga !== "" &&
-        formValues.highestQualification !== "" &&
-        formValues.courseOfStudy !== "" &&
-        formValues.sex !== "" &&
-        formValues.courseChoice !== "" &&
-        formValues.city !== ""
-        )
+      formValues.firstName !== "" &&
+      formValues.lastName !== "" &&
+      formValues.emailAddress !== "" &&
+      formValues.emailAddressConfirm !== "" &&
+      formValues.phoneNumber !== "" &&
+      formValues.phoneNumberConfirm !== "" &&
+      formValues.states !== "" &&
+      formValues.lga !== "" &&
+      formValues.highestQualification !== "" &&
+      formValues.courseOfStudy !== "" &&
+      formValues.nameOfInstitution !== "" &&
+      formValues.sex !== "" &&
+      formValues.courseChoice !== "" &&
+      formValues.city !== ""
     ) {
-     
-
       axios
         .post(
           `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/RegisterApplicant`,
           formData
         )
         .then(function (response) {
-          setResponseFirstName(response.data.Data.FirstName)
-          setResponseRegistrationCode(response.data.Data.RegistrationCode)
+          setResponseFirstName(response.data.Data.FirstName);
+          setResponseRegistrationCode(response.data.Data.RegistrationCode);
           setSubmitLoader(false);
           submitBtnHandler();
           isSubmitted(true);
           // setSubmit(response.data.data);
           // setFile(null);
           // setFileCV(null);
-          
         })
         .catch(function (error) {
           console.log(error);
         })
-        .then(function () {
-         
-         
-        });
-       
-    
-     
+        .then(function () {});
     } else {
       setSubmitLoader(false);
-      setGeneralErrorMsg('*All fields except the middle name are required')
+      setGeneralErrorMsg("*All fields except the middle name are required");
     }
-
-    
   };
-  const CopyandPasteHandler = (e) =>{
-    document.getElementById("emailTextField").addEventListener('paste', e => e.preventDefault());
-    document.getElementById("emailTextFieldConfirm").addEventListener('paste', e => e.preventDefault());
-    document.getElementById("phoneNumberTextField").addEventListener('paste', e => e.preventDefault());
-    document.getElementById("phoneNumberConfirmTextField").addEventListener('paste', e => e.preventDefault());
-  }
-  
+  const CopyandPasteHandler = (e) => {
+    document
+      .getElementById("emailTextField")
+      .addEventListener("paste", (e) => e.preventDefault());
+    document
+      .getElementById("emailTextFieldConfirm")
+      .addEventListener("paste", (e) => e.preventDefault());
+    document
+      .getElementById("phoneNumberTextField")
+      .addEventListener("paste", (e) => e.preventDefault());
+    document
+      .getElementById("phoneNumberConfirmTextField")
+      .addEventListener("paste", (e) => e.preventDefault());
+  };
+
+  //   if(formValues.emailAddressLogin !=="" && formValues.phoneNumberAddressLogin !=="" && formValues.countryCode !==""){
+  //     setDisable(false);
+  // }
   return (
     <React.Fragment>
-      <CssBaseline />
-      {loader === true ?
-      <Box
-        top={0}
-        left={0}
-        bottom={0}
-        right={0}
-        position="absolute"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-     
-      <CircularProgress color="secondary" />
-      </Box>
-      :(
-      <MuiThemeProvider theme={getMuiTheme}>
-        <AppBar
-          position="sticky"
-          style={{
-            backgroundColor: "#fff",
-            height: "90px",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
+      <CssBaseline className="hello" />
+      {loader === true ? (
+        <Box
+          top={0}
+          left={0}
+          bottom={0}
+          right={0}
+          position="absolute"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         >
-          <Toolbar>
-            <img className={classes.Logo} onClick={logoFunction} src={newlogo} alt="JM Tech Centre" width="130px" height="70px" />
-            <Button
+          <CircularProgress color="secondary" />
+        </Box>
+      ) : (
+        <MuiThemeProvider theme={getMuiTheme}>
+          <AppBar
+            position="sticky"
+            style={{
+              backgroundColor: "#fff",
+              height: "90px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Toolbar>
+              <img
+                className={classes.Logo}
+                onClick={logoFunction}
+                src={newlogo}
+                alt="JM Tech Centre"
+                width="130px"
+                height="70px"
+              />
+              {/* <Button
               id="ApplyHereBtn"
               onClick={() => applicationDivWithCourse(applicationForm)}
               className={classes.ApplyHereBtn}
@@ -1009,56 +1096,171 @@ export default function BackToTop(props) {
               color="primary"
             >
               Apply Here
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <Toolbar id="back-to-top-anchor" />
-        <Container>
-          <Box my={2}>
+            </Button> */}
+            </Toolbar>
+          </AppBar>
+          <Toolbar id="back-to-top-anchor" />
+          <Container>
+            <Box my={2}>
               <Grid container spacing={3}>
                 <Box
                   className={classes.homePage}
                   id="HomePage"
-                  style={{ display: "flex", transition:'all easein 1s' }}
+                  style={{ display: "flex", transition: "all easein 1s" }}
                 >
-                  <Grid
-                    className={classes.grids}
-                    item
-                    xs={12}
-                    sm={6}
-                    
-                   
-                  >
-                    <Paper className={classes.papers}>
-                      <img className={classes.theImage} src={image} alt="Home Page" />
+                  <Grid className={classes.grids} item xs={12} sm={12} md={6}>
+                    <Paper
+                      className={classes.papers}
+                      style={{backgroundColor:'#fff'}}
+                    >
+                      <img
+                        className={classes.theImage}
+                        src={image2}
+                        alt="Home Page"
+                      />
                     </Paper>
                   </Grid>
-                  <Grid item xs={12} sm={6} >
-                    <Paper className={classes.papers}>
-                      <h1  style={{ fontSize: "3em", margin:'0px'}}>
-                        {isSubmitted === false
-                          ? "Welcome to JM Tech Learning Centre"
-                          : (
-                            <>
-                          <span style={{color:'#FF5C5C', margin:'5px 15px'}}>Thank you for applying</span>
-                            <p style={{fontSize:'25px', margin:'20px 0px', fontWeight:'lighter'}}>Hello {responseFirstName}, your registration code is <b>{responseRegistrationCode}</b></p>
+                  <Grid item xs={12} sm={12} md={6} style={{marginBottom:'30px'}}>
+                    {isPayLater === true? (
+                      <>
+                         <Paper className={classes.papers} style={{marginBottom:'10px', paddingBottom:'15px'}}>
+                      <h1 style={{ fontSize: "1.5em", margin: "0px" }}>
+                       {isSubmitted === false ? (
+                          "JM Tech Learning Centre"
+                        ) : (
+                          <>
+                            <span
+                              style={{ color: "#9a9a9a", margin: "5px 15px" }}
+                            >
+                              To complete the registration, a payment link has been sent to your email -
+                            </span>
+                            <p
+                              style={{
+                                fontSize: "25px",
+                                margin: "20px 0px",
+                                fontWeight: "lighter",
+                              }}
+                            >
+                             
+                            </p> 
                           </>
-                          )}
+                        )}
+                    
                       </h1>
-                     
-                      <h2 style={{margin:'10px', fontSize:'1.3em'}}>{isSubmitted === true ? 'A confirmation mail has been sent to your email':""}</h2>
-                      {isSubmitted === false ?
-                      (
+
+                      <h2 style={{ margin: "10px", fontSize: "1.3em" }}>
+                        {isSubmitted === true
+                          ? "A confirmation mail has been sent to your email"
+                          : ""}
+                      </h2>
+                      {isSubmitted === false ? (
                         <>
-                      <h2>We offer a range of courses</h2>
-                     
-                      <p style={{ fontStyle: "italic", color: "#949494" }}>
-                        Data Science & AI, Cloud Development, Business
+                          <h2 style={{ color: "#00a1f1" }}>
+                            Microsoft Future Ready Program
+                          </h2>
+
+                          <p style={{ fontStyle: "italic", color: "#949494" }}>
+                            Please enter the following details to proceed with
+                            your application
+                            {/* Data Science & AI, Cloud Development, Business
                         Application, Backend Software Development, Frontend
-                        Software Development, or Cyber Security
-                      </p>
-                      <FormControl className={classes.margin}>
-                        <TextField
+                        Software Development, or Cyber Security */}
+                          </p>
+                          <FormControl className={classes.margin}>
+                            <TextField
+                              //   style={{width:'300px'}}
+                              type="text"
+                              onpaste="return false;"
+                              ondrop="return false;"
+                              autocomplete="off"
+                              id="emailTextField"
+                              color="secondary"
+                              label="Email Address"
+                              value={formValues.emailAddress.toLowerCase()}
+                              error={formStates.emailAddressError}
+                              helperText={formStates.emailAddressErrorMsg}
+                              onFocus={(event) => {
+                                CopyandPasteHandler(event);
+                              }}
+                              onChange={(event) => {
+                                emailAddressHandler(event);
+                              }}
+                              variant="outlined"
+                            />
+                            <br />
+                            <div style={{ display: "flex" }}>
+                              <Grid
+                                item
+                                xs={3}
+                                sm={5}
+                                md={5}
+                                style={{ margin: "0px 10px 0px 0px" }}
+                              >
+                                <TextField
+                                  className={classes.countryCodeText}
+                                  color="secondary"
+                                  style={{
+                                    textAlign: "left",
+                                    marginRight: "30px",
+                                  }}
+                                  id="outlined-select-currency"
+                                  select
+                                  label="Country Code"
+                                  value={formValues.countryCode}
+                                  error={formStates.countryCodeError}
+                                  helperText={formStates.countryCodeErrorMsg}
+                                  onChange={(event) => {
+                                    countryCodeHandler(event);
+                                  }}
+                                  variant="outlined"
+                                  // InputLabelProps={{
+                                  //     style:{
+                                  //         fontSize:'15px'
+                                  //     }
+                                  // }}
+                                  // InputProps={{
+                                  //     style: {
+                                  //         width:'110px',
+                                  //         marginRight:'10px',
+                                  //     }
+                                  // }}
+                                  fullWidth
+                                >
+                                  {countryCodeDropDown.length > 0 &&
+                                    countryCodeDropDown.map((option) => (
+                                      <MenuItem
+                                        key={option.CountryCode}
+                                        value={option.CountryCode}
+                                      >
+                                        {"+"}
+                                        {option.CountryCode}{" "}
+                                        {option.CountryName}
+                                      </MenuItem>
+                                    ))}
+                                </TextField>
+                              </Grid>
+                              <Grid item xs={9} sm={7} md={7}>
+                                <TextField
+                                  type="number"
+                                  color="secondary"
+                                  id="phoneNumberTextField"
+                                  label="Phone Number"
+                                  value={formValues.phoneNumber}
+                                  error={formStates.phoneNumberError}
+                                  helperText={formStates.phoneNumberErrorMsg}
+                                  onChange={(event) => {
+                                    phoneNumberHandler(event);
+                                  }}
+                                  onFocus={(event) => {
+                                    CopyandPasteHandler(event);
+                                  }}
+                                  fullWidth
+                                  variant="outlined"
+                                  // fullWidth
+                                />
+                              </Grid>
+                            </div>
+                            {/* <TextField
                           color="secondary"
                           style={{ width: "100%" }}
                           fullWidth
@@ -1080,36 +1282,246 @@ export default function BackToTop(props) {
                               {option.CourseName}
                             </MenuItem>
                           ))}
-                        </TextField>
-                       
+                        </TextField> */}
+
+                            <Button
+                              id="ApplyHereBtn"
+                              className={classes.applyNow}
+                              //   disabled={disable}
+                              onClick={() =>
+                                applicationDivWithCourse(applicationForm)
+                              }
+                              style={{ marginTop: "20px" }}
+                              disableElevation
+                              variant="contained"
+                              color="secondary"
+                            >
+                              {/* {!loadingForms && <CircularProgress/>} */}
+                              {/* {loadingForms && 'Apply Now'}  */}
+                              Proceed
+                            </Button>
+                          </FormControl>
+                        </>
+                      ) : (
+                        
                         <Button
-                          className={classes.applyNow}
-                          disabled={disable}
-                          onClick={() => applicationDiv(applicationForm)}
-                          style={{ marginTop: "20px" }}
+                          onClick={backToHomeHandler}
+                          style={{
+                            margin: "20px 0px",
+                            textTransform: "capitalize",
+                          }}
                           disableElevation
                           variant="contained"
                           color="secondary"
                         >
                           {/* {!loadingForms && <CircularProgress/>} */}
                           {/* {loadingForms && 'Apply Now'}  */}
-                         Apply Now
+                          Go Back to Home
                         </Button>
-                      </FormControl>
-                      </>
-                        )
-                        : <Button
-                        onClick={backToHomeHandler}
-                        style={{ margin: "20px 0px", textTransform:'capitalize' }}
-                        disableElevation
-                        variant="contained"
-                        color="secondary"
-                      >
-                        {/* {!loadingForms && <CircularProgress/>} */}
-                        {/* {loadingForms && 'Apply Now'}  */}
-                       Go Back to Home
-                      </Button>}
+                      )}
                     </Paper>
+                      </>
+                    ) : (
+                    <Paper className={classes.papers} style={{marginBottom:'10px', paddingBottom:'15px'}}>
+                      <h1 style={{ fontSize: "1.5em", margin: "0px" }}>
+                       {isSubmitted === false ? (
+                          "JM Tech Learning Centre"
+                        ) : (
+                          <>
+                            <span
+                              style={{ color: "#9a9a9a", margin: "5px 15px" }}
+                            >
+                              To complete the registration, a payment link has been sent to your email -
+                            </span>
+                            <p
+                              style={{
+                                fontSize: "25px",
+                                margin: "20px 0px",
+                                fontWeight: "lighter",
+                              }}
+                            >
+                              Hello {responseFirstName}, your registration code
+                              is <b>{responseRegistrationCode}</b>
+                            </p> 
+                          </>
+                        )}
+                    
+                      </h1>
+
+                      <h2 style={{ margin: "10px", fontSize: "1.3em" }}>
+                        {isSubmitted === true
+                          ? "A confirmation mail has been sent to your email"
+                          : ""}
+                      </h2>
+                      {isSubmitted === false ? (
+                        <>
+                          <h2 style={{ color: "#00a1f1" }}>
+                            Microsoft Future Ready Program
+                          </h2>
+
+                          <p style={{ fontStyle: "italic", color: "#949494" }}>
+                            Please enter the following details to proceed with
+                            your application
+                            {/* Data Science & AI, Cloud Development, Business
+                        Application, Backend Software Development, Frontend
+                        Software Development, or Cyber Security */}
+                          </p>
+                          <FormControl className={classes.margin}>
+                            <TextField
+                              //   style={{width:'300px'}}
+                              type="text"
+                              onpaste="return false;"
+                              ondrop="return false;"
+                              autocomplete="off"
+                              id="emailTextField"
+                              color="secondary"
+                              label="Email Address"
+                              value={formValues.emailAddress.toLowerCase()}
+                              error={formStates.emailAddressError}
+                              helperText={formStates.emailAddressErrorMsg}
+                              onFocus={(event) => {
+                                CopyandPasteHandler(event);
+                              }}
+                              onChange={(event) => {
+                                emailAddressHandler(event);
+                              }}
+                              variant="outlined"
+                            />
+                            <br />
+                            <div style={{ display: "flex" }}>
+                              <Grid
+                                item
+                                xs={3}
+                                sm={5}
+                                md={5}
+                                style={{ margin: "0px 10px 0px 0px" }}
+                              >
+                                <TextField
+                                  className={classes.countryCodeText}
+                                  color="secondary"
+                                  style={{
+                                    textAlign: "left",
+                                    marginRight: "30px",
+                                  }}
+                                  id="outlined-select-currency"
+                                  select
+                                  label="Country Code"
+                                  value={formValues.countryCode}
+                                  error={formStates.countryCodeError}
+                                  helperText={formStates.countryCodeErrorMsg}
+                                  onChange={(event) => {
+                                    countryCodeHandler(event);
+                                  }}
+                                  variant="outlined"
+                                  // InputLabelProps={{
+                                  //     style:{
+                                  //         fontSize:'15px'
+                                  //     }
+                                  // }}
+                                  // InputProps={{
+                                  //     style: {
+                                  //         width:'110px',
+                                  //         marginRight:'10px',
+                                  //     }
+                                  // }}
+                                  fullWidth
+                                >
+                                  {countryCodeDropDown.length > 0 &&
+                                    countryCodeDropDown.map((option) => (
+                                      <MenuItem
+                                        key={option.CountryCode}
+                                        value={option.CountryCode}
+                                      >
+                                        {"+"}
+                                        {option.CountryCode}{" "}
+                                        {option.CountryName}
+                                      </MenuItem>
+                                    ))}
+                                </TextField>
+                              </Grid>
+                              <Grid item xs={9} sm={7} md={7}>
+                                <TextField
+                                  type="number"
+                                  color="secondary"
+                                  id="phoneNumberTextField"
+                                  label="Phone Number"
+                                  value={formValues.phoneNumber}
+                                  error={formStates.phoneNumberError}
+                                  helperText={formStates.phoneNumberErrorMsg}
+                                  onChange={(event) => {
+                                    phoneNumberHandler(event);
+                                  }}
+                                  onFocus={(event) => {
+                                    CopyandPasteHandler(event);
+                                  }}
+                                  fullWidth
+                                  variant="outlined"
+                                  // fullWidth
+                                />
+                              </Grid>
+                            </div>
+                            {/* <TextField
+                          color="secondary"
+                          style={{ width: "100%" }}
+                          fullWidth
+                          id="outlined-select-currency"
+                          select
+                          label="Choose a course"
+                          value={formValues.courseChoice}
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                          helperText="Please your course of interest"
+                          variant="outlined"
+                        >
+                          {dataDropDown.length > 0 && dataDropDown.map((option) => (
+                            <MenuItem
+                              key={option.CourseId}
+                              value={option.CourseId}
+                            >
+                              {option.CourseName}
+                            </MenuItem>
+                          ))}
+                        </TextField> */}
+
+                            <Button
+                              id="ApplyHereBtn"
+                              className={classes.applyNow}
+                              //   disabled={disable}
+                              onClick={() =>
+                                applicationDivWithCourse(applicationForm)
+                              }
+                              style={{ marginTop: "20px" }}
+                              disableElevation
+                              variant="contained"
+                              color="secondary"
+                            >
+                              {/* {!loadingForms && <CircularProgress/>} */}
+                              {/* {loadingForms && 'Apply Now'}  */}
+                              Proceed
+                            </Button>
+                          </FormControl>
+                        </>
+                      ) : (
+                        
+                        <Button
+                          onClick={backToHomeHandler}
+                          style={{
+                            margin: "20px 0px",
+                            textTransform: "capitalize",
+                          }}
+                          disableElevation
+                          variant="contained"
+                          color="secondary"
+                        >
+                          {/* {!loadingForms && <CircularProgress/>} */}
+                          {/* {loadingForms && 'Apply Now'}  */}
+                          Go Back to Home
+                        </Button>
+                      )}
+                    </Paper>
+
+                    )}
                   </Grid>
                 </Box>
 
@@ -1127,45 +1539,32 @@ export default function BackToTop(props) {
                       autoComplete="off"
                     >
                       <h2 className={classes.formText}>
-                        Application Form For Microsoft Skilling Initiative
+                        Application Form For Microsoft Future Ready Program
                       </h2>
-                      <h2 className={classes.programText}style={{ color: "#545454" }}>
-                        Program:{" "}
-                        <span>
-                          {formValues.courseChoice === 1
-                            ? "Data Science & AI"
-                            : formValues.courseChoice === 2
-                            ? "Cloud Development"
-                            : formValues.courseChoice === 3
-                            ? "Business Application"
-                            : formValues.courseChoice === 4
-                            ? "Backend Software Development"
-                            : formValues.courseChoice === 5
-                            ? "Frontend Software Development"
-                            : formValues.courseChoice === 6
-                            ? "Cyber Security"
-                            : formValues.courseChoice === 7
-                            ? "Data Science"
-                            : "Choose a course"}
-                        </span>
-                      </h2>
+
                       <h4 style={{ fontStyle: "italic" }}>
-                        <span style={{ color: "#fe000067" }}>Note: </span>All fields
-                        except the Middle Name are required
+                        <span style={{ color: "#fe000067" }}>Note: </span>A
+                        payment of <>&#8358;</>30,000.00 will be required to
+                        complete this registration
                       </h4>
                       <div>
-                      <span style={{color:'#fe0000'}}>{imageFormatMsg}</span>
-                      {openPictureSection?(
-                      <img
-                          style={{
-                            width: "150px",
-                            height: "150px",
-                            borderRadius: "20%",
-                            border:'4px solid #4c4c4c'
-                          }}
-                          src={displayPicture}
-                          alt={pictureName}
-                        />):""}
+                        <span style={{ color: "#fe0000" }}>
+                          {imageFormatMsg}
+                        </span>
+                        {openPictureSection ? (
+                          <img
+                            style={{
+                              width: "150px",
+                              height: "150px",
+                              borderRadius: "20%",
+                              border: "4px solid #4c4c4c",
+                            }}
+                            src={displayPicture}
+                            alt={pictureName}
+                          />
+                        ) : (
+                          ""
+                        )}
                         {/* {openPictureSection ? (
                           <Grid item xs={12}>
                             <DescriptionIcon /> <small> {pictureName} </small>
@@ -1173,29 +1572,45 @@ export default function BackToTop(props) {
                         ) : (
                           ""
                         )} */}
-                          <span className={classes.cvformatError}>{cvFormatMsg}</span>
-                          {openCVSection ? (
+                        <span className={classes.cvformatError}>
+                          {cvFormatMsg}
+                        </span>
+                        {openCVSection ? (
                           <Grid item xs={12}>
-                            <div style={{backgroundColor:'#949494', display:"flex", 
-                            justifyContent:'flex-start', padding:'0px 0px',
-                            borderRadius:'5px', color:'#fff', marginBottom:'10px'
-                            }}>
-                            <span style={{margin:'0px 10px 0px 0px', backgroundColor:'#4c4c4c',
-                             borderRadius:'5px 0px 0px 5px', padding:'10px 20px',
-                          }}>CV File :</span>
-                            <span style={{padding:'5px'}}><DescriptionIcon /> <small> {CVName} </small></span>
+                            <div
+                              style={{
+                                backgroundColor: "#949494",
+                                display: "flex",
+                                justifyContent: "flex-start",
+                                padding: "0px 0px",
+                                borderRadius: "5px",
+                                color: "#fff",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  margin: "0px 10px 0px 0px",
+                                  backgroundColor: "#4c4c4c",
+                                  borderRadius: "5px 0px 0px 5px",
+                                  padding: "10px 20px",
+                                }}
+                              >
+                                CV File :
+                              </span>
+                              <span style={{ padding: "5px" }}>
+                                <DescriptionIcon /> <small> {CVName} </small>
+                              </span>
                             </div>
-              
                           </Grid>
                         ) : (
                           ""
                         )}
                       </div>
-                     
+
                       <div style={{ marginBottom: "20px" }}>
-                        
                         <Button
-                        className={classes.buttonUploadPhoto}
+                          className={classes.buttonUploadPhoto}
                           onClick={passportUploadHandler()}
                           disableElevation
                           style={{ marginRight: "15px" }}
@@ -1208,14 +1623,13 @@ export default function BackToTop(props) {
                           <small>Upload Passport Photo</small>
                           <input
                             type="file"
-                          
                             hidden
                             onChange={onInputChange}
-                            accept="image/x-png,image/gif,image/jpeg" 
+                            accept="image/x-png,image/gif,image/jpeg"
                           />
                           {/* <label accept="image/*"></label> */}
                         </Button>
-                        
+
                         <Button
                           disableElevation
                           variant="contained"
@@ -1233,10 +1647,8 @@ export default function BackToTop(props) {
                           />
                           {/* <label accept="/*"></label> */}
                         </Button>
-
-                      
                       </div>
-                      <div id="CourseChoice" style={{ display: "none" }}>
+                      <div id="CourseChoice">
                         <TextField
                           color="secondary"
                           style={{
@@ -1247,7 +1659,7 @@ export default function BackToTop(props) {
                           fullWidth
                           id="outlined-select-currency"
                           select
-                          label="Choose a course"
+                          label="Learn Track Choice for Program"
                           value={formValues.courseChoice}
                           onChange={handleChange}
                           variant="outlined"
@@ -1264,7 +1676,6 @@ export default function BackToTop(props) {
                       </div>
 
                       <TextField
-                        
                         color="secondary"
                         id="outlined-disabled"
                         label="First Name"
@@ -1280,7 +1691,7 @@ export default function BackToTop(props) {
                       <TextField
                         color="secondary"
                         id="outlined-disabled"
-                        label="Middle Name"
+                        label="Middle Name (if applicable)"
                         value={toTitleCase(formValues.middleName)}
                         onChange={(event) => {
                           middleNameHandler(event);
@@ -1301,20 +1712,22 @@ export default function BackToTop(props) {
                         variant="outlined"
                       />
                       <br />
-                      <b style={{color:'#1a1a1a'}}>*Yahoo mails and Ymails are not allowed</b>
+                      <b style={{ color: "#1a1a1a" }}>
+                        *Yahoo mails and Ymails are not allowed
+                      </b>
                       <TextField
                         type="text"
-                        onpaste="return false;" 
-                        ondrop="return false;" 
+                        onpaste="return false;"
+                        ondrop="return false;"
                         autocomplete="off"
                         id="emailTextField"
                         color="secondary"
                         label="Email Address"
-                        value={(formValues.emailAddress).toLowerCase()}
+                        value={formValues.emailAddress.toLowerCase()}
                         error={formStates.emailAddressError}
                         helperText={formStates.emailAddressErrorMsg}
-                        onFocus={(event)=>{
-                            CopyandPasteHandler(event)
+                        onFocus={(event) => {
+                          CopyandPasteHandler(event);
                         }}
                         onChange={(event) => {
                           emailAddressHandler(event);
@@ -1326,11 +1739,11 @@ export default function BackToTop(props) {
                         color="secondary"
                         id="emailTextFieldConfirm"
                         label="Confirm Email Address"
-                        value={(formValues.emailAddressConfirm).toLowerCase()}
+                        value={formValues.emailAddressConfirm.toLowerCase()}
                         error={formStates.emailAddressConfirmError}
                         helperText={formStates.emailAddressConfirmErrorMsg}
-                        onFocus={(event)=>{
-                            CopyandPasteHandler(event)
+                        onFocus={(event) => {
+                          CopyandPasteHandler(event);
                         }}
                         onChange={(event) => {
                           emailAddressConfirmHandler(event);
@@ -1338,134 +1751,151 @@ export default function BackToTop(props) {
                         variant="outlined"
                       />
                       <br />
-                      <span style={{display:'flex', justifyContent:"flex-start"}}>
-                      <Grid item xs={3} sm={4} md={3}>
-                      <TextField
-                        className={classes.countryCodeText}
-                        color="secondary"
-                        style={{ textAlign: "left",marginRight:'30px'}}
-                        id="outlined-select-currency"
-                        select
-                        label="Country Code"
-                        value={formValues.countryCode}
-                        error={formStates.countryCodeError}
-                        helperText={formStates.countryCodeErrorMsg}
-                        onChange={(event) => {
-                          countryCodeHandler(event);
+                      <span
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-start",
                         }}
-                        variant="outlined"
-                        // InputLabelProps={{
-                        //     style:{
-                        //         fontSize:'15px' 
-                        //     }
-                        // }}
-                        // InputProps={{
-                        //     style: {
-                        //         width:'110px',
-                        //         marginRight:'10px',
-                        //     }
-                        // }}
-                       fullWidth
                       >
-                       {countryCodeDropDown.length > 0 && countryCodeDropDown.map((option) => (
-                            <MenuItem
-                              key={option.CountryCode}
-                              value={option.CountryCode}
-                            >
-                              {"+"}
-                              {option.CountryCode} {" "}
-                              {option.CountryName}
-                            </MenuItem>
-                          ))}
-                      </TextField>
-                      </Grid>
-                      <Grid item xs={9} sm={8} md={9} >
-                      <TextField
-                      type="number"
-                        color="secondary"
-                        id="phoneNumberTextField"
-                        label="Phone Number"
-                        value={(formValues.phoneNumber)}
-                        error={formStates.phoneNumberError}
-                        helperText={formStates.phoneNumberErrorMsg}
-                        onChange={(event) => {
-                          phoneNumberHandler(event);
-                        }}
-                        onFocus={(event)=>{
-                            CopyandPasteHandler(event)
-                        }}
-                        fullWidth
-                        variant="outlined"
-                        // fullWidth
-                      />
-                      </Grid>
-                     
-                     
+                        <Grid
+                          item
+                          xs={3}
+                          sm={4}
+                          md={3}
+                          style={{ margin: "0px 10px 0px 0px" }}
+                        >
+                          <TextField
+                            className={classes.countryCodeText}
+                            color="secondary"
+                            style={{ textAlign: "left", marginRight: "30px" }}
+                            id="outlined-select-currency"
+                            select
+                            label="Country Code"
+                            value={formValues.countryCode}
+                            error={formStates.countryCodeError}
+                            helperText={formStates.countryCodeErrorMsg}
+                            onChange={(event) => {
+                              countryCodeHandler(event);
+                            }}
+                            variant="outlined"
+                            // InputLabelProps={{
+                            //     style:{
+                            //         fontSize:'15px'
+                            //     }
+                            // }}
+                            // InputProps={{
+                            //     style: {
+                            //         width:'110px',
+                            //         marginRight:'10px',
+                            //     }
+                            // }}
+                            fullWidth
+                          >
+                            {countryCodeDropDown.length > 0 &&
+                              countryCodeDropDown.map((option) => (
+                                <MenuItem
+                                  key={option.CountryCode}
+                                  value={option.CountryCode}
+                                >
+                                  {"+"}
+                                  {option.CountryCode} {option.CountryName}
+                                </MenuItem>
+                              ))}
+                          </TextField>
+                        </Grid>
+                        <Grid item xs={9} sm={8} md={9}>
+                          <TextField
+                            type="number"
+                            color="secondary"
+                            id="phoneNumberTextField"
+                            label="Phone Number"
+                            value={formValues.phoneNumber}
+                            error={formStates.phoneNumberError}
+                            helperText={formStates.phoneNumberErrorMsg}
+                            onChange={(event) => {
+                              phoneNumberHandler(event);
+                            }}
+                            onFocus={(event) => {
+                              CopyandPasteHandler(event);
+                            }}
+                            fullWidth
+                            variant="outlined"
+                            // fullWidth
+                          />
+                        </Grid>
                       </span>
                       <br />
-                      <span style={{display:'flex', justifyContent:"flex-start"}}>
-                      <Grid item xs={3} sm={4} md={3}>
-                      <TextField
-                      className={classes.countryCodeText}
-                        color="secondary"
-                        style={{ textAlign: "left",marginRight:'30px'}}
-                        id="outlined-select-currency"
-                        select
-                        fullWidth
-                        label="Country Code"
-                        value={formValues.countryCode}
-                        error={formStates.countryCodeError}
-                        helperText={formStates.countryCodeErrorMsg}
-                        onChange={(event) => {
-                          countryCodeHandler(event);
+                      <span
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-start",
                         }}
-                        variant="outlined"
-                        InputLabelProps={{
-                            style:{
-                                fontSize:'15px' 
-                            }
-                        }}
-                        // InputProps={{
-                        //     style: {
-                        //         width:'110px',
-                        //         marginRight:'10px',
-                        //     }
-                        // }}
-                       
                       >
-                       {countryCodeDropDown.length > 0 && countryCodeDropDown.map((option) => (
-                            <MenuItem
-                              key={option.CountryCode}
-                              value={option.CountryCode}
-                            >
-                              {"+"}
-                              {option.CountryCode} {" "}
-                              {option.CountryName}
-                            </MenuItem>
-                          ))}
-                      </TextField>
-                      </Grid>
-                      <Grid item xs={9} sm={8} md={9} >
-                      <TextField
-                      type="number"
-                        color="secondary"
-                        id="phoneNumberConfirmTextField"
-                        label="Confirm Phone Number"
-                        value={(formValues.phoneNumberConfirm)}
-                        error={formStates.phoneNumberConfirmError}
-                        helperText={formStates.phoneNumberConfirmErrorMsg}
-                        onChange={(event) => {
-                          phoneNumberConfirmHandler(event);
-                        }}
-                        onFocus={(event)=>{
-                            CopyandPasteHandler(event)
-                        }}
-                     
-                        fullWidth
-                        variant="outlined"
-                      />
-                      </Grid>
-                    
+                        <Grid
+                          item
+                          xs={3}
+                          sm={4}
+                          md={3}
+                          style={{ margin: "0px 10px 0px 0px" }}
+                        >
+                          <TextField
+                            className={classes.countryCodeText}
+                            color="secondary"
+                            style={{ textAlign: "left", marginRight: "30px" }}
+                            id="outlined-select-currency"
+                            select
+                            fullWidth
+                            label="Country Code"
+                            value={formValues.countryCode}
+                            error={formStates.countryCodeError}
+                            helperText={formStates.countryCodeErrorMsg}
+                            onChange={(event) => {
+                              countryCodeHandler(event);
+                            }}
+                            variant="outlined"
+                            InputLabelProps={{
+                              style: {
+                                fontSize: "15px",
+                              },
+                            }}
+                            // InputProps={{
+                            //     style: {
+                            //         width:'110px',
+                            //         marginRight:'10px',
+                            //     }
+                            // }}
+                          >
+                            {countryCodeDropDown.length > 0 &&
+                              countryCodeDropDown.map((option) => (
+                                <MenuItem
+                                  key={option.CountryCode}
+                                  value={option.CountryCode}
+                                >
+                                  {"+"}
+                                  {option.CountryCode} {option.CountryName}
+                                </MenuItem>
+                              ))}
+                          </TextField>
+                        </Grid>
+                        <Grid item xs={9} sm={8} md={9}>
+                          <TextField
+                            type="number"
+                            color="secondary"
+                            id="phoneNumberConfirmTextField"
+                            label="Confirm Phone Number"
+                            value={formValues.phoneNumberConfirm}
+                            error={formStates.phoneNumberConfirmError}
+                            helperText={formStates.phoneNumberConfirmErrorMsg}
+                            onChange={(event) => {
+                              phoneNumberConfirmHandler(event);
+                            }}
+                            onFocus={(event) => {
+                              CopyandPasteHandler(event);
+                            }}
+                            fullWidth
+                            variant="outlined"
+                          />
+                        </Grid>
                       </span>
                       <br />
                       <TextField
@@ -1473,7 +1903,7 @@ export default function BackToTop(props) {
                         style={{ textAlign: "left" }}
                         id="outlined-select-currency"
                         select
-                        label="Gender"
+                        label="Sex"
                         value={formValues.sex}
                         error={formStates.genderError}
                         helperText={formStates.genderErrorMsg}
@@ -1541,8 +1971,52 @@ export default function BackToTop(props) {
                         }}
                         variant="outlined"
                       />
-                      <br/>
+                      <br />
 
+                      <FormControl>
+                        <FormLabel id="demo-radio-buttons-group-label" style={{color:'#1a1a1a', textAlign:'left', marginBottom:'15px'}}>
+                          Are you currently in school?
+                        </FormLabel>
+                        <RadioGroup
+                          aria-labelledby="demo-radio-buttons-group-label"
+                          name="radio-buttons-group"
+                        >
+                          <FormControlLabel
+                            value="yes"
+                            control={<Radio />}
+                            label="Yes"
+                            onClick={handleChangeAnswer}
+                          />
+                          <FormControlLabel
+                            value="no"
+                            control={<Radio />}
+                            label="No"
+                            onClick={handlePickNo}
+                          />
+                        </RadioGroup>
+                      </FormControl>
+
+                      <br />
+                      {answer === "yes"?
+                      (
+                        <TextField
+                        color="secondary"
+                        id="outlined-disabled"
+                        label="Name Of Institution"
+                        value={formValues.nameOfInstitution}
+                        error={formStates.nameOfInstitutionError}
+                        helperText={formStates.nameOfInstitutionErrorMsg}
+                        onChange={(event) => {
+                          nameOfInstitutionHandler(event);
+                        }}
+                        variant="outlined"
+                      />
+                      )
+                      :
+                      ""
+                      }
+                     
+                      <br />
                       <TextField
                         color="secondary"
                         style={{ textAlign: "left" }}
@@ -1575,7 +2049,9 @@ export default function BackToTop(props) {
                         variant="outlined"
                       />
                       <br />
-                      <span style={{color:'#fe0000'}}>{generalErrorMsg}</span>
+                      <span style={{ color: "#fe0000" }}>
+                        {generalErrorMsg}
+                      </span>
                       <div
                         style={{ display: "flex", justifyContent: "flex-end" }}
                       >
@@ -1593,24 +2069,34 @@ export default function BackToTop(props) {
                           variant="contained"
                           color="secondary"
                         >
-                          {submitLoader === true ? <CircularProgress/>:
-                          'Submit'}
+                          {submitLoader === true ? (
+                            <CircularProgress />
+                          ) : (
+                            "Submit"
+                          )}
                           {/* Submit */}
                         </Button>
+                        <Button onClick={handleClickPay} variant="outlined" color="primary">
+                          Submit 2nd
+                        </Button>
+                    
+                       
                       </div>
                     </FormControl>
                   </Paper>
                 </Grid>
               </Grid>
-          </Box>
-        </Container>
-        <ScrollTop {...props}>
-          <Fab color="secondary" size="small" aria-label="scroll back to top">
-            <KeyboardArrowUpIcon />
-          </Fab>
-        </ScrollTop>
-        <AuthenticationForm open={open} handleClose={handleClose}/>
-      </MuiThemeProvider>
+            </Box>
+          </Container>
+          <ScrollTop {...props}>
+            <Fab color="secondary" size="small" aria-label="scroll back to top">
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </ScrollTop>
+          <AuthenticationForm open={open} handleClose={handleClose} />
+          <ProceedToPayForm openPay={openPay} handleClosePay={handleClosePay} handleClickPayLater={handleClickPayLater}/>
+          
+        </MuiThemeProvider>
       )}
     </React.Fragment>
   );

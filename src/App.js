@@ -5,6 +5,7 @@ import Applicants from "./pages/Table";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import AuthenticationForm from "./AuthenticationForm";
 import ApplicationClosed from "./pages/ApplicationClosed";
+import Payment from "./pages/payment";
 
 
 
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/" exact component={Home} />
         <ProtectedRoute path="/applicants" component={Applicants} isAuth = {isAuth}/>
         <Route path="/applicationClosed" exact component={ApplicationClosed} />
+        <Route path="/payment" exact component={Payment} />
       </BrowserRouter>
     </div>
   
