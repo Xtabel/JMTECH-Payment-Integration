@@ -191,7 +191,7 @@ ScrollTop.propTypes = {
   window: PropTypes.func,
 };
 
-export default function BackToTop(props) {
+export default function PayLater(props) {
   // const dispatch = useDispatch();
 
   
@@ -245,7 +245,7 @@ export default function BackToTop(props) {
     lga: "",
     city: "",
     cityid: "",
-    sex: "",
+    sex: "hello",
     countryCode: "234",
     highestQualification: "",
     courseOfStudy: "",
@@ -260,6 +260,8 @@ export default function BackToTop(props) {
     firstNameErrorMsg: "",
     lastNameError: false,
     lastNameErrorMsg: "",
+    emailAddressLoginError:"",
+    emailAddressLoginErrorMsg:"",
     emailAddressError: false,
     emailAddressErrorMsg: "",
     emailAddressConfirmError: false,
@@ -301,28 +303,47 @@ export default function BackToTop(props) {
   const handleClose = () => {
     setOpen(false);
   };
+  const [pictureExists, setPictureExists] = useState(true);
+  const [responseCourseChoice, setResponseCourseChoice] = useState("");
   const [responseFirstName, setResponseFirstName] = useState("");
+  const [responseMiddleName, setResponseMiddleName] = useState("");
+  const [responseLastName,setResponseLastName]= useState("");
+  const [responseEmail, setResponseEmail] = useState("");
+  const [responseEmailConfirm, setResponseEmailConfirm]=useState("");
+  const [responsePhoneNumber, setResponsePhoneNumber]= useState("");
+  const [responsePhoneNumberConfirm,setResponsePhoneNumberConfirm]= useState("");
+  const [responseGender, setResponseGender] = useState("");
+  const [responseState, setResponseState] = useState("");
+  const [responseCity,setResponseCity]= useState("");
+  const [responseInstitution,setResponseInstitution] = useState("");
+  const [responseQualification, setResponseQualification] = useState("");
+  const [responseCourseQualification, setResponseCourseQualification]= useState("");
   const [responseRegistrationCode, setResponseRegistrationCode] = useState("");
   const [responseMsg, setResponseMsg] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const[checkEmailBtn, setCheckEmailBtn] = useState(false);
   const [submitFailure, setSubmitFailure] = useState(false);
   const [emailAddressHolder,setEmailAddressHolder] = useState("Akan");
   const [formStates, setFormStates] = React.useState(initialFormState);
   const [lgaDisable, setLgaDisable] = useState(true);
   const [loader, setLoader] = useState(true);
   const [submitLoader, setSubmitLoader] = useState(false);
+  const [btnLoader, setBtnLoader] = useState(false);
   const [imageFormatMsg, setImageFormatMsg] = useState("");
   const [cvFormatMsg, setCvFormatMsg] = useState("");
   const [generalErrorMsg, setGeneralErrorMsg] = useState("");
   const [file, setFile] = useState(null);
   const [fileCV, setFileCV] = useState(null);
-  const [displayPicture, setDisplayPicture] = useState("")
+  const [displayPicture, setDisplayPicture] = useState("");
+  const [fileExtension,setFileExtension]=useState("");
+  const [pictureContainer,setPictureContainer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPayLater, setIsPayLater] = useState(false);
   const [theState, setTheState] = useState([]);
   const [theLga, setTheLga] = useState([]);
-  // const [disable, setDisable] = useState(true);
+  const [disable, setDisable] = useState(true);
   const [answer, setAnswer] = React.useState("");
+  const [defaultValueAnswer, setDefaultValueAnswer] = useState("yes")
   const [hideSchool, setHideSchool] = useState(true);
   const [openPay,setOpenPay]= useState(false);
 
@@ -498,7 +519,8 @@ export default function BackToTop(props) {
       // let genderName = e.currentTarget.textContent;
       e.preventDefault();
 
-      setFormValues({ ...formValues, sex: genderValue });
+      // setFormValues({ ...formValues, sex: genderValue });
+      setResponseGender(genderValue);
       return SetIsRequiredError(genderValue, "genderError", "genderErrorMsg");
     }
   };
@@ -522,11 +544,11 @@ export default function BackToTop(props) {
       let qualificationValue = e.target.value;
       // let qualificationName = e.currentTarget.textContent;
       e.preventDefault();
-
-      setFormValues({
-        ...formValues,
-        highestQualification: qualificationValue,
-      });
+      setResponseQualification(qualificationValue);
+      // setFormValues({
+      //   ...formValues,
+      //   highestQualification: qualificationValue,
+      // });
       return SetIsRequiredError(
         qualificationValue,
         "highestQualificationError",
@@ -536,14 +558,16 @@ export default function BackToTop(props) {
   };
   const StateHandler = (e) => {
     const stateIds = e.target.value;
-    setFormValues({ ...formValues, states: stateIds });
+    // setFormValues({ ...formValues, states: stateIds });
+    setResponseState(stateIds)
     fetchLGA(stateIds);
   };
   const classes = useStyles();
 
   const handleChange = (e) => {
     // setDisable(false);
-    setFormValues({ ...formValues, courseChoice: e.target.value });
+    // setFormValues({ ...formValues, courseChoice: e.target.value });
+    setResponseCourseChoice(e.target.value)
   };
 
   const applicationForm = React.useRef();
@@ -676,8 +700,11 @@ export default function BackToTop(props) {
   }, [file]);
 
   useEffect(() => {
+    debugger
     if (fileCV !== null && fileCV !== undefined) {
       setCVName(fileCV.name);
+      console.log(fileCV)
+      console.log(fileCV.name)
       setOpenCVSection(true);
     }
 
@@ -701,7 +728,8 @@ export default function BackToTop(props) {
     if (e) {
       e.preventDefault();
       let firstNameValue = e.target.value;
-      setFormValues({ ...formValues, firstName: firstNameValue });
+      // setFormValues({ ...formValues, firstName: firstNameValue });
+      setResponseFirstName(firstNameValue)
       return SetIsRequiredError(
         firstNameValue,
         "firstNameError",
@@ -713,14 +741,67 @@ export default function BackToTop(props) {
     if (e) {
       e.preventDefault();
       let middleNameValue = e.target.value;
-      setFormValues({ ...formValues, middleName: middleNameValue });
+      // setFormValues({ ...formValues, middleName: middleNameValue });
+      setResponseMiddleName(middleNameValue);
     }
   };
+
+  const emailAddressLoginHandler = (e) => {
+    var emailAddressLoginValue = e.target.value.trim();
+
+    if (e) {
+      e.preventDefault();
+      setFormValues({ ...formValues, emailAddressLogin: emailAddressLoginValue });
+    }
+
+    if (emailAddressLoginValue === "" || emailAddressLoginValue === undefined) {
+        setDisable(true);
+      setFormStates({
+        ...formStates,
+        emailAddressLoginError: false,
+        emailAddressLoginErrorMsg: "",
+      });
+      return true;
+     
+    }
+
+    if (!validators.isValidEmail(emailAddressLoginValue)) {
+      setFormStates({
+        ...formStates,
+        emailAddressLoginError: true,
+        emailAddressLoginErrorMsg:
+          "Please enter a valid email or clear your selection",
+      });
+      return false;
+    }
+    if (validators.isYahoo(emailAddressLoginValue)) {
+      setFormStates({
+        ...formStates,
+        emailAddressLoginError: true,
+        emailAddressLoginErrorMsg: "Please do not enter a yahoo mail or ymail",
+      });
+      return false;
+    }
+    if(emailAddressLoginValue!==""){
+        setDisable(false);
+    }
+
+    setFormStates({
+      ...formStates,
+      emailAddressLoginError: false,
+      emailAddressLoginErrorMsg: "",
+
+    });
+    return true;
+    
+  };
+
   const lastNameHandler = (e) => {
     if (e) {
       e.preventDefault();
       let lastNameValue = e.target.value;
-      setFormValues({ ...formValues, lastName: lastNameValue });
+      // setFormValues({ ...formValues, lastName: lastNameValue });
+      setResponseLastName(responseLastName)
       return SetIsRequiredError(
         lastNameValue,
         "lastNameError",
@@ -732,7 +813,8 @@ export default function BackToTop(props) {
     var emailAddressValue = e.target.value.trim();
     if (e) {
       e.preventDefault();
-      setFormValues({ ...formValues, emailAddress: emailAddressValue });
+      // setFormValues({ ...formValues, emailAddress: emailAddressValue });
+      setResponseEmail(emailAddressValue);
     }
 
     if (emailAddressValue === "" || emailAddressValue === undefined) {
@@ -772,10 +854,11 @@ export default function BackToTop(props) {
     let emailAddressConfirmValue = e.target.value.trim();
     if (e) {
       e.preventDefault();
-      setFormValues({
-        ...formValues,
-        emailAddressConfirm: emailAddressConfirmValue,
-      });
+      // setFormValues({
+      //   ...formValues,
+      //   emailAddressConfirm: emailAddressConfirmValue,
+      // });
+      setResponseEmailConfirm(emailAddressConfirmValue);
     }
 
     if (
@@ -840,7 +923,8 @@ export default function BackToTop(props) {
     let phoneNumberValue = e.target.value;
     if (e) {
       e.preventDefault();
-      setFormValues({ ...formValues, phoneNumber: phoneNumberValue });
+      // setFormValues({ ...formValues, phoneNumber: phoneNumberValue });
+      setResponsePhoneNumber(phoneNumberValue)
       if (phoneNumberValue.charAt(0) === "0") {
         phoneNumberValue = phoneNumberValue.substring(1);
         setFormValues({ ...formValues, phoneNumber: phoneNumberValue });
@@ -870,10 +954,11 @@ export default function BackToTop(props) {
     let phoneNumberConfirmValue = e.target.value;
     if (e) {
       e.preventDefault();
-      setFormValues({
-        ...formValues,
-        phoneNumberConfirm: phoneNumberConfirmValue,
-      });
+      // setFormValues({
+      //   ...formValues,
+      //   phoneNumberConfirm: phoneNumberConfirmValue,
+      // });
+      setResponsePhoneNumberConfirm(phoneNumberConfirmValue)
 
       if (phoneNumberConfirmValue.charAt(0) === "0") {
         phoneNumberConfirmValue = phoneNumberConfirmValue.substring(1);
@@ -937,14 +1022,16 @@ export default function BackToTop(props) {
     if (e) {
       e.preventDefault();
       let cityNameValue = e.target.value;
-      setFormValues({ ...formValues, city: cityNameValue });
+      // setFormValues({ ...formValues, city: cityNameValue });
+      setResponseCity(cityNameValue);
     }
   };
   const courseOfStudyHandler = (e) => {
     if (e) {
       e.preventDefault();
       let courseOfStudyValue = e.target.value;
-      setFormValues({ ...formValues, courseOfStudy: courseOfStudyValue });
+      // setFormValues({ ...formValues, courseOfStudy: courseOfStudyValue });
+      setResponseCourseQualification(courseOfStudyValue);
       return SetIsRequiredError(
         courseOfStudyValue,
         "courseOfStudyError",
@@ -957,10 +1044,11 @@ export default function BackToTop(props) {
     if (e) {
       e.preventDefault();
       let nameOfInstitutionValue = e.target.value;
-      setFormValues({
-        ...formValues,
-        nameOfInstitution: nameOfInstitutionValue,
-      });
+      // setFormValues({
+      //   ...formValues,
+      //   nameOfInstitution: nameOfInstitutionValue,
+      // });
+      setResponseInstitution(nameOfInstitutionValue);
       return SetIsRequiredError(
         nameOfInstitutionValue,
         "nameOfInstitutionError",
@@ -969,7 +1057,122 @@ export default function BackToTop(props) {
     }
   };
 
+  const checkValidEmail = () => {
+    debugger
+    setSubmitLoader(true);
+    if(formValues.emailAddressLogin!=="")
+   {
+      axios
+        .post(
+          `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetApplicantsByEmailAddress?emailAddress=${formValues.emailAddressLogin}`,
+         
+        )
+        .then(function (response) {
+          debugger
+     
+        
+        //   setSubmitSuccess(true);
+        setCheckEmailBtn(true);
+        setSubmitLoader(false);
+          setDisplayPicture(`data:image/png;base64, ${response.data.Data[0].Passport}`);
+          setFileCV(`data:application/pdf;base64,${response.data.Data[0].Resume}`);
+          setFileExtension(response.data.Data[0].ResumeExtension);
+          setCVName(`Resume${fileExtension}`);
+          // setCVName(`${fileCV}${response.data.Data[0].ResumeExtension}`)
+          // setCVName(fileCV.name="hello")
+          // setCVName(fileCV.name)
+          // setDisplayPicture(pictureContainer);
+          // setPictureContainer(`data:image/png;base64,${displayPicture}`)
+          setOpenPictureSection(true);
+          setResponseCourseChoice(response.data.Data[0].CourseOfChoiceId);
+          setResponseFirstName(response.data.Data[0].FirstName);
+          setResponseMiddleName(response.data.Data[0].MiddleName);
+          setResponseLastName(response.data.Data[0].LastName);
+          setResponseEmail(response.data.Data[0].EmailAddress);
+          setResponseEmailConfirm(response.data.Data[0].EmailAddress)
+          setResponsePhoneNumber(response.data.Data[0].PhoneNumber);
+          setResponsePhoneNumberConfirm(response.data.Data[0].PhoneNumber);
+          setResponseGender(response.data.Data[0].Gender);
+          setResponseState(response.data.Data[0].StateId);
+          setResponseCity(response.data.Data[0].City);
+          setResponseInstitution(response.data.Data[0].FirstName);
+          setResponseQualification(response.data.Data[0].HighestQualification);
+          setResponseCourseQualification(response.data.Data[0].CourseOfHighestQualification);
+        //   setResponseRegistrationCode(response.data.Data.RegistrationCode);
+        //   setEmailAddressHolder(response.data.Data.EmailAddress)
+        //   setResponseMsg(response.data.Msg);
+         
+        //   submitBtnHandler();
+        //   isSubmitted(true);
+        //   setOpenPay(true);
+       
+          // setSubmit(response.data.data);
+          // setFile(null);
+          // setFileCV(null);
+        })
+        .catch(function (error) {
+          debugger
+        //   console.log(error);
+        //   setSubmitFailure(true);
+        //   setSubmitSuccess(false);
+         
+        })
+        .then(function () { setSubmitLoader(false) });
+    } else {
+    //   setSubmitLoader(false);
+    //   setSubmitFailure(false);
+    //   setSubmitSuccess(false);
+    //   setGeneralErrorMsg("*All fields except the middle name are required");
+    }
+    // setSubmitFailure(false);
+    // setSubmitSuccess(false);
+  };
+
+  useEffect(()=>{
+    debugger
+      if(checkEmailBtn === true  && responseEmail !==""){
+       alert(responseCourseChoice)
+       alert(pictureContainer)
+       alert(displayPicture)
+       alert(fileCV)
+        applicationDivWithCourse(applicationForm)
+      }
+  },[responseEmail, checkEmailBtn])
+
+  useEffect(()=>{
+    if(pictureContainer !=="" && checkEmailBtn === true &&responseEmail !==""){
+      setPictureExists(true);
+      alert(pictureExists);
+    }
+  },[pictureContainer,checkEmailBtn,responseEmail])
+ 
+  useEffect(()=>{
+    if(responseInstitution!==""  && responseEmail !=="" && checkEmailBtn === true && defaultValueAnswer !==""){
+      setAnswer("yes");
+      alert(defaultValueAnswer)
+    }
+   
+},[responseInstitution,responseEmail, checkEmailBtn, defaultValueAnswer, answer])
+
+useEffect(()=>{
+  if(responseInstitution ==="null"  && responseEmail !=="" && checkEmailBtn === true && defaultValueAnswer !==""){
+    setAnswer("no");
+    // alert(defaultValueAnswer)
+    setDefaultValueAnswer("no")
+  }
+ 
+},[responseInstitution,responseEmail, checkEmailBtn, defaultValueAnswer, answer]);
+
+
+useEffect(()=>{
+  if(responseEmail !=="" && checkEmailBtn === true && fileCV !==""){
   
+  console.log(fileCV.name,"munchit")
+  alert("Resume:"+CVName);
+  }
+ 
+},[responseEmail, checkEmailBtn, fileCV]);
+
 
   const registerHandler = () => {
     debugger
@@ -1091,9 +1294,9 @@ export default function BackToTop(props) {
       .addEventListener("paste", (e) => e.preventDefault());
   };
 
-  //   if(formValues.emailAddressLogin !=="" && formValues.phoneNumberAddressLogin !=="" && formValues.countryCode !==""){
-  //     setDisable(false);
-  // }
+  
+
+
   return (
     <React.Fragment>
       <CssBaseline className="hello" />
@@ -1287,8 +1490,8 @@ export default function BackToTop(props) {
                                   type="number"
                                   color="secondary"
                                   id="phoneNumberTextField"
-                                  label="Phone Number"
-                                  value={formValues.phoneNumber}
+                                  label="Phone Number Look"
+                                  value={responsePhoneNumber}
                                   error={formStates.phoneNumberError}
                                   helperText={formStates.phoneNumberErrorMsg}
                                   onChange={(event) => {
@@ -1410,8 +1613,8 @@ export default function BackToTop(props) {
                         Software Development, or Cyber Security */}
                           </p>
                           <FormControl className={classes.margin}>
-                            {/* <TextField
-                              //   style={{width:'300px'}}
+                         <TextField
+                                style={{width:'300px'}}
                               type="text"
                               onpaste="return false;"
                               ondrop="return false;"
@@ -1419,96 +1622,38 @@ export default function BackToTop(props) {
                               id="emailTextField"
                               color="secondary"
                               label="Email Address"
-                              value={formValues.emailAddress.toLowerCase()}
-                              error={formStates.emailAddressError}
-                              helperText={formStates.emailAddressErrorMsg}
+                              value={formValues.emailAddressLogin.toLowerCase()}
+                              error={formStates.emailAddressLoginError}
+                              helperText={formStates.emailAddressLoginErrorMsg}
                               onFocus={(event) => {
                                 CopyandPasteHandler(event);
                               }}
                               onChange={(event) => {
-                                emailAddressHandler(event);
+                                emailAddressLoginHandler(event);
                               }}
                               variant="outlined"
                             />
                             <br />
-                            <div style={{ display: "flex" }}>
-                              <Grid
-                                item
-                                xs={3}
-                                sm={5}
-                                md={5}
-                                style={{ margin: "0px 10px 0px 0px" }}
-                              >
-                                <TextField
-                                  className={classes.countryCodeText}
-                                  color="secondary"
-                                  style={{
-                                    textAlign: "left",
-                                    marginRight: "30px",
-                                  }}
-                                  id="outlined-select-currency"
-                                  select
-                                  label="Country Code"
-                                  value={formValues.countryCode}
-                                  error={formStates.countryCodeError}
-                                  helperText={formStates.countryCodeErrorMsg}
-                                  onChange={(event) => {
-                                    countryCodeHandler(event);
-                                  }}
-                                  variant="outlined"
-                          
-                                  fullWidth
-                                >
-                                  {countryCodeDropDown.length > 0 &&
-                                    countryCodeDropDown.map((option) => (
-                                      <MenuItem
-                                        key={option.CountryCode}
-                                        value={option.CountryCode}
-                                      >
-                                        {"+"}
-                                        {option.CountryCode}{" "}
-                                        {option.CountryName}
-                                      </MenuItem>
-                                    ))}
-                                </TextField>
-                              </Grid>
-                              <Grid item xs={9} sm={7} md={7}>
-                                <TextField
-                                  type="number"
-                                  color="secondary"
-                                  id="phoneNumberTextField"
-                                  label="Phone Number"
-                                  value={formValues.phoneNumber}
-                                  error={formStates.phoneNumberError}
-                                  helperText={formStates.phoneNumberErrorMsg}
-                                  onChange={(event) => {
-                                    phoneNumberHandler(event);
-                                  }}
-                                  onFocus={(event) => {
-                                    CopyandPasteHandler(event);
-                                  }}
-                                  fullWidth
-                                  variant="outlined"
-                                  // fullWidth
-                                />
-                              </Grid>
-                            </div> */}
+                            
 
                             <Button
+                              disabled={disable}
                               id="ApplyHereBtn"
                               className={classes.applyNow}
                               //   disabled={disable}
-                              onClick={() =>
-                                applicationDivWithCourse(applicationForm)
-                              }
+                            //   onClick={() =>
+                            //     applicationDivWithCourse(applicationForm)
+                            //   }
+                            onClick={checkValidEmail }
                               style={{ marginTop: "20px" }}
                               disableElevation
                               variant="contained"
                               color="secondary"
                             >
-                              {/* {!loadingForms && <CircularProgress/>} */}
-                              {/* {loadingForms && 'Apply Now'}  */}
-                              Proceed
+                               {submitLoader === true ? (
+                            <CircularProgress />
+                          ) :
+                             " Proceeds"}
                             </Button>
                           </FormControl>
                         </>
@@ -1670,7 +1815,7 @@ export default function BackToTop(props) {
                           id="outlined-select-currency"
                           select
                           label="Learn Track Choice for Program"
-                          value={formValues.courseChoice}
+                          value={responseCourseChoice}
                           onChange={handleChange}
                           variant="outlined"
                         >
@@ -1689,7 +1834,7 @@ export default function BackToTop(props) {
                         color="secondary"
                         id="outlined-disabled"
                         label="First Name"
-                        value={toTitleCase(formValues.firstName)}
+                        value={toTitleCase(responseFirstName)}
                         error={formStates.firstNameError}
                         helperText={formStates.firstNameErrorMsg}
                         onChange={(event) => {
@@ -1702,7 +1847,7 @@ export default function BackToTop(props) {
                         color="secondary"
                         id="outlined-disabled"
                         label="Middle Name (if applicable)"
-                        value={toTitleCase(formValues.middleName)}
+                        value={toTitleCase(responseMiddleName)}
                         onChange={(event) => {
                           middleNameHandler(event);
                         }}
@@ -1713,7 +1858,7 @@ export default function BackToTop(props) {
                         color="secondary"
                         id="outlined-disabled"
                         label="Last Name"
-                        value={toTitleCase(formValues.lastName)}
+                        value={toTitleCase(responseLastName)}
                         error={formStates.lastNameError}
                         helperText={formStates.lastNameErrorMsg}
                         onChange={(event) => {
@@ -1733,7 +1878,7 @@ export default function BackToTop(props) {
                         id="emailTextField"
                         color="secondary"
                         label="Email Address"
-                        value={formValues.emailAddress.toLowerCase()}
+                        value={responseEmail.toLowerCase()}
                         error={formStates.emailAddressError}
                         helperText={formStates.emailAddressErrorMsg}
                         onFocus={(event) => {
@@ -1749,7 +1894,7 @@ export default function BackToTop(props) {
                         color="secondary"
                         id="emailTextFieldConfirm"
                         label="Confirm Email Address"
-                        value={formValues.emailAddressConfirm.toLowerCase()}
+                        value={responseEmailConfirm.toLowerCase()}
                         error={formStates.emailAddressConfirmError}
                         helperText={formStates.emailAddressConfirmErrorMsg}
                         onFocus={(event) => {
@@ -1819,7 +1964,7 @@ export default function BackToTop(props) {
                             color="secondary"
                             id="phoneNumberTextField"
                             label="Phone Number"
-                            value={formValues.phoneNumber}
+                            value={responsePhoneNumber}
                             error={formStates.phoneNumberError}
                             helperText={formStates.phoneNumberErrorMsg}
                             onChange={(event) => {
@@ -1893,7 +2038,7 @@ export default function BackToTop(props) {
                             color="secondary"
                             id="phoneNumberConfirmTextField"
                             label="Confirm Phone Number"
-                            value={formValues.phoneNumberConfirm}
+                            value={responsePhoneNumberConfirm}
                             error={formStates.phoneNumberConfirmError}
                             helperText={formStates.phoneNumberConfirmErrorMsg}
                             onChange={(event) => {
@@ -1914,7 +2059,8 @@ export default function BackToTop(props) {
                         id="outlined-select-currency"
                         select
                         label="Sex"
-                        value={formValues.sex}
+                        defaultValue="see"
+                        value={responseGender}
                         error={formStates.genderError}
                         helperText={formStates.genderErrorMsg}
                         onChange={(event) => {
@@ -1935,7 +2081,7 @@ export default function BackToTop(props) {
                         id="outlined-select-currency"
                         select
                         label="State Of Residence"
-                        value={formValues.states}
+                        value={responseState}
                         onChange={(e) => {
                           StateHandler(e);
                         }}
@@ -1975,7 +2121,7 @@ export default function BackToTop(props) {
                         color="secondary"
                         id="outlined-disabled"
                         label="City Of Residence"
-                        value={formValues.city}
+                        value={responseCity}
                         onChange={(event) => {
                           cityHandler(event);
                         }}
@@ -1988,6 +2134,7 @@ export default function BackToTop(props) {
                           Are you currently in school?
                         </FormLabel>
                         <RadioGroup
+                          defaultValue={defaultValueAnswer}
                           aria-labelledby="demo-radio-buttons-group-label"
                           name="radio-buttons-group"
                         >
@@ -2013,7 +2160,7 @@ export default function BackToTop(props) {
                         color="secondary"
                         id="outlined-disabled"
                         label="Name Of Institution"
-                        value={formValues.nameOfInstitution}
+                        value={responseInstitution}
                         error={formStates.nameOfInstitutionError}
                         helperText={formStates.nameOfInstitutionErrorMsg}
                         onChange={(event) => {
@@ -2033,7 +2180,7 @@ export default function BackToTop(props) {
                         id="outlined-select-currency"
                         select
                         label="Highest Qualification"
-                        value={formValues.highestQualification}
+                        value={responseQualification}
                         onChange={(event) => {
                           QualificationHandler(event);
                         }}
@@ -2050,7 +2197,7 @@ export default function BackToTop(props) {
                         color="secondary"
                         id="outlined-disabled"
                         label="Course of Highest Qualification"
-                        value={formValues.courseOfStudy}
+                        value={responseCourseQualification}
                         error={formStates.courseOfStudyError}
                         helperText={formStates.courseOfStudyErrorMsg}
                         onChange={(event) => {

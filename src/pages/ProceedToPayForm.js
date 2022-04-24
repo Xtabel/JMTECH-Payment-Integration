@@ -2,14 +2,13 @@ import React,{useState} from 'react';
 import { withStyles,makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import { TextField } from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -73,9 +72,9 @@ const DialogActions = withStyles((theme) => ({
 
 const ProceedToPayment = (props)=> {
   debugger
-  const { openPay, handleClosePay,handleClickPayLater} = props
+  const { openPay, handleClosePay,handleClickPayLater,emailAddressHolder} = props
   const classes = useStyles();
-  const[toPage,setToPage]=useState("/payment");
+  const[toPage,setToPage]=useState("/payment/");
   const initialFormValue = {
       initialtoken:"1A2B5E",
       token:""
@@ -83,16 +82,24 @@ const ProceedToPayment = (props)=> {
   const [formValue, setFormValue] = useState(initialFormValue);
 
   // const {setIsAuth} = useContext(AuthContext);
-
-
+  // const navigate = useNavigate();
+  const history = useHistory(); 
   const payLaterHandler = () =>{
     handleClickPayLater();
       // setToPage("/")
   }
-  const proceedBtn = (e) =>{
-      setToPage()
+  const proceedBtn = () =>{
+      // setToPage()
+      debugger
+      history.push("/payment",{emailAddressHolder})
+      // console.log(emailAddressHolder)
+
   }
   const notify = () => toast.error("Unrecognised Authentication Token!");
+
+  // const sendToPage = () =>{
+  //   navigate.push("/payment",{emailAddressHolder})
+  // }
 
 
 return (
@@ -118,11 +125,10 @@ return (
       <Button className={classes.submitBtn}onClick={payLaterHandler}style={{backgroundColor:"#94949485", color:'#fff', textTransform:'capitalize'}}>
           Pay Later
         </Button>
-       <Link to={toPage} style={{textDecoration:'none'}}>
-      <Button className={classes.submitBtn}onClick={proceedBtn}style={{backgroundColor:"#00a1f1", color:'#fff', textTransform:'capitalize'}}>
+        <Button className={classes.submitBtn}onClick={proceedBtn}style={{backgroundColor:"#00a1f1", color:'#fff', textTransform:'capitalize'}}>
           Pay Now
         </Button>
-       </Link>
+     
 
        <ToastContainer  />
       </DialogActions>

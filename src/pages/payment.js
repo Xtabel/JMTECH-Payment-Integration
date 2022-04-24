@@ -7,7 +7,9 @@ import {
 import { Button, Grid, Paper, TextField } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import axios from "axios";
+import { CircularProgress } from "@material-ui/core";
 import validators from "../utils/Validators";
+import {useLocation } from 'react-router-dom';
 
 
 const getMuiTheme = createTheme({
@@ -39,25 +41,57 @@ const useStyles = makeStyles((theme) => ({
     },
     formcontainer:{
     },
+    proceedToPayBtn:{
+      backgroundColor:'#00a1f1', textTransform:'capitalize', color:'#fff',
+      '&:hover':{
+        backgroundColor:'#00a1f1'
+      },
+    },
+    paymentLink:{
+      textDecoration:'none',
+      // pointerEvents:'none',
+    },
 
 }));
 
 
    
 
-const Payment = () => {
+const Payment = (props) => {
+  debugger
+    // const {emailAddressHolder} = props;
+    // let { email } = useParams();
+    const location = useLocation();
+    let email = location.state.emailAddressHolder
+    console.log(email,"Email Address");
     const classes = useStyles();
     const initialFormValues = {
       userid: "",
       accountName: "",
-      accountEmail: "",
+      accountEmail:  "",
       amount :30000,
+      url:"https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment"
     };
     
      // Form Values
+     
      const [formValues, setFormValues] = useState(initialFormValues);
      const [responseMsg, setResponseMsg] = useState("");
+     const [theLinkSentByAkan, setTheLinkSentByAkan] = useState("https://www.google.com");
      const [responseData, setResponseData] = useState("");
+     const [disableBtn, setDisableBtn] = useState(true);
+     const [isButtonClicked, setIsButtonClicked] = useState(false);
+    //  const [paymentLink, setPaymentLink] = useState("https://www.google.com")
+    const [paymentProcessed, setPaymentProcessed] = useState(false);
+    //  const linkStatus = () =>{
+    //    var paymentLink = document.getElementsByClassName("make");
+    //    paymentLink.style = "text-decoration:underline";
+    //  }
+  
+    //  useEffect(()=>{
+    //    console.log(email)
+    //  })
+
      const SetIsRequiredError = (
       value,
       stateError,
@@ -146,45 +180,86 @@ const Payment = () => {
       return true;
   
     }
+
+   useEffect(()=>{
+    if((formValues.accountName !== "") && (email !=="")){
+      setDisableBtn(false);
+    }
+    else{
+      setDisableBtn(true);
+    }
+   },[formValues.accountName, email])
+
     const proceedToPaymentHandler = () => {
-      debugger
-      // let formData = new FormData();
-      // formData.append("accountName", formValues.accountName);
-      // formData.append("amount", formValues.amount);
-      // formData.append("EmailAddress", formValues.emailAddress);
+     debugger
       if (
         formValues.accountName !== "" &&
-        formValues.accountEmail !== ""
+        email !== ""
       ) {
         axios
           .post(
             `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/ProcessPayment`,{
                 accountName: formValues.accountName,
                 amount: formValues.amount,
-                accountEmail:formValues.accountEmail
+                accountEmail:email,
+                url: formValues.url,
           }
           )
           .then(function (response) {
-            setResponseMsg(response.data.Msg);
-            setResponseData(response.data.Data);
-            alert(responseData);
+            debugger
+            if(response.data){
+              setPaymentProcessed(true);
+              setResponseMsg(response.data.Msg);
+              setResponseData(response.data.Data);
             
+            } 
           })
           .catch(function (error) {
             console.log(error);
           })
-          .then(function () {});
+          .then(function () {
+            debugger
+            setIsButtonClicked(!isButtonClicked);
+          });
       } else {
         alert("something")
       }
     };
 
+   
+    useEffect(()=>{
+      debugger
+      if(paymentProcessed === true && responseData !==""){
+        window.location.href=`${responseMsg}`;
+        // window.location.href='https://www.google.com';
+      }
+    },[paymentProcessed, isButtonClicked])
+
+
+    useEffect(()=> {
+      debugger
+      if(paymentProcessed && responseData !==""){
+        axios
+          .post(
+            `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment?reference=${responseData}&emailAddress=${email}`
+          )
+          .then(function (response) {
+            debugger
+            if(response.data){
+              
+            } 
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .then(function () {
+            setPaymentProcessed(false);
+          });
+      }
+    },[paymentProcessed, isButtonClicked])
+
+
     
-
-
-    const payBtn = () =>{
-
-    }
   return (
     <MuiThemeProvider theme={getMuiTheme}>
     <div className={classes.container}>
@@ -210,29 +285,46 @@ const Payment = () => {
                         fullWidth
                       />
                <br/>
-          
+                        {/* {emailAddressHolder} */}
             <TextField
-                        type="text"
-                        onpaste="return false;"
-                        ondrop="return false;"
-                        autocomplete="off"
-                        id="emailTextField"
-                        color="secondary"
-                        label="Email Address"
-                        value={formValues.accountEmail.toLowerCase()}
-                        error={formStates.accountEmailError}
-                        helperText={formStates.accountEmailErrorMsg}
-                        onFocus={(event) => {
-                          // CopyandPasteHandler(event);
-                        }}
-                        onChange={(event) => {
-                          accountEmailHandler(event);
-                        }}
-                        variant="outlined"
-                        fullWidth
-                      />
+                disabled
+                type="text"
+                onpaste="return false;"
+                ondrop="return false;"
+                autocomplete="off"
+                id="emailTextField"
+                color="secondary"
+                label="Email Address"
+                value={email}
+                error={formStates.accountEmailError}
+                helperText={formStates.accountEmailErrorMsg}
+                onFocus={(event) => {
+                  // CopyandPasteHandler(event);
+                }}
+                onChange={(event) => {
+                  accountEmailHandler(event);
+                }}
+                variant="outlined"
+                fullWidth
+              />
                       <br/>
-                      <Button onClick={proceedToPaymentHandler} variant="contained" style={{backgroundColor:'#00a1f1', textTransform:'capitalize', color:'#fff'}}>Proceed to make payment</Button>
+                     
+                <Button className={classes.proceedToPayBtn}disabled={disableBtn} onClick={()=>proceedToPaymentHandler()} variant="contained">
+                  {isButtonClicked === true ?
+                  <><CircularProgress color="secondary"/></>:
+                  "Proceed to make payment"}
+                  
+                  </Button>
+                      {/* <a rel={'external'} target="_blank" href={responseMsg} >
+                      <Button className={classes.proceedToPayBtn}disabled={disableBtn} onClick={()=>proceedToPaymentHandler()} variant="contained">Proceed to make payment</Button>
+                      </a> */}
+                       {/* {isLinkActive?(
+                         <Button className={classes.proceedToPayBtn}disabled={disableBtn} onClick={()=>proceedToPaymentHandler()} variant="contained">Proceed to make payment</Button>
+                       ):(
+                      <Link className={classes.paymentLink} to={{ pathname: `${responseMsg}`}}>
+                    
+                      </Link>)} */}
+                     {/* <Button onClick={linkStatus}>Check</Button> */}
                      
               </FormControl>
            

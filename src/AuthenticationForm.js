@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { withStyles,makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import { TextField } from "@material-ui/core";
-import { AuthContext } from "./context/AuthContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
@@ -75,7 +74,7 @@ const DialogActions = withStyles((theme) => ({
 
 export default function AuthenticationForm(props) {
     debugger
-    const { open, handleClose, setIsAuth, isAuth } = props
+    const { open, handleClose, isAuth } = props
     const classes = useStyles();
     const[toPage,setToPage]=useState("");
     const initialFormValue = {
@@ -85,7 +84,6 @@ export default function AuthenticationForm(props) {
     const [formValue, setFormValue] = useState(initialFormValue);
     const [tokenError, setTokenError] = useState("");
 
-    // const {setIsAuth} = useContext(AuthContext);
  
 
     const submitBtnHandler = () =>{
