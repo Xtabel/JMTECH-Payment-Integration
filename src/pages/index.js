@@ -22,11 +22,12 @@ import Zoom from "@material-ui/core/Zoom";
 import { Button, Grid, Paper, TextField } from "@material-ui/core";
 import newlogo from "../assets/newlogo.png";
 import image2 from "../assets/image2.gif";
+import bg from "../assets/bg.jpg";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { CircularProgress } from "@material-ui/core";
-import AuthenticationForm from "../AuthenticationForm";
+// import AuthenticationForm from "../AuthenticationForm";
 import ProceedToPayForm from "./ProceedToPayForm";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -34,6 +35,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {Link} from 'react-router-dom';
 
 // axios.defaults.baseURL = "http://jmtechcentre.azurewebsites.net/api/Applicant/";
 // axios.defaults.baseURL = "https://www.waeconline.org.ng/JMTechAPI/swagger/index.html";
@@ -42,12 +44,27 @@ const getMuiTheme = createTheme({
   palette: {
     secondary: { main: "#1a1a1a" },
     primary: { main: "#fe0000" },
+    background:{
+      // default:`url(${bg})`, 
+      // paper:"#fe0000",
+    },
   },
+
   overrides: {
     MuiToolbar: {
       regular: {
         justifyContent: "space-between",
       },
+    },
+    MuiCssBaseline: {
+      "@global": {
+        body: {
+          backgroundImage:
+          `url(${bg})`,
+          backgroundSize: 'cover',
+          backgroundRepeat:'no-repeat',
+        }
+      }
     },
     // MuiContainer:{
     //   maxWidthLg:{
@@ -58,6 +75,9 @@ const getMuiTheme = createTheme({
       container:{
         display:'block',
       }
+    },
+    '& body':{
+     backgroundColor:'red !important'
     },
     MuiFormControl: {
       root: {
@@ -230,7 +250,7 @@ export default function BackToTop(props) {
   ];
 
   const initialFormValues = {
-    userid: "",
+    userid: 0,
     firstName: "",
     middleName: "",
     lastName: "",
@@ -246,7 +266,8 @@ export default function BackToTop(props) {
     city: "",
     cityid: "",
     sex: "",
-    countryCode: "234",
+    countryCode: "",
+    countryId:"156",
     highestQualification: "",
     courseOfStudy: "",
     nameOfInstitution: "",
@@ -291,22 +312,23 @@ export default function BackToTop(props) {
     uploadCVError: false,
     uploadCVErrorMsg: "",
   };
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   // const[toPage,setToPage]=useState("");
 
   
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+  // const handleClose = () => {
+  //   setOpen(false);
+  // };
   const [responseFirstName, setResponseFirstName] = useState("");
+  const [responseLastName, setResponseLastName] = useState("")
   const [responseRegistrationCode, setResponseRegistrationCode] = useState("");
   const [responseMsg, setResponseMsg] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitFailure, setSubmitFailure] = useState(false);
-  const [emailAddressHolder,setEmailAddressHolder] = useState("Akan");
+  const [emailAddressHolder,setEmailAddressHolder] = useState("");
   const [formStates, setFormStates] = React.useState(initialFormState);
   const [lgaDisable, setLgaDisable] = useState(true);
   const [loader, setLoader] = useState(true);
@@ -323,7 +345,7 @@ export default function BackToTop(props) {
   const [theLga, setTheLga] = useState([]);
   // const [disable, setDisable] = useState(true);
   const [answer, setAnswer] = React.useState("");
-  const [hideSchool, setHideSchool] = useState(true);
+  // const [hideSchool, setHideSchool] = useState(true);
   const [openPay,setOpenPay]= useState(false);
 
   const handleClickPayLater = ()=>{
@@ -332,9 +354,9 @@ export default function BackToTop(props) {
     handleClosePay();
     setIsPayLater(true);
   }
-  const handleClickPay = ()=>{
-    setOpenPay(true)
-  };
+  // const handleClickPay = ()=>{
+  //   setOpenPay(true)
+  // };
   const handleClosePay = () =>{
     setOpenPay(false);
   }
@@ -342,7 +364,7 @@ export default function BackToTop(props) {
   const handleChangeAnswer = (event) => {
     const answers = event.target.value;
     setAnswer(answers);
-    setHideSchool(false);
+    // setHideSchool(false);
   };
   const handlePickNo = (event)=>{
     const answers = event.target.value;
@@ -488,7 +510,7 @@ export default function BackToTop(props) {
     // HomePageArea.style = "display:flex";
     // var applicationForms = document.getElementById("forms");
     // applicationForms.style="display:none";
-    handleClickOpen();
+    // handleClickOpen();
     CancelBtnHandler();
   };
   const genderHandler = (e) => {
@@ -508,7 +530,7 @@ export default function BackToTop(props) {
       let countryCodeValue = e.target.value;
       e.preventDefault();
 
-      setFormValues({ ...formValues, countryCode: countryCodeValue });
+      setFormValues({ ...formValues, countryId: countryCodeValue });
       return SetIsRequiredError(
         countryCodeValue,
         "countryCodeError",
@@ -576,7 +598,7 @@ export default function BackToTop(props) {
   const CancelBtnHandler = () => {
     var HomePageArea = document.getElementById("HomePage");
     var applicationForms = document.getElementById("forms");
-    var applyhere = document.getElementById("ApplyHereBtn");
+    // var applyhere = document.getElementById("ApplyHereBtn");
     // applyhere.style = "display:block";
     HomePageArea.style = "display:flex";
     applicationForms.style = "display:none";
@@ -591,20 +613,20 @@ export default function BackToTop(props) {
     setCvFormatMsg("");
     setImageFormatMsg("");
   };
-  const backToHomeHandler = () => {
-    var HomePageArea = document.getElementById("HomePage");
-    var applicationForms = document.getElementById("forms");
-    var applyhere = document.getElementById("ApplyHereBtn");
-    // applyhere.style = "display:block";
-    // HomePageArea.style = "display:flex";
-    // applicationForms.style = "display:none";
-    // setDisable(true);
-    setFormStates({ ...initialFormState });
-    setFormValues({ ...initialFormValues });
-    setIsSubmitted(false);
-    setFileCV(null);
-    setFile(null);
-  };
+  // const backToHomeHandler = () => {
+  //   // var HomePageArea = document.getElementById("HomePage");
+  //   // var applicationForms = document.getElementById("forms");
+  //   var applyhere = document.getElementById("ApplyHereBtn");
+  //   // applyhere.style = "display:block";
+  //   // HomePageArea.style = "display:flex";
+  //   // applicationForms.style = "display:none";
+  //   // setDisable(true);
+  //   setFormStates({ ...initialFormState });
+  //   setFormValues({ ...initialFormValues });
+  //   setIsSubmitted(false);
+  //   setFileCV(null);
+  //   setFile(null);
+  // };
 
   const validateImage = (e) => {
     setDisplayPicture(null);
@@ -977,13 +999,15 @@ export default function BackToTop(props) {
     setGeneralErrorMsg("");
     setIsSubmitted(true);
     let formData = new FormData();
+    formData.append("ApplicantId", formValues.userid);
     formData.append("FirstName", formValues.firstName);
     formData.append("LastName", formValues.lastName);
     formData.append("MiddleName", formValues.middleName);
     formData.append(
       "PhoneNumber",
-      formValues.countryCode + formValues.phoneNumber
+      formValues.phoneNumber
     );
+    formData.append("CountryCodeId", formValues.countryId);
     formData.append("StateId", formValues.states);
     formData.append("Gender", formValues.sex);
     formData.append("EmailAddress", formValues.emailAddress);
@@ -1012,7 +1036,6 @@ export default function BackToTop(props) {
       formValues.lga !== "" &&
       formValues.highestQualification !== "" &&
       formValues.courseOfStudy !== "" &&
-      formValues.nameOfInstitution !== "" &&
       formValues.sex !== "" &&
       formValues.courseChoice !== "" &&
       formValues.city !== ""
@@ -1026,6 +1049,7 @@ export default function BackToTop(props) {
           debugger
           setSubmitSuccess(true);
           setResponseFirstName(response.data.Data.FirstName);
+          setResponseLastName(response.data.Data.LastName);
           setResponseRegistrationCode(response.data.Data.RegistrationCode);
           setEmailAddressHolder(response.data.Data.EmailAddress)
           setResponseMsg(response.data.Msg);
@@ -1068,10 +1092,10 @@ export default function BackToTop(props) {
   useEffect(()=>{
     debugger
     if(submitFailure === true && responseMsg !=="" && submitSuccess===false){
-    toast.error(responseMsg);
+    // toast.error(responseMsg);
     }
     
-  },[submitLoader, submitFailure, responseMsg])
+  },[submitLoader, submitFailure, responseMsg, submitSuccess])
 
 
 
@@ -1096,6 +1120,7 @@ export default function BackToTop(props) {
   // }
   return (
     <React.Fragment>
+      <div style={{backgroundColor:'red !important'}}>
       <CssBaseline className="hello" />
       {loader === true ? (
         <Box
@@ -1112,6 +1137,7 @@ export default function BackToTop(props) {
         </Box>
       ) : (
         <MuiThemeProvider theme={getMuiTheme}>
+          <CssBaseline/>
           <AppBar
             position="sticky"
             style={{
@@ -1143,7 +1169,7 @@ export default function BackToTop(props) {
             </Toolbar>
           </AppBar>
           <Toolbar id="back-to-top-anchor" />
-          <Container>
+          <Container >
             <Box my={2}>
               <Grid container spacing={3}>
                 <Box
@@ -1210,7 +1236,7 @@ export default function BackToTop(props) {
                         Software Development, or Cyber Security */}
                           </p>
                           <FormControl className={classes.margin}>
-                            <TextField
+                            {/* <TextField
                               //   style={{width:'300px'}}
                               type="text"
                               onpaste="return false;"
@@ -1248,8 +1274,8 @@ export default function BackToTop(props) {
                                   }}
                                   id="outlined-select-currency"
                                   select
-                                  label="Country Code"
-                                  value={formValues.countryCode}
+                                  label="Country Code3"
+                                  value={formValues.countryId}
                                   error={formStates.countryCodeError}
                                   helperText={formStates.countryCodeErrorMsg}
                                   onChange={(event) => {
@@ -1272,8 +1298,8 @@ export default function BackToTop(props) {
                                   {countryCodeDropDown.length > 0 &&
                                     countryCodeDropDown.map((option) => (
                                       <MenuItem
-                                        key={option.CountryCode}
-                                        value={option.CountryCode}
+                                        key={option.CountryId}
+                                        value={option.CountryId}
                                       >
                                         {"+"}
                                         {option.CountryCode}{" "}
@@ -1302,7 +1328,7 @@ export default function BackToTop(props) {
                                   // fullWidth
                                 />
                               </Grid>
-                            </div>
+                            </div> */}
                             {/* <TextField
                           color="secondary"
                           style={{ width: "100%" }}
@@ -1348,7 +1374,7 @@ export default function BackToTop(props) {
                       ) : (
                         
                         <Button
-                          onClick={backToHomeHandler}
+                          // onClick={backToHomeHandler}
                           style={{
                             margin: "20px 0px",
                             textTransform: "capitalize",
@@ -1410,91 +1436,9 @@ export default function BackToTop(props) {
                         Software Development, or Cyber Security */}
                           </p>
                           <FormControl className={classes.margin}>
-                            {/* <TextField
-                              //   style={{width:'300px'}}
-                              type="text"
-                              onpaste="return false;"
-                              ondrop="return false;"
-                              autocomplete="off"
-                              id="emailTextField"
-                              color="secondary"
-                              label="Email Address"
-                              value={formValues.emailAddress.toLowerCase()}
-                              error={formStates.emailAddressError}
-                              helperText={formStates.emailAddressErrorMsg}
-                              onFocus={(event) => {
-                                CopyandPasteHandler(event);
-                              }}
-                              onChange={(event) => {
-                                emailAddressHandler(event);
-                              }}
-                              variant="outlined"
-                            />
-                            <br />
-                            <div style={{ display: "flex" }}>
-                              <Grid
-                                item
-                                xs={3}
-                                sm={5}
-                                md={5}
-                                style={{ margin: "0px 10px 0px 0px" }}
-                              >
-                                <TextField
-                                  className={classes.countryCodeText}
-                                  color="secondary"
-                                  style={{
-                                    textAlign: "left",
-                                    marginRight: "30px",
-                                  }}
-                                  id="outlined-select-currency"
-                                  select
-                                  label="Country Code"
-                                  value={formValues.countryCode}
-                                  error={formStates.countryCodeError}
-                                  helperText={formStates.countryCodeErrorMsg}
-                                  onChange={(event) => {
-                                    countryCodeHandler(event);
-                                  }}
-                                  variant="outlined"
                           
-                                  fullWidth
-                                >
-                                  {countryCodeDropDown.length > 0 &&
-                                    countryCodeDropDown.map((option) => (
-                                      <MenuItem
-                                        key={option.CountryCode}
-                                        value={option.CountryCode}
-                                      >
-                                        {"+"}
-                                        {option.CountryCode}{" "}
-                                        {option.CountryName}
-                                      </MenuItem>
-                                    ))}
-                                </TextField>
-                              </Grid>
-                              <Grid item xs={9} sm={7} md={7}>
-                                <TextField
-                                  type="number"
-                                  color="secondary"
-                                  id="phoneNumberTextField"
-                                  label="Phone Number"
-                                  value={formValues.phoneNumber}
-                                  error={formStates.phoneNumberError}
-                                  helperText={formStates.phoneNumberErrorMsg}
-                                  onChange={(event) => {
-                                    phoneNumberHandler(event);
-                                  }}
-                                  onFocus={(event) => {
-                                    CopyandPasteHandler(event);
-                                  }}
-                                  fullWidth
-                                  variant="outlined"
-                                  // fullWidth
-                                />
-                              </Grid>
-                            </div> */}
-
-                            <Button
+                          <div style={{display:'flex'}}>
+                          <Button
                               id="ApplyHereBtn"
                               className={classes.applyNow}
                               //   disabled={disable}
@@ -1508,14 +1452,28 @@ export default function BackToTop(props) {
                             >
                               {/* {!loadingForms && <CircularProgress/>} */}
                               {/* {loadingForms && 'Apply Now'}  */}
-                              Proceed
+                              Start New Application
                             </Button>
+                            <Link to="/resumeApplication" style={{textDecoration:'none'}}>
+                            <Button
+                              className={classes.applyNow}
+                              style={{ marginTop: "20px", marginLeft:'20px' }}
+                              disableElevation
+                              variant="contained"
+                              color="primary"
+                            >
+                              Resume Application
+                            </Button>
+                            </Link>
+                          </div>
+                            
+                          
                           </FormControl>
                         </>
                       ) : (
                         
                         <Button
-                          onClick={backToHomeHandler}
+                          // onClick={backToHomeHandler}
                           style={{
                             margin: "20px 0px",
                             textTransform: "capitalize",
@@ -1780,8 +1738,8 @@ export default function BackToTop(props) {
                             style={{ textAlign: "left", marginRight: "30px" }}
                             id="outlined-select-currency"
                             select
-                            label="Country Code"
-                            value={formValues.countryCode}
+                            label="Country Code1"
+                            value={formValues.countryId}
                             error={formStates.countryCodeError}
                             helperText={formStates.countryCodeErrorMsg}
                             onChange={(event) => {
@@ -1804,8 +1762,8 @@ export default function BackToTop(props) {
                             {countryCodeDropDown.length > 0 &&
                               countryCodeDropDown.map((option) => (
                                 <MenuItem
-                                  key={option.CountryCode}
-                                  value={option.CountryCode}
+                                  key={option.CountryId}
+                                  value={option.CountryId}
                                 >
                                   {"+"}
                                   {option.CountryCode} {option.CountryName}
@@ -1855,8 +1813,8 @@ export default function BackToTop(props) {
                             id="outlined-select-currency"
                             select
                             fullWidth
-                            label="Country Code"
-                            value={formValues.countryCode}
+                            label="Country Code2"
+                            value={formValues.countryId}
                             error={formStates.countryCodeError}
                             helperText={formStates.countryCodeErrorMsg}
                             onChange={(event) => {
@@ -1878,8 +1836,8 @@ export default function BackToTop(props) {
                             {countryCodeDropDown.length > 0 &&
                               countryCodeDropDown.map((option) => (
                                 <MenuItem
-                                  key={option.CountryCode}
-                                  value={option.CountryCode}
+                                  key={option.CountryId}
+                                  value={option.CountryId}
                                 >
                                   {"+"}
                                   {option.CountryCode} {option.CountryName}
@@ -2103,10 +2061,11 @@ export default function BackToTop(props) {
               <KeyboardArrowUpIcon />
             </Fab>
           </ScrollTop>
-          <AuthenticationForm open={open} handleClose={handleClose} />
-          <ProceedToPayForm emailAddressHolder={emailAddressHolder} openPay={openPay} handleClosePay={handleClosePay} handleClickPayLater={handleClickPayLater}/>
+          {/* <AuthenticationForm open={open} handleClose={handleClose} /> */}
+          <ProceedToPayForm emailAddressHolder={emailAddressHolder} responseFirstName={responseFirstName} responseLastName={responseLastName} openPay={openPay} handleClosePay={handleClosePay} handleClickPayLater={handleClickPayLater}/>
         </MuiThemeProvider>
       )}
+      </div>
     </React.Fragment>
   );
 }

@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+import axios from 'axios';
 import { withStyles,makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -71,9 +72,11 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 const ProceedToPayment = (props)=> {
-  debugger
-  const { openPay, handleClosePay,handleClickPayLater,emailAddressHolder} = props
+  
+  const { openPay, handleClosePay,handleClickPayLater,emailAddressHolder,responseFirstName, responseLastName} = props
+  const [responseMsg, setResponseMsg] = useState("");
   const classes = useStyles();
+  const fullname = responseFirstName+ " "+responseLastName;
   const[toPage,setToPage]=useState("/payment/");
   const initialFormValue = {
       initialtoken:"1A2B5E",
@@ -84,13 +87,46 @@ const ProceedToPayment = (props)=> {
   // const {setIsAuth} = useContext(AuthContext);
   // const navigate = useNavigate();
   const history = useHistory(); 
+
+  const goToPayLater = ()=>{
+    history.push("/paylater",{fullname,emailAddressHolder})
+  }
+
+
   const payLaterHandler = () =>{
-    handleClickPayLater();
+    debugger
+    let formData = new FormData();
+    formData.append("emailAddress", emailAddressHolder);
+    formData.append("fullName", responseFirstName);
+    if(responseFirstName !=="" && responseLastName!=="" && emailAddressHolder !==""){
+      debugger
+      axios
+      .post(
+        `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/PayLater?emailAddress=${emailAddressHolder}&fullName=${fullname}`)
+      .then(function (response) {
+        debugger
+        setResponseMsg(response.data.Msg)
+        goToPayLater()
+       
+      })
+      .catch(function (error) {
+        toast.error(responseMsg);
+      })
+      .then(function () {
+        debugger
+      });
+  } else {
+    alert("something")
+  
+    }
+
+
+ 
       // setToPage("/")
   }
   const proceedBtn = () =>{
       // setToPage()
-      debugger
+
       history.push("/payment",{emailAddressHolder})
       // console.log(emailAddressHolder)
 

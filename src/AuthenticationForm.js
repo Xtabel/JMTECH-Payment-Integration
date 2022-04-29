@@ -73,7 +73,7 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 export default function AuthenticationForm(props) {
-    debugger
+    
     const { open, handleClose, isAuth } = props
     const classes = useStyles();
     const[toPage,setToPage]=useState("");

@@ -4,7 +4,7 @@ import {
   createTheme,
   MuiThemeProvider,
 } from "@material-ui/core/styles";
-import { Button, Grid, Paper, TextField } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
@@ -77,7 +77,7 @@ const Payment = (props) => {
      
      const [formValues, setFormValues] = useState(initialFormValues);
      const [responseMsg, setResponseMsg] = useState("");
-     const [theLinkSentByAkan, setTheLinkSentByAkan] = useState("https://www.google.com");
+    //  const [theLinkSentByAkan, setTheLinkSentByAkan] = useState("https://www.google.com");
      const [responseData, setResponseData] = useState("");
      const [disableBtn, setDisableBtn] = useState(true);
      const [isButtonClicked, setIsButtonClicked] = useState(false);
@@ -233,7 +233,7 @@ const Payment = (props) => {
         window.location.href=`${responseMsg}`;
         // window.location.href='https://www.google.com';
       }
-    },[paymentProcessed, isButtonClicked])
+    },[paymentProcessed, isButtonClicked, responseMsg, responseData])
 
 
     useEffect(()=> {
@@ -256,7 +256,7 @@ const Payment = (props) => {
             setPaymentProcessed(false);
           });
       }
-    },[paymentProcessed, isButtonClicked])
+    },[paymentProcessed, isButtonClicked,responseData, email])
 
 
     

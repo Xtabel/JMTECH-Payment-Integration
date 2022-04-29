@@ -10,7 +10,6 @@ import {
   createTheme,
   MuiThemeProvider,
 } from "@material-ui/core/styles";
-import bg from "../assets/bg.jpg";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
@@ -27,17 +26,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { CircularProgress } from "@material-ui/core";
-// import AuthenticationForm from "../AuthenticationForm";
+import AuthenticationForm from "../AuthenticationForm";
 import ProceedToPayForm from "./ProceedToPayForm";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-import { base64StringToBlob } from 'blob-util';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // axios.defaults.baseURL = "http://jmtechcentre.azurewebsites.net/api/Applicant/";
 // axios.defaults.baseURL = "https://www.waeconline.org.ng/JMTechAPI/swagger/index.html";
@@ -53,24 +49,15 @@ const getMuiTheme = createTheme({
         justifyContent: "space-between",
       },
     },
-    MuiCssBaseline: {
-      "@global": {
-        body: {
-          backgroundImage: `url(${bg})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        },
-      },
-    },
     // MuiContainer:{
     //   maxWidthLg:{
     //     maxWidth:''
     //   }
     // },
-    MuiGrid: {
-      container: {
-        display: "block",
-      },
+    MuiGrid:{
+      container:{
+        display:'block',
+      }
     },
     MuiFormControl: {
       root: {
@@ -125,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   theImage: {
-    width: "80%",
+    width:'80%',
     [theme.breakpoints.only("xs")]: {
       width: "300px",
       height: "auto",
@@ -207,6 +194,7 @@ ScrollTop.propTypes = {
 export default function PayLater(props) {
   // const dispatch = useDispatch();
 
+  
   const genders = [
     {
       value: "Male",
@@ -258,7 +246,7 @@ export default function PayLater(props) {
     city: "",
     cityid: "",
     sex: "hello",
-    countryCode: "",
+    countryCode: "234",
     highestQualification: "",
     courseOfStudy: "",
     nameOfInstitution: "",
@@ -272,8 +260,8 @@ export default function PayLater(props) {
     firstNameErrorMsg: "",
     lastNameError: false,
     lastNameErrorMsg: "",
-    emailAddressLoginError: "",
-    emailAddressLoginErrorMsg: "",
+    emailAddressLoginError:"",
+    emailAddressLoginErrorMsg:"",
     emailAddressError: false,
     emailAddressErrorMsg: "",
     emailAddressConfirmError: false,
@@ -308,104 +296,76 @@ export default function PayLater(props) {
 
   // const[toPage,setToPage]=useState("");
 
-  const [valueYesOrNo, setValueYesOrNo] =useState("");
-  // const [pictureExists, setPictureExists] = useState(true);
+  
+ 
+  const [pictureExists, setPictureExists] = useState(true);
   const [responseCourseChoice, setResponseCourseChoice] = useState("");
-  const [responseApplicantId, setResponseApplicantId] = useState(0);
   const [responseFirstName, setResponseFirstName] = useState("");
   const [responseMiddleName, setResponseMiddleName] = useState("");
-  const [responseLastName, setResponseLastName] = useState("");
+  const [responseLastName,setResponseLastName]= useState("");
   const [responseEmail, setResponseEmail] = useState("");
-  const [responseEmailConfirm, setResponseEmailConfirm] = useState("");
-  // const [responseCountryCode, setResponseCountryCode] = useState("");
-  const [responseCountryId, setResponseCountryId] = useState("");
-  const [responsePhoneNumber, setResponsePhoneNumber] = useState("");
-  const [responsePhoneNumberConfirm, setResponsePhoneNumberConfirm] =
-    useState("");
+  const [responseEmailConfirm, setResponseEmailConfirm]=useState("");
+  const [responsePhoneNumber, setResponsePhoneNumber]= useState("");
+  const [responsePhoneNumberConfirm,setResponsePhoneNumberConfirm]= useState("");
   const [responseGender, setResponseGender] = useState("");
   const [responseState, setResponseState] = useState("");
-  const [responseLGAId, setResponseLGAId] = useState("");
-  const [responseLGA, setResponseLGA] = useState("");
-  const [responseCity, setResponseCity] = useState("");
-  const [responseInstitution, setResponseInstitution] = useState("");
+  const [responseCity,setResponseCity]= useState("");
+  const [responseInstitution,setResponseInstitution] = useState("");
   const [responseQualification, setResponseQualification] = useState("");
-  const [responseCourseQualification, setResponseCourseQualification] =
-    useState("");
+  const [responseCourseQualification, setResponseCourseQualification]= useState("");
   const [responseRegistrationCode, setResponseRegistrationCode] = useState("");
   const [responseMsg, setResponseMsg] = useState("");
-  const [responseEmailMsg, setResponseEmailMsg] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [checkEmailBtn, setCheckEmailBtn] = useState(false);
-  // const [submitFailure, setSubmitFailure] = useState(false);
-  const [emailAddressHolder, setEmailAddressHolder] = useState("Akan");
+  const[checkEmailBtn, setCheckEmailBtn] = useState(false);
+  const [submitFailure, setSubmitFailure] = useState(false);
+  const [emailAddressHolder,setEmailAddressHolder] = useState("Akan");
   const [formStates, setFormStates] = React.useState(initialFormState);
-  const [lgaDisable, setLgaDisable] = useState(false);
+  const [lgaDisable, setLgaDisable] = useState(true);
   const [loader, setLoader] = useState(true);
   const [submitLoader, setSubmitLoader] = useState(false);
-  // const [btnLoader, setBtnLoader] = useState(false);
+  const [btnLoader, setBtnLoader] = useState(false);
   const [imageFormatMsg, setImageFormatMsg] = useState("");
   const [cvFormatMsg, setCvFormatMsg] = useState("");
   const [generalErrorMsg, setGeneralErrorMsg] = useState("");
   const [file, setFile] = useState(null);
   const [fileCV, setFileCV] = useState(null);
   const [displayPicture, setDisplayPicture] = useState("");
-  const [fileExtension, setFileExtension] = useState("");
-  // const [pictureContainer, setPictureContainer] = useState("");
+  const [fileExtension,setFileExtension]=useState("");
+  const [pictureContainer,setPictureContainer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPayLater, setIsPayLater] = useState(false);
   const [theState, setTheState] = useState([]);
   const [theLga, setTheLga] = useState([]);
   const [disable, setDisable] = useState(true);
-  // const [answer, setAnswer] = useState("");
-  const [displayInstitution, setDisplayInstitution] = useState(false);
-  // const [defaultValueAnswer, setDefaultValueAnswer] = useState(false);
-  // const [hideSchool, setHideSchool] = useState(true);
-  const [openPay, setOpenPay] = useState(false);
-  // const [picBlob, setPicBlob] = useState("");
-  // const [docBloB, setDocBlob] = useState("");
-  const [newImage, setNewImage] = useState(null)
-  const [newCvState,setNewCvState] = useState(null);
-  // const [newCV,setnewCV]=  useState(null);
-  const [theCVFile, setTheCVFile]= useState(null);
+  const [answer, setAnswer] = React.useState("");
+  const [defaultValueAnswer, setDefaultValueAnswer] = useState("yes")
+  const [hideSchool, setHideSchool] = useState(true);
+  const [openPay,setOpenPay]= useState(false);
 
-
-  const handleChangeValue=(e)=>{
-    let ans = e.target.value;
-    setValueYesOrNo(ans)
-   
-    if(ans === "yes"){
-      setDisplayInstitution(true)
-    }
-    else{
-      setDisplayInstitution(false)
-    }
-  }
-
-
-  const handleClickPayLater = () => {
+  const handleClickPayLater = ()=>{
     submitBtnHandler();
     setIsSubmitted(true);
     handleClosePay();
     setIsPayLater(true);
+  }
+  const handleClickPay = ()=>{
+    setOpenPay(true)
   };
-  // const handleClickPay = () => {
-  //   setOpenPay(true);
-  // };
-  const handleClosePay = () => {
+  const handleClosePay = () =>{
     setOpenPay(false);
-  };
+  }
 
-  // const handleChangeAnswer = (event) => {
-  //   const answers = event.target.value;
-  //   setDisplayInstitution(true);
-  //   setAnswer(answers);
-  //   // setHideSchool(false);
-  // };
-  // const handlePickNo = (event) => {
-  //   setDisplayInstitution(false);
-  //   const answers = event.target.value;
-  //   setAnswer(answers);
-  // };
+  const handleChangeAnswer = (event) => {
+    const answers = event.target.value;
+    setAnswer(answers);
+    setHideSchool(false);
+  };
+  const handlePickNo = (event)=>{
+    const answers = event.target.value;
+    setAnswer(answers);
+
+  }
+  
 
   // Form Values
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -413,7 +373,7 @@ export default function PayLater(props) {
   const [pictureName, setPictureName] = useState("");
   const [CVName, setCVName] = useState("");
   const [openPictureSection, setOpenPictureSection] = useState(false);
-  const [openCVSection, setOpenCVSection] = useState(true);
+  const [openCVSection, setOpenCVSection] = useState(false);
   const SetIsRequiredError = (
     value,
     stateError,
@@ -534,19 +494,6 @@ export default function PayLater(props) {
   };
 
   useEffect(() => {
-    debugger;
-    fetchLGA(responseState);
-
-    lgaHandler();
-
-    // theLga.map((item) => { item.LGAId === responseLGAId ? setResponseLGA(item.LGAId) : setResponseLGA('')})
-
-    // if(responseLGAId!==""){
-    //   setResponseLGA(responseLGAId)
-    // }
-  }, [responseState, responseLGAId]);
-
-  useEffect(() => {
     fetchData();
     fetchStates();
     fetchCountryCode();
@@ -557,7 +504,7 @@ export default function PayLater(props) {
     // HomePageArea.style = "display:flex";
     // var applicationForms = document.getElementById("forms");
     // applicationForms.style="display:none";
-
+    
     CancelBtnHandler();
   };
   const genderHandler = (e) => {
@@ -573,12 +520,12 @@ export default function PayLater(props) {
     }
   };
   const countryCodeHandler = (e) => {
+    debugger;
     if (e) {
       let countryCodeValue = e.target.value;
       e.preventDefault();
 
-      // setFormValues({ ...formValues, countryCode: countryCodeValue });
-      setResponseCountryId(countryCodeValue);
+      setFormValues({ ...formValues, countryCode: countryCodeValue });
       return SetIsRequiredError(
         countryCodeValue,
         "countryCodeError",
@@ -607,7 +554,7 @@ export default function PayLater(props) {
   const StateHandler = (e) => {
     const stateIds = e.target.value;
     // setFormValues({ ...formValues, states: stateIds });
-    setResponseState(stateIds);
+    setResponseState(stateIds)
     fetchLGA(stateIds);
   };
   const classes = useStyles();
@@ -615,7 +562,7 @@ export default function PayLater(props) {
   const handleChange = (e) => {
     // setDisable(false);
     // setFormValues({ ...formValues, courseChoice: e.target.value });
-    setResponseCourseChoice(e.target.value);
+    setResponseCourseChoice(e.target.value)
   };
 
   const applicationForm = React.useRef();
@@ -648,7 +595,7 @@ export default function PayLater(props) {
   const CancelBtnHandler = () => {
     var HomePageArea = document.getElementById("HomePage");
     var applicationForms = document.getElementById("forms");
-    // var applyhere = document.getElementById("ApplyHereBtn");
+    var applyhere = document.getElementById("ApplyHereBtn");
     // applyhere.style = "display:block";
     HomePageArea.style = "display:flex";
     applicationForms.style = "display:none";
@@ -664,9 +611,9 @@ export default function PayLater(props) {
     setImageFormatMsg("");
   };
   const backToHomeHandler = () => {
-    // var HomePageArea = document.getElementById("HomePage");
-    // var applicationForms = document.getElementById("forms");
-    // var applyhere = document.getElementById("ApplyHereBtn");
+    var HomePageArea = document.getElementById("HomePage");
+    var applicationForms = document.getElementById("forms");
+    var applyhere = document.getElementById("ApplyHereBtn");
     // applyhere.style = "display:block";
     // HomePageArea.style = "display:flex";
     // applicationForms.style = "display:none";
@@ -678,34 +625,25 @@ export default function PayLater(props) {
     setFile(null);
   };
 
-  
-
   const validateImage = (e) => {
-    debugger
     setDisplayPicture(null);
     setFile(null);
-  
-    const newImag = e.target.files[0] 
-    setNewImage(newImag)
-
-
-
-    if (newImag && newImag !== null) {
-      if (!newImag.name.match(/\.(jpg|jpeg|png)$/)) {
+    const NewImage = e.target.files[0];
+    if (NewImage && NewImage !== null) {
+      if (!NewImage.name.match(/\.(jpg|jpeg|png)$/)) {
         setImageFormatMsg("Image format must be in jpg, jpeg or png");
         return false;
       } else {
         setImageFormatMsg("");
       }
-      if (newImag.size > 1024000) {
+      if (NewImage.size > 1024000) {
         setImageFormatMsg("*File is too large, Size must be less than 1MB");
         return false;
       } else {
         setImageFormatMsg("");
       }
-      setFile(URL.createObjectURL(newImag));
-      setDisplayPicture(URL.createObjectURL(newImag)); 
-
+      setFile(NewImage);
+      setDisplayPicture(URL.createObjectURL(NewImage));
     } else {
       setFile(null);
     }
@@ -718,30 +656,26 @@ export default function PayLater(props) {
   };
 
   const validateCV = (e) => {
-    debugger
     setCVName(null);
     setFileCV(null);
-    setOpenCVSection(true);
-    const newCV = e.target.files[0];
-    setNewCvState(newCV)
-    if (newCV && newCV != null) {
-      if (!newCV.name.match(/\.(pdf|doc|docx)$/)) {
+    const NewCV = e.target.files[0];
+    if (NewCV && NewCV != null) {
+      if (!NewCV.name.match(/\.(pdf|doc|docx)$/)) {
         setCvFormatMsg("CV format must be in pdf, doc or docx");
         return false;
       } else {
         setCvFormatMsg("");
       }
-      if (newCV.size > 1024000) {
+      if (NewCV.size > 1024000) {
         setCvFormatMsg("File too large", "Size must be less than one megabyte");
         return false;
       } else {
         setCvFormatMsg("");
       }
-      setFileCV(URL.createObjectURL(newCV));
-      setCVName(newCV.name);
-      console.log("CV Name", CVName)
+      setFileCV(NewCV);
+      setCVName(URL.createObjectURL(NewCV));
     } else {
-      setFileCV(null);
+      setFile(null);
     }
   };
   const onInputCVChange = (e) => {
@@ -754,23 +688,26 @@ export default function PayLater(props) {
       setOpenPictureSection(true);
     }
 
-   
+    return () => {
+      setPictureName("");
+      setOpenPictureSection(false);
+    };
   }, [file]);
 
-  // useEffect(() => {
-  //   debugger
-  //   if (fileCV !== null && fileCV !== undefined) {
-  //     setCVName(fileCV.name);
-  //     // console.log(fileCV);
-  //     // console.log(fileCV.name);
-  //     setOpenCVSection(true);
-  //   }
+  useEffect(() => {
+    debugger
+    if (fileCV !== null && fileCV !== undefined) {
+      setCVName(fileCV.name);
+      console.log(fileCV)
+      console.log(fileCV.name)
+      setOpenCVSection(true);
+    }
 
-  //   // return () => {
-  //   //   setCVName("");
-  //   //   setOpenCVSection(false);
-  //   // };
-  // }, [fileCV]);
+    return () => {
+      setCVName("");
+      setOpenCVSection(false);
+    };
+  }, [fileCV]);
 
   const applicationDivWithCourse = (ref) => {
     applicationDiv();
@@ -787,7 +724,7 @@ export default function PayLater(props) {
       e.preventDefault();
       let firstNameValue = e.target.value;
       // setFormValues({ ...formValues, firstName: firstNameValue });
-      setResponseFirstName(firstNameValue);
+      setResponseFirstName(firstNameValue)
       return SetIsRequiredError(
         firstNameValue,
         "firstNameError",
@@ -809,20 +746,18 @@ export default function PayLater(props) {
 
     if (e) {
       e.preventDefault();
-      setFormValues({
-        ...formValues,
-        emailAddressLogin: emailAddressLoginValue,
-      });
+      setFormValues({ ...formValues, emailAddressLogin: emailAddressLoginValue });
     }
 
     if (emailAddressLoginValue === "" || emailAddressLoginValue === undefined) {
-      setDisable(true);
+        setDisable(true);
       setFormStates({
         ...formStates,
         emailAddressLoginError: false,
         emailAddressLoginErrorMsg: "",
       });
       return true;
+     
     }
 
     if (!validators.isValidEmail(emailAddressLoginValue)) {
@@ -842,16 +777,18 @@ export default function PayLater(props) {
       });
       return false;
     }
-    if (emailAddressLoginValue !== "") {
-      setDisable(false);
+    if(emailAddressLoginValue!==""){
+        setDisable(false);
     }
 
     setFormStates({
       ...formStates,
       emailAddressLoginError: false,
       emailAddressLoginErrorMsg: "",
+
     });
     return true;
+    
   };
 
   const lastNameHandler = (e) => {
@@ -859,7 +796,7 @@ export default function PayLater(props) {
       e.preventDefault();
       let lastNameValue = e.target.value;
       // setFormValues({ ...formValues, lastName: lastNameValue });
-      setResponseLastName(responseLastName);
+      setResponseLastName(responseLastName)
       return SetIsRequiredError(
         lastNameValue,
         "lastNameError",
@@ -982,7 +919,7 @@ export default function PayLater(props) {
     if (e) {
       e.preventDefault();
       // setFormValues({ ...formValues, phoneNumber: phoneNumberValue });
-      setResponsePhoneNumber(phoneNumberValue);
+      setResponsePhoneNumber(phoneNumberValue)
       if (phoneNumberValue.charAt(0) === "0") {
         phoneNumberValue = phoneNumberValue.substring(1);
         setFormValues({ ...formValues, phoneNumber: phoneNumberValue });
@@ -1016,7 +953,7 @@ export default function PayLater(props) {
       //   ...formValues,
       //   phoneNumberConfirm: phoneNumberConfirmValue,
       // });
-      setResponsePhoneNumberConfirm(phoneNumberConfirmValue);
+      setResponsePhoneNumberConfirm(phoneNumberConfirmValue)
 
       if (phoneNumberConfirmValue.charAt(0) === "0") {
         phoneNumberConfirmValue = phoneNumberConfirmValue.substring(1);
@@ -1069,16 +1006,11 @@ export default function PayLater(props) {
   };
 
   const lgaHandler = (e) => {
-    setResponseLGA(responseLGAId);
-
     if (e) {
       e.preventDefault();
       let lgaNameValue = e.target.value;
-      setResponseLGA(lgaNameValue);
-      // setFormValues({ ...formValues, lga: lgaNameValue });
+      setFormValues({ ...formValues, lga: lgaNameValue });
       return SetIsRequiredError(lgaNameValue, "lgaError", "lgaErrorMsg");
-    } else {
-      // setResponseLGAId(41009)
     }
   };
   const cityHandler = (e) => {
@@ -1121,181 +1053,149 @@ export default function PayLater(props) {
   };
 
   
+
   const checkValidEmail = () => {
     debugger
     setSubmitLoader(true);
-    if (formValues.emailAddressLogin !== "") {
+    if(formValues.emailAddressLogin!=="")
+   {
       axios
         .post(
-          `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetApplicantsByEmailAddress?emailAddress=${formValues.emailAddressLogin}`
+          `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetApplicantsByEmailAddress?emailAddress=${formValues.emailAddressLogin}`,
+         
         )
         .then(function (response) {
           debugger
-          setSubmitLoader(false);
-          setCheckEmailBtn(true);
-          if(newImage === null){
-            const contentType = 'image/png';
-            const blob = base64StringToBlob(response.data.Data.Passport, contentType);
-            setFile(blob)
-          }
-          else{
-
-          }
-          setDisplayPicture(
-            `data:image/png;base64, ${response.data.Data.Passport}`
-          );
-          if(newCvState === null){
-            const contentType = 'image/pdf';
-            const blobCV = base64StringToBlob(response.data.Data.Resume, contentType);
-            setTheCVFile(blobCV)
-          }
-         
-          // setFile(response.data.Data.Passport);
-          setFileCV(`data:application/pdf;base64,${response.data.Data.Resume}`);
-          setFileExtension(response.data.Data.ResumeExtension);
-          // setCVName(`Resume${fileExtension}`)
-       
-          // var docblock = fileCV.split(";");
-          // // Get the content type of the image
-          // var contentDocType = docblock[0].split(":")[1]; // In this case "image/gif"
-          // // get the real base64 content of the file
-          // var realDocData = docblock[1].split(",")[1]; // In this case "R0lGODlhPQBEAPeoAJosM...."
-
-          // // Convert it to a blob to upload
-          // setDocBlob(b64toBlob(realDocData, contentDocType));
-
-          setCVName(`Resume${response.data.Data.ResumeExtension}`);
+     
+        
+        //   setSubmitSuccess(true);
+        setCheckEmailBtn(true);
+        setSubmitLoader(false);
+          setDisplayPicture(`data:image/png;base64, ${response.data.Data[0].Passport}`);
+          setFileCV(`data:application/pdf;base64,${response.data.Data[0].Resume}`);
+          setCVName("resume")
+          // setFileExtension(response.data.Data[0].ResumeExtension);
+          // setCVName(`Resume${response.data.Data[0].ResumeExtension}`);
           // setCVName(`${fileCV}${response.data.Data[0].ResumeExtension}`)
           // setCVName(fileCV.name="hello")
           // setCVName(fileCV.name)
           // setDisplayPicture(pictureContainer);
           // setPictureContainer(`data:image/png;base64,${displayPicture}`)
           setOpenPictureSection(true);
-
-          setResponseCourseChoice(response.data.Data.CourseId);
-          setResponseApplicantId(response.data.Data.ApplicantId);
-          setResponseFirstName(response.data.Data.FirstName);
-          setResponseMiddleName(response.data.Data.MiddleName);
-          setResponseLastName(response.data.Data.LastName);
-          setResponseEmail(response.data.Data.EmailAddress);
-          setResponseEmailConfirm(response.data.Data.EmailAddress);
-          setResponsePhoneNumber(response.data.Data.PhoneNumber);
-          setResponsePhoneNumberConfirm(response.data.Data.PhoneNumber);
-          // setResponseCountryCode(response.data.Data.CountryCode);
-          setResponseCountryId(response.data.Data.CountryCodeId);
-          setResponseGender(response.data.Data.Gender);
-          setResponseState(response.data.Data.StateId);
-          setResponseLGAId(response.data.Data.LGAId);
-          setResponseCity(response.data.Data.City);
-          setResponseInstitution(response.data.Data.NameOfInstitution);
-          setResponseQualification(response.data.Data.HighestQualification);
-          setResponseCourseQualification(
-            response.data.Data.CourseOfHighestQualification
-          );
-          setResponseEmailMsg(response.data.Msg);
-
-          //   setResponseRegistrationCode(response.data.Data.RegistrationCode);
-          //   setEmailAddressHolder(response.data.Data.EmailAddress)
-          //   setResponseMsg(response.data.Msg);
-          //   submitBtnHandler();
-          //   isSubmitted(true);
-          //   setOpenPay(true);
-
+          setResponseCourseChoice(response.data.Data[0].CourseOfChoiceId);
+          setResponseFirstName(response.data.Data[0].FirstName);
+          setResponseMiddleName(response.data.Data[0].MiddleName);
+          setResponseLastName(response.data.Data[0].LastName);
+          setResponseEmail(response.data.Data[0].EmailAddress);
+          setResponseEmailConfirm(response.data.Data[0].EmailAddress)
+          setResponsePhoneNumber(response.data.Data[0].PhoneNumber);
+          setResponsePhoneNumberConfirm(response.data.Data[0].PhoneNumber);
+          setResponseGender(response.data.Data[0].Gender);
+          setResponseState(response.data.Data[0].StateId);
+          setResponseCity(response.data.Data[0].City);
+          setResponseInstitution(response.data.Data[0].FirstName);
+          setResponseQualification(response.data.Data[0].HighestQualification);
+          setResponseCourseQualification(response.data.Data[0].CourseOfHighestQualification);
+        //   setResponseRegistrationCode(response.data.Data.RegistrationCode);
+        //   setEmailAddressHolder(response.data.Data.EmailAddress)
+        //   setResponseMsg(response.data.Msg);
+         
+        //   submitBtnHandler();
+        //   isSubmitted(true);
+        //   setOpenPay(true);
+       
           // setSubmit(response.data.data);
           // setFile(null);
           // setFileCV(null);
         })
         .catch(function (error) {
-          console.log(error);
-          toast.error(
-            responseEmailMsg
-          );
+          debugger
+        //   console.log(error);
+        //   setSubmitFailure(true);
+        //   setSubmitSuccess(false);
+         
         })
-        .then(function () {
-          setSubmitLoader(false);
-        });
+        .then(function () { setSubmitLoader(false) });
     } else {
-      //   setSubmitLoader(false);
-      //   setSubmitFailure(false);
-      //   setSubmitSuccess(false);
-      //   setGeneralErrorMsg("*All fields except the middle name are required");
+    //   setSubmitLoader(false);
+    //   setSubmitFailure(false);
+    //   setSubmitSuccess(false);
+    //   setGeneralErrorMsg("*All fields except the middle name are required");
     }
     // setSubmitFailure(false);
     // setSubmitSuccess(false);
   };
 
+  useEffect(()=>{
+    debugger
+      if(checkEmailBtn === true  && responseEmail !==""){
+       alert(responseCourseChoice)
+       alert(pictureContainer)
+       alert(displayPicture)
+       alert(fileCV)
+        applicationDivWithCourse(applicationForm)
+      }
+  },[responseEmail, checkEmailBtn])
 
-  // useEffect(()=>{
-  //   if(file!=="" && displayPicture!==""){
-     
-  //   }
-  // },[picBlob,displayPicture, file])
-
-  useEffect(() => {
-    debugger;
-    if (responseInstitution === null || responseInstitution === "null") {
-      setDisplayInstitution(false);
-      setValueYesOrNo("no")
+  useEffect(()=>{
+    if(pictureContainer !=="" && checkEmailBtn === true &&responseEmail !==""){
+      setPictureExists(true);
+      alert(pictureExists);
     }
-    else if(responseInstitution !== null ||responseInstitution !== "null"){
-      setDisplayInstitution(true);
-      setValueYesOrNo("yes")
-    } 
-
-    console.log()
+  },[pictureContainer,checkEmailBtn,responseEmail])
+ 
+  useEffect(()=>{
+    if(responseInstitution!==""  && responseEmail !=="" && checkEmailBtn === true && defaultValueAnswer !==""){
+      setAnswer("yes");
+      alert(defaultValueAnswer)
+    }
    
-  }, [responseInstitution]);
+},[responseInstitution,responseEmail, checkEmailBtn, defaultValueAnswer, answer])
 
-  useEffect(() => {
-    debugger;
-    if (checkEmailBtn === true && responseEmail !== "") {
-      console.log("Test", responseEmail);
-      applicationDivWithCourse(applicationForm);
-    }
-    //  else if(checkEmailBtn ===true && responseEmail ==="" &&){
-    //   toast.error("You are not registered. Go to the home page and proceed to start new application");
-    //  }
-  }, [responseEmail, checkEmailBtn]);
+useEffect(()=>{
+  if(responseInstitution ==="null"  && responseEmail !=="" && checkEmailBtn === true && defaultValueAnswer !==""){
+    setAnswer("no");
+    // alert(defaultValueAnswer)
+    setDefaultValueAnswer("no")
+  }
+ 
+},[responseInstitution,responseEmail, checkEmailBtn, defaultValueAnswer, answer]);
 
-  // useEffect(() => {
-  //   if (pictureContainer !== "") {
-  //     setPictureExists(true);
-  //   }
-  // }, [pictureContainer]);
 
-  //   useEffect(()=>{
-  //     if(responseInstitution!==""  && responseEmail !=="" && checkEmailBtn === true && defaultValueAnswer !==""){
-  //       setAnswer("yes");
-  //       // alert(defaultValueAnswer)
-  //     }
+useEffect(()=>{
+  if(responseEmail !=="" && checkEmailBtn === true && fileCV !==""){
+  
+  console.log(fileCV.name,"munchit")
+  alert("Resume:"+CVName);
+  }
+ 
+},[responseEmail, checkEmailBtn, fileCV]);
 
-  // },[responseInstitution,responseEmail, checkEmailBtn, defaultValueAnswer, answer])
 
   const registerHandler = () => {
+    debugger
     setSubmitLoader(true);
     setGeneralErrorMsg("");
     setIsSubmitted(true);
-    
     let formData = new FormData();
-    formData.append("ApplicantId", responseApplicantId);
-    formData.append("FirstName", responseFirstName);
-    formData.append("LastName", responseLastName);
-    formData.append("MiddleName", responseMiddleName);
-    formData.append("PhoneNumber", responsePhoneNumber);
-    formData.append("StateId", responseState);
-    formData.append("Gender", responseGender);
-    formData.append("EmailAddress", responseEmail);
-    formData.append("HighestQualification", responseQualification);
+    formData.append("FirstName", formValues.firstName);
+    formData.append("LastName", formValues.lastName);
+    formData.append("MiddleName", formValues.middleName);
     formData.append(
-      "CourseOfHighestQualification",
-      responseCourseQualification
+      "PhoneNumber",
+      formValues.countryCode + formValues.phoneNumber
     );
-    formData.append("CourseofChoiceId", responseCourseChoice);
-    formData.append("LGaId", responseLGAId);
-    formData.append("City", responseCity);
+    formData.append("StateId", formValues.states);
+    formData.append("Gender", formValues.sex);
+    formData.append("EmailAddress", formValues.emailAddress);
+    formData.append("HighestQualification", formValues.highestQualification);
+    formData.append("CourseOfHighestQualification", formValues.courseOfStudy);
+    formData.append("CourseofChoiceId", formValues.courseChoice);
+    formData.append("LGaId", formValues.lga);
+    formData.append("City", formValues.city);
     formData.append("passportFilePath", file);
-    formData.append("resumeFilePath", theCVFile);
-    formData.append("NameOfInstitution", responseInstitution);
+    formData.append("resumeFilePath", fileCV);
+    formData.append("NameOfInstitution", formValues.nameOfInstitution);
 
     if (file === null || fileCV === null) {
       setSubmitLoader(false);
@@ -1303,20 +1203,20 @@ export default function PayLater(props) {
       return true;
     }
     if (
-      responseFirstName !== "" &&
-      responseLastName !== "" &&
-      responseEmail !== "" &&
-      responseEmailConfirm !== "" &&
-      responsePhoneNumber !== "" &&
-      responsePhoneNumberConfirm !== "" &&
-      responseState !== "" &&
-      responseLGAId !== "" &&
-      responseQualification !== "" &&
-      responseCourseQualification !== "" &&
-      responseInstitution !== "" &&
-      responseGender !== "" &&
-      responseCourseChoice !== "" &&
-      responseCity !== ""
+      formValues.firstName !== "" &&
+      formValues.lastName !== "" &&
+      formValues.emailAddress !== "" &&
+      formValues.emailAddressConfirm !== "" &&
+      formValues.phoneNumber !== "" &&
+      formValues.phoneNumberConfirm !== "" &&
+      formValues.states !== "" &&
+      formValues.lga !== "" &&
+      formValues.highestQualification !== "" &&
+      formValues.courseOfStudy !== "" &&
+      formValues.nameOfInstitution !== "" &&
+      formValues.sex !== "" &&
+      formValues.courseChoice !== "" &&
+      formValues.city !== ""
     ) {
       axios
         .post(
@@ -1324,52 +1224,58 @@ export default function PayLater(props) {
           formData
         )
         .then(function (response) {
+          debugger
           setSubmitSuccess(true);
           setResponseFirstName(response.data.Data.FirstName);
           setResponseRegistrationCode(response.data.Data.RegistrationCode);
-          setEmailAddressHolder(response.data.Data.EmailAddress);
+          setEmailAddressHolder(response.data.Data.EmailAddress)
           setResponseMsg(response.data.Msg);
           setSubmitLoader(false);
           submitBtnHandler();
           isSubmitted(true);
           setOpenPay(true);
-
+       
           // setSubmit(response.data.data);
           // setFile(null);
           // setFileCV(null);
         })
         .catch(function (error) {
+          debugger
           console.log(error);
-          // setSubmitFailure(true);
+          setSubmitFailure(true);
           setSubmitSuccess(false);
+         
         })
-        .then(function () {
-          setSubmitLoader(false);
-        });
+        .then(function () { setSubmitLoader(false) });
     } else {
       setSubmitLoader(false);
-      // setSubmitFailure(false);
+      setSubmitFailure(false);
       setSubmitSuccess(false);
       setGeneralErrorMsg("*All fields except the middle name are required");
     }
-    // setSubmitFailure(false);
+    setSubmitFailure(false);
     setSubmitSuccess(false);
   };
 
-  useEffect(() => {
-    if (submitSuccess === true && responseMsg !== "") {
+  useEffect(()=>{
+    debugger
+    if(submitSuccess ===true && responseMsg !== "" ){
       toast.success(responseMsg);
       setOpenPay(true);
     }
-  }, [submitSuccess, submitLoader, responseMsg]);
+    
+  },[submitSuccess,submitLoader,responseMsg])
 
-  // useEffect(()=>{
+  useEffect(()=>{
+    debugger
+    if(submitFailure === true && responseMsg !=="" && submitSuccess===false){
+    toast.error(responseMsg);
+    }
+    
+  },[submitLoader, submitFailure, responseMsg])
 
-  //   if(submitFailure === true && responseMsg !=="" && submitSuccess===false){
-  //   toast.error(responseMsg);
-  //   }
 
-  // },[submitLoader, submitFailure, responseMsg])
+
 
   const CopyandPasteHandler = (e) => {
     document
@@ -1386,320 +1292,19 @@ export default function PayLater(props) {
       .addEventListener("paste", (e) => e.preventDefault());
   };
 
+  
+
+
   return (
     <React.Fragment>
-      <CssBaseline className="hello" />
-      {loader === true ? (
-        <Box
-          top={0}
-          left={0}
-          bottom={0}
-          right={0}
-          position="absolute"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <CircularProgress color="secondary" />
-        </Box>
-      ) : (
+      
         <MuiThemeProvider theme={getMuiTheme}>
-          <CssBaseline />
-          <AppBar
-            position="sticky"
-            style={{
-              backgroundColor: "#fff",
-              height: "90px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Toolbar>
-              <img
-                className={classes.Logo}
-                onClick={logoFunction}
-                src={newlogo}
-                alt="JM Tech Centre"
-                width="130px"
-                height="70px"
-              />
-              {/* <Button
-              id="ApplyHereBtn"
-              onClick={() => applicationDivWithCourse(applicationForm)}
-              className={classes.ApplyHereBtn}
-              disableElevation
-              variant="outlined"
-              color="primary"
-            >
-              Apply Here
-            </Button> */}
-            </Toolbar>
-          </AppBar>
-          <Toolbar id="back-to-top-anchor" />
+        
           <Container>
             <Box my={2}>
               <Grid container spacing={3}>
-                <Box
-                  className={classes.homePage}
-                  id="HomePage"
-                  style={{ display: "flex", transition: "all easein 1s" }}
-                >
-                  <Grid className={classes.grids} item xs={12} sm={12} md={6}>
-                    <Paper
-                      className={classes.papers}
-                      style={{ backgroundColor: "#fff" }}
-                    >
-                      <img
-                        className={classes.theImage}
-                        src={image2}
-                        alt="Home Page"
-                      />
-                    </Paper>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={12}
-                    md={6}
-                    style={{ marginBottom: "30px" }}
-                  >
-                    {isPayLater === true ? (
-                      <>
-                        <Paper
-                          className={classes.papers}
-                          style={{
-                            marginBottom: "10px",
-                            paddingBottom: "15px",
-                          }}
-                        >
-                          <h1 style={{ fontSize: "1.5em", margin: "0px" }}>
-                            {isSubmitted === false ? (
-                              "JM Tech Learning Centre"
-                            ) : (
-                              <>
-                                <span
-                                  style={{
-                                    color: "#9a9a9a",
-                                    margin: "5px 15px",
-                                  }}
-                                >
-                                  To complete the registration, a payment link
-                                  has been sent to your email -
-                                </span>
-                                <p
-                                  style={{
-                                    fontSize: "25px",
-                                    margin: "20px 0px",
-                                    fontWeight: "lighter",
-                                  }}
-                                ></p>
-                              </>
-                            )}
-                          </h1>
-
-                          <h2 style={{ margin: "10px", fontSize: "1.3em" }}>
-                            {isSubmitted === true
-                              ? "A confirmation mail has been sent to your email"
-                              : ""}
-                          </h2>
-                          {isSubmitted === false ? (
-                            <>
-                              <h2 style={{ color: "#00a1f1" }}>
-                                Microsoft Future Ready Program
-                              </h2>
-
-                              <p
-                                style={{
-                                  fontStyle: "italic",
-                                  color: "#949494",
-                                }}
-                              >
-                                Please enter the following details to proceed
-                                with your application
-                                {/* Data Science & AI, Cloud Development, Business
-                        Application, Backend Software Development, Frontend
-                        Software Development, or Cyber Security */}
-                              </p>
-                              <FormControl className={classes.margin}>
-                                {/* <TextField
-                          color="secondary"
-                          style={{ width: "100%" }}
-                          fullWidth
-                          id="outlined-select-currency"
-                          select
-                          label="Choose a course"
-                          value={formValues.courseChoice}
-                          onChange={(e) => {
-                            handleChange(e);
-                          }}
-                          helperText="Please your course of interest"
-                          variant="outlined"
-                        >
-                          {dataDropDown.length > 0 && dataDropDown.map((option) => (
-                            <MenuItem
-                              key={option.CourseId}
-                              value={option.CourseId}
-                            >
-                              {option.CourseName}
-                            </MenuItem>
-                          ))}
-                        </TextField> */}
-
-                                <Button
-                                  id="ApplyHereBtn"
-                                  className={classes.applyNow}
-                                  //   disabled={disable}
-                                  onClick={() =>
-                                    applicationDivWithCourse(applicationForm)
-                                  }
-                                  style={{ marginTop: "20px" }}
-                                  disableElevation
-                                  variant="contained"
-                                  color="secondary"
-                                >
-                                  {/* {!loadingForms && <CircularProgress/>} */}
-                                  {/* {loadingForms && 'Apply Now'}  */}
-                                  Proceed
-                                </Button>
-                              </FormControl>
-                            </>
-                          ) : (
-                            <Button
-                              onClick={backToHomeHandler}
-                              style={{
-                                margin: "20px 0px",
-                                textTransform: "capitalize",
-                              }}
-                              disableElevation
-                              variant="contained"
-                              color="secondary"
-                            >
-                              {/* {!loadingForms && <CircularProgress/>} */}
-                              {/* {loadingForms && 'Apply Now'}  */}
-                              Go Back to Home
-                            </Button>
-                          )}
-                        </Paper>
-                      </>
-                    ) : (
-                      <Paper
-                        className={classes.papers}
-                        style={{ marginBottom: "10px", paddingBottom: "15px" }}
-                      >
-                        <h1 style={{ fontSize: "1.5em", margin: "0px" }}>
-                          {isSubmitted === false ? (
-                            "JM Tech Learning Centre"
-                          ) : (
-                            <>
-                              <span
-                                style={{ color: "#9a9a9a", margin: "5px 15px" }}
-                              >
-                                To complete the registration, a payment link has
-                                been sent to your email -
-                              </span>
-                              <p
-                                style={{
-                                  fontSize: "25px",
-                                  margin: "20px 0px",
-                                  fontWeight: "lighter",
-                                }}
-                              >
-                                Hello {responseFirstName}, your registration
-                                code is <b>{responseRegistrationCode}</b>
-                              </p>
-                            </>
-                          )}
-                        </h1>
-
-                        <h2 style={{ margin: "10px", fontSize: "1.3em" }}>
-                          {isSubmitted === true
-                            ? "A confirmation mail has been sent to your email"
-                            : ""}
-                        </h2>
-                        {isSubmitted === false ? (
-                          <>
-                            <h2 style={{ color: "#00a1f1" }}>
-                              Microsoft Future Ready Program
-                            </h2>
-
-                            <p
-                              style={{ fontStyle: "italic", color: "#949494" }}
-                            >
-                              Please enter the following details to proceed with
-                              your application
-                              {/* Data Science & AI, Cloud Development, Business
-                        Application, Backend Software Development, Frontend
-                        Software Development, or Cyber Security */}
-                            </p>
-                            <FormControl className={classes.margin}>
-                              <TextField
-                                style={{ width: "300px" }}
-                                type="text"
-                                onpaste="return false;"
-                                ondrop="return false;"
-                                autocomplete="off"
-                                id="emailTextField"
-                                color="secondary"
-                                label="Email Address"
-                                value={formValues.emailAddressLogin.toLowerCase()}
-                                error={formStates.emailAddressLoginError}
-                                helperText={
-                                  formStates.emailAddressLoginErrorMsg
-                                }
-                                onFocus={(event) => {
-                                  CopyandPasteHandler(event);
-                                }}
-                                onChange={(event) => {
-                                  emailAddressLoginHandler(event);
-                                }}
-                                variant="outlined"
-                              />
-                              <br />
-
-                              <Button
-                                disabled={disable}
-                                id="ApplyHereBtn"
-                                className={classes.applyNow}
-                                //   disabled={disable}
-                                //   onClick={() =>
-                                //     applicationDivWithCourse(applicationForm)
-                                //   }
-                                onClick={checkValidEmail}
-                                style={{ marginTop: "20px" }}
-                                disableElevation
-                                variant="contained"
-                                color="secondary"
-                              >
-                                {submitLoader === true ? (
-                                  <CircularProgress />
-                                ) : (
-                                  " Resume Application"
-                                )}
-                              </Button>
-                            </FormControl>
-                          </>
-                        ) : (
-                          <Button
-                            onClick={backToHomeHandler}
-                            style={{
-                              margin: "20px 0px",
-                              textTransform: "capitalize",
-                            }}
-                            disableElevation
-                            variant="contained"
-                            color="secondary"
-                          >
-                            {/* {!loadingForms && <CircularProgress/>} */}
-                            {/* {loadingForms && 'Apply Now'}  */}
-                            Go Back to Home
-                          </Button>
-                        )}
-                      </Paper>
-                    )}
-                  </Grid>
-                </Box>
-
-                <Grid
+             
+              <Grid
                   style={{ display: "none" }}
                   id="forms"
                   item
@@ -1944,8 +1549,8 @@ export default function PayLater(props) {
                             style={{ textAlign: "left", marginRight: "30px" }}
                             id="outlined-select-currency"
                             select
-                            label="Country Code2"
-                            value={responseCountryId}
+                            label="Country Code"
+                            value={formValues.countryCode}
                             error={formStates.countryCodeError}
                             helperText={formStates.countryCodeErrorMsg}
                             onChange={(event) => {
@@ -1968,8 +1573,8 @@ export default function PayLater(props) {
                             {countryCodeDropDown.length > 0 &&
                               countryCodeDropDown.map((option) => (
                                 <MenuItem
-                                  key={option.CountryId}
-                                  value={option.CountryId}
+                                  key={option.CountryCode}
+                                  value={option.CountryCode}
                                 >
                                   {"+"}
                                   {option.CountryCode} {option.CountryName}
@@ -2019,8 +1624,8 @@ export default function PayLater(props) {
                             id="outlined-select-currency"
                             select
                             fullWidth
-                            label="Country Code3"
-                            value={responseCountryId}
+                            label="Country Code"
+                            value={formValues.countryCode}
                             error={formStates.countryCodeError}
                             helperText={formStates.countryCodeErrorMsg}
                             onChange={(event) => {
@@ -2042,8 +1647,8 @@ export default function PayLater(props) {
                             {countryCodeDropDown.length > 0 &&
                               countryCodeDropDown.map((option) => (
                                 <MenuItem
-                                  key={option.CountryId}
-                                  value={option.CountryId}
+                                  key={option.CountryCode}
+                                  value={option.CountryCode}
                                 >
                                   {"+"}
                                   {option.CountryCode} {option.CountryName}
@@ -2120,7 +1725,7 @@ export default function PayLater(props) {
                         id="outlined-select-currency"
                         select
                         label="LGA Of Residence"
-                        value={responseLGA}
+                        value={formValues.lga}
                         error={formStates.lgaError}
                         helperText={formStates.lgaErrorMsg}
                         onChange={(e) => {
@@ -2149,21 +1754,11 @@ export default function PayLater(props) {
                       <br />
 
                       <FormControl>
-                        <FormLabel
-                          id="demo-radio-buttons-group-label"
-                          style={{
-                            color: "#1a1a1a",
-                            textAlign: "left",
-                            marginBottom: "15px",
-                          }}
-                        >
+                        <FormLabel id="demo-radio-buttons-group-label" style={{color:'#1a1a1a', textAlign:'left', marginBottom:'15px'}}>
                           Are you currently in school?
                         </FormLabel>
                         <RadioGroup
-                          value={valueYesOrNo}
-                          onChange={(e) => {
-                            handleChangeValue(e);
-                          }}
+                          defaultValue={defaultValueAnswer}
                           aria-labelledby="demo-radio-buttons-group-label"
                           name="radio-buttons-group"
                         >
@@ -2171,36 +1766,37 @@ export default function PayLater(props) {
                             value="yes"
                             control={<Radio />}
                             label="Yes"
-                            // onClick={handleChangeAnswer}
+                            onClick={handleChangeAnswer}
                           />
                           <FormControlLabel
                             value="no"
                             control={<Radio />}
                             label="No"
-                            // onClick={handlePickNo}
+                            onClick={handlePickNo}
                           />
                         </RadioGroup>
                       </FormControl>
 
                       <br />
-
-                      {displayInstitution === true ? (
+                      {answer === "yes"?
+                      (
                         <TextField
-                          color="secondary"
-                          id="outlined-disabled"
-                          label="Name Of Institution"
-                          value={responseInstitution}
-                          error={formStates.nameOfInstitutionError}
-                          helperText={formStates.nameOfInstitutionErrorMsg}
-                          onChange={(event) => {
-                            nameOfInstitutionHandler(event);
-                          }}
-                          variant="outlined"
-                        />
-                      ) : 
-                        ""
+                        color="secondary"
+                        id="outlined-disabled"
+                        label="Name Of Institution"
+                        value={responseInstitution}
+                        error={formStates.nameOfInstitutionError}
+                        helperText={formStates.nameOfInstitutionErrorMsg}
+                        onChange={(event) => {
+                          nameOfInstitutionHandler(event);
+                        }}
+                        variant="outlined"
+                      />
+                      )
+                      :
+                      ""
                       }
-
+                     
                       <br />
                       <TextField
                         color="secondary"
@@ -2265,27 +1861,19 @@ export default function PayLater(props) {
                           Submit 2nd
                         </Button>
                      */}
-                        <ToastContainer />
+                        <ToastContainer  />
                       </div>
                     </FormControl>
                   </Paper>
                 </Grid>
+            
               </Grid>
             </Box>
           </Container>
-          <ScrollTop {...props}>
-            <Fab color="secondary" size="small" aria-label="scroll back to top">
-              <KeyboardArrowUpIcon />
-            </Fab>
-          </ScrollTop>
-          <ProceedToPayForm
-            emailAddressHolder={emailAddressHolder}
-            openPay={openPay}
-            handleClosePay={handleClosePay}
-            handleClickPayLater={handleClickPayLater}
-          />
+         
+          <ProceedToPayForm emailAddressHolder={emailAddressHolder} openPay={openPay} handleClosePay={handleClosePay} handleClickPayLater={handleClickPayLater}/>
         </MuiThemeProvider>
-      )}
+     
     </React.Fragment>
   );
 }
