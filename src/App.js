@@ -26,7 +26,7 @@ export default function App() {
     >
       <AuthenticationForm  isAuth = {isAuth} setIsAuth = {setIsAuth}/>
       <BrowserRouter>
-        <Route path="/" exact component={Home} />
+        <Route exact path="/"  component={Home} />
         <ProtectedRoute path="/applicants" component={Applicants} isAuth = {isAuth}/>
         <Route path="/applicationClosed" exact component={ApplicationClosed} />
         {/* <Route path= "/payment/:email" component={Payment} /> */}
@@ -34,8 +34,10 @@ export default function App() {
         <Route path= "/resumeApplication" component={PayLater} />
         <Route path="/success" component={SuccessfulPayment}/>
         <Route path="/payLater" component={PayLaterResponse}/>
-        <Route path="*" component={NotFoundPage} />
-       
+        <Route path="/404"  component={NotFoundPage} />
+
+        {/* <Redirect from='/' to = '/404' exact/>
+          <Route path="/404"  component={NotFoundPage} /> */}
       </BrowserRouter>
     </div>
   

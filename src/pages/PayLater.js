@@ -36,7 +36,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { base64StringToBlob } from 'blob-util';
+import { base64StringToBlob, blobToBinaryString} from 'blob-util';
 
 
 // axios.defaults.baseURL = "http://jmtechcentre.azurewebsites.net/api/Applicant/";
@@ -367,7 +367,7 @@ export default function PayLater(props) {
   const [newCvState,setNewCvState] = useState(null);
   // const [newCV,setnewCV]=  useState(null);
   const [theCVFile, setTheCVFile]= useState(null);
-
+  const [pictureFile, setPictureFile] = useState(null);
 
   const handleChangeValue=(e)=>{
     let ans = e.target.value;
@@ -684,7 +684,7 @@ export default function PayLater(props) {
     debugger
     setDisplayPicture(null);
     setFile(null);
-  
+    setPictureFile(null);
     const newImag = e.target.files[0] 
     setNewImage(newImag)
 
@@ -703,10 +703,19 @@ export default function PayLater(props) {
       } else {
         setImageFormatMsg("");
       }
-      setFile(URL.createObjectURL(newImag));
+    
       setDisplayPicture(URL.createObjectURL(newImag)); 
+      setFile(newImag)
+      // const contentType = newImag.type;
+      // blobToBinaryString(newImag).then(function (binaryString) {
+      //   setFile(newImag)
+      // }).catch(function (err) {
+      //   // error
+      // });
+     
 
     } else {
+     
       setFile(null);
     }
   };
@@ -725,8 +734,8 @@ export default function PayLater(props) {
     const newCV = e.target.files[0];
     setNewCvState(newCV)
     if (newCV && newCV != null) {
-      if (!newCV.name.match(/\.(pdf|doc|docx)$/)) {
-        setCvFormatMsg("CV format must be in pdf, doc or docx");
+      if (!newCV.name.match(/\.(pdf)$/)) {
+        setCvFormatMsg("CV format must be in pdf");
         return false;
       } else {
         setCvFormatMsg("");
@@ -737,9 +746,20 @@ export default function PayLater(props) {
       } else {
         setCvFormatMsg("");
       }
-      setFileCV(URL.createObjectURL(newCV));
-      setCVName(newCV.name);
-      console.log("CV Name", CVName)
+    // setFileCV(URL.createObjectURL(newCV));
+      setFileCV(newCV);
+      setCVName(newCV.name)
+      // const contentType = newCV.type;
+      // blobToBinaryString(newCV).then(function (binaryString) {
+      //   setFileCV(newCV)
+      //   setCVName(newCV.name);
+          
+      //   }).catch(function (err) {
+      //     // error
+      //   });
+  
+     
+   
     } else {
       setFileCV(null);
     }
@@ -1134,9 +1154,17 @@ export default function PayLater(props) {
           setSubmitLoader(false);
           setCheckEmailBtn(true);
           if(newImage === null){
-            const contentType = 'image/png';
+            var extension =response.data.Data.PassportExtension;
+            var imageType = "image/"
+            const contentType = imageType + extension.substring(1) ;
             const blob = base64StringToBlob(response.data.Data.Passport, contentType);
             setFile(blob)
+            // blobToBinaryString(blob).then(function (binaryString) {
+            //   setFile(blob)
+            // }).catch(function (err) {
+            //   // error
+            // });
+            // setFile(blob)
           }
           else{
 
@@ -1147,11 +1175,19 @@ export default function PayLater(props) {
           if(newCvState === null){
             const contentType = 'image/pdf';
             const blobCV = base64StringToBlob(response.data.Data.Resume, contentType);
-            setTheCVFile(blobCV)
+            setFileCV(blobCV)
+            // blobToBinaryString(blobCV).then(function (binaryString) {
+            
+            //   setFileCV(blobCV)
+              
+            //   }).catch(function (err) {
+            //     // error
+            //   });
+        
           }
          
           // setFile(response.data.Data.Passport);
-          setFileCV(`data:application/pdf;base64,${response.data.Data.Resume}`);
+          // setFileCV(`data:application/pdf;base64,${response.data.Data.Resume}`);
           setFileExtension(response.data.Data.ResumeExtension);
           // setCVName(`Resume${fileExtension}`)
        
@@ -1272,6 +1308,7 @@ export default function PayLater(props) {
   // },[responseInstitution,responseEmail, checkEmailBtn, defaultValueAnswer, answer])
 
   const registerHandler = () => {
+    debugger
     setSubmitLoader(true);
     setGeneralErrorMsg("");
     setIsSubmitted(true);
@@ -1282,6 +1319,7 @@ export default function PayLater(props) {
     formData.append("LastName", responseLastName);
     formData.append("MiddleName", responseMiddleName);
     formData.append("PhoneNumber", responsePhoneNumber);
+    formData.append("CountryCodeId", responseCountryId);
     formData.append("StateId", responseState);
     formData.append("Gender", responseGender);
     formData.append("EmailAddress", responseEmail);
@@ -1293,8 +1331,8 @@ export default function PayLater(props) {
     formData.append("CourseofChoiceId", responseCourseChoice);
     formData.append("LGaId", responseLGAId);
     formData.append("City", responseCity);
-    formData.append("passportFilePath", file);
-    formData.append("resumeFilePath", theCVFile);
+    formData.append("passportFilePath",file );
+    formData.append("resumeFilePath", fileCV);
     formData.append("NameOfInstitution", responseInstitution);
 
     if (file === null || fileCV === null) {

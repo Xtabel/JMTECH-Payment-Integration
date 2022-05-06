@@ -16,6 +16,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.24.0",
     "blob-util": "^2.0.2",
+    "file-blob-converter": "^2.0.0",
     "moment": "^2.29.1",
     "mui-datatables": "^3.7.8",
     "react": "^17.0.1",

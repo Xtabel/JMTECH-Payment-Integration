@@ -663,7 +663,7 @@ export default function BackToTop(props) {
     setFileCV(null);
     const NewCV = e.target.files[0];
     if (NewCV && NewCV != null) {
-      if (!NewCV.name.match(/\.(pdf|doc|docx)$/)) {
+      if (!NewCV.name.match(/\.(pdf)$/)) {
         setCvFormatMsg("CV format must be in pdf, doc or docx");
         return false;
       } else {
