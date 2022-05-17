@@ -10,12 +10,12 @@ import PayLater from "./pages/PayLater";
 import SuccessfulPayment from "./pages/SuccessfulPayment";
 import PayLaterResponse from "./pages/PayLaterResponse";
 import NotFoundPage from "./pages/NotFound";
+import TestWebPage from "./pages/TestWebPage";
 
 
 export default function App() {
   const [isAuth, setIsAuth] = useState(true);
 
-  debugger
   return (
     
           <div
@@ -35,7 +35,7 @@ export default function App() {
         <Route path="/success" component={SuccessfulPayment}/>
         <Route path="/payLater" component={PayLaterResponse}/>
         <Route path="/404"  component={NotFoundPage} />
-
+        <Route path="/testpage"  component={TestWebPage} />
         {/* <Redirect from='/' to = '/404' exact/>
           <Route path="/404"  component={NotFoundPage} /> */}
       </BrowserRouter>

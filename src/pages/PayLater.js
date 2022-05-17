@@ -401,11 +401,11 @@ export default function PayLater(props) {
   //   setAnswer(answers);
   //   // setHideSchool(false);
   // };
-  // const handlePickNo = (event) => {
-  //   setDisplayInstitution(false);
-  //   const answers = event.target.value;
-  //   setAnswer(answers);
-  // };
+  const handlePickNo = (event) => {
+    setResponseInstitution(null);
+    // const answers = event.target.value;
+    // setAnswer(answers);
+  };
 
   // Form Values
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -534,7 +534,6 @@ export default function PayLater(props) {
   };
 
   useEffect(() => {
-    debugger;
     fetchLGA(responseState);
 
     lgaHandler();
@@ -879,7 +878,7 @@ export default function PayLater(props) {
       e.preventDefault();
       let lastNameValue = e.target.value;
       // setFormValues({ ...formValues, lastName: lastNameValue });
-      setResponseLastName(responseLastName);
+      setResponseLastName(lastNameValue);
       return SetIsRequiredError(
         lastNameValue,
         "lastNameError",
@@ -1094,7 +1093,7 @@ export default function PayLater(props) {
     if (e) {
       e.preventDefault();
       let lgaNameValue = e.target.value;
-      setResponseLGA(lgaNameValue);
+      setResponseLGAId(lgaNameValue);
       // setFormValues({ ...formValues, lga: lgaNameValue });
       return SetIsRequiredError(lgaNameValue, "lgaError", "lgaErrorMsg");
     } else {
@@ -1142,7 +1141,6 @@ export default function PayLater(props) {
 
   
   const checkValidEmail = () => {
-    debugger
     setSubmitLoader(true);
     if (formValues.emailAddressLogin !== "") {
       axios
@@ -1150,7 +1148,6 @@ export default function PayLater(props) {
           `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetApplicantsByEmailAddress?emailAddress=${formValues.emailAddressLogin}`
         )
         .then(function (response) {
-          debugger
           setSubmitLoader(false);
           setCheckEmailBtn(true);
           if(newImage === null){
@@ -1243,9 +1240,9 @@ export default function PayLater(props) {
         })
         .catch(function (error) {
           console.log(error);
-          toast.error(
-            responseEmailMsg
-          );
+          // toast.error(
+          //   responseEmailMsg
+          // );
         })
         .then(function () {
           setSubmitLoader(false);
@@ -1268,9 +1265,9 @@ export default function PayLater(props) {
   // },[picBlob,displayPicture, file])
 
   useEffect(() => {
-    debugger;
     if (responseInstitution === null || responseInstitution === "null") {
       setDisplayInstitution(false);
+      setResponseInstitution("null");
       setValueYesOrNo("no")
     }
     else if(responseInstitution !== null ||responseInstitution !== "null"){
@@ -1283,7 +1280,6 @@ export default function PayLater(props) {
   }, [responseInstitution]);
 
   useEffect(() => {
-    debugger;
     if (checkEmailBtn === true && responseEmail !== "") {
       console.log("Test", responseEmail);
       applicationDivWithCourse(applicationForm);
@@ -1308,7 +1304,6 @@ export default function PayLater(props) {
   // },[responseInstitution,responseEmail, checkEmailBtn, defaultValueAnswer, answer])
 
   const registerHandler = () => {
-    debugger
     setSubmitLoader(true);
     setGeneralErrorMsg("");
     setIsSubmitted(true);
@@ -1395,7 +1390,7 @@ export default function PayLater(props) {
   };
 
   useEffect(() => {
-    if (submitSuccess === true && responseMsg !== "") {
+    if (submitSuccess === true && responseMsg !== "" && submitLoader===true ) {
       toast.success(responseMsg);
       setOpenPay(true);
     }
@@ -2215,7 +2210,7 @@ export default function PayLater(props) {
                             value="no"
                             control={<Radio />}
                             label="No"
-                            // onClick={handlePickNo}
+                            onClick={handlePickNo}
                           />
                         </RadioGroup>
                       </FormControl>

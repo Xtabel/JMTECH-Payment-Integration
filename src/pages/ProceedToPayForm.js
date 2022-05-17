@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import axios from 'axios';
 import { withStyles,makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -9,9 +9,12 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import {useHistory} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PaystackPop from '@paystack/inline-js';
+
+
 
 const styles = (theme) => ({
   root: {
@@ -74,13 +77,18 @@ const DialogActions = withStyles((theme) => ({
 const ProceedToPayment = (props)=> {
   
   const { openPay, handleClosePay,handleClickPayLater,emailAddressHolder,responseFirstName, responseLastName} = props
+ 
   const [responseMsg, setResponseMsg] = useState("");
+  const [responseData, setResponseData] = useState("");
+  const [refNumber, setRefNumber] = useState(null);
+
   const classes = useStyles();
   const fullname = responseFirstName+ " "+responseLastName;
   const[toPage,setToPage]=useState("/payment/");
   const initialFormValue = {
       initialtoken:"1A2B5E",
-      token:""
+      token:"",
+      amount: 30000
   };
   const [formValue, setFormValue] = useState(initialFormValue);
 
@@ -122,21 +130,121 @@ const ProceedToPayment = (props)=> {
 
 
  
-      // setToPage("/")
   }
-  const proceedBtn = () =>{
-      // setToPage()
 
-      history.push("/payment",{emailAddressHolder})
-      // console.log(emailAddressHolder)
-
+  const proceedToPayBtn = () =>{
+    axios
+    .post(
+      `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/ProcessPayment`, {
+          accountName: responseFirstName,
+          amount: formValue.amount,
+          accountEmail:emailAddressHolder,
+          url: "http://localhost:3000/testpage/",
+      }
+    )
+    .then(function (response) {
+      debugger
+      console.log(response)
+      if(response.data){
+        setResponseData(response.data.Data);
+        window.location.href=`${response.data.Msg}`;
+        
+      } 
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    
   }
+
+  // const payWithPaystack = () =>{
+
+  //     // history.push("/payment",{emailAddressHolder})
+
+  //          axios
+  //            .post(
+  //              `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/ProcessPayment`, {
+  //                  accountName: 'fcfg',
+  //                  amount: (30000 * 100),
+  //                  accountEmail: emailAddressHolder,
+  //                  url: "",
+  //              }
+  //            )
+  //            .then(function (response) {
+               
+  //              console.log(response)
+  //              if(response.data){
+  //               setRefNumber(response.data.Data);
+                
+                
+                 
+   
+                 
+  //              } 
+  //            })
+  //            .catch(function (error) {
+  //              console.log(error);
+  //            })
+             
+             
+       
+      
+
+
+
+
+  // const handler = PaystackPop.setup({
+  //   key: 'pk_test_62650f7da63fcbb8b10b32aaf2a4da244ad309dc', // Replace with your public key
+  //   currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+  //   callback: function(refNumber) {
+  //     //this happens after the payment is completed successfully
+  //     const reference = refNumber;
+  //     alert('Payment complete! Reference: ' + reference);  
+
+  //     axios
+  //     .post(`https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment?reference=${reference}&emailAddress=${emailAddressHolder}`)
+  //     .then(function (response) {
+  //       console.log(response)
+  //       if(response.data){
+         
+
+  //         history.push("/payment",{emailAddressHolder})
+
+         
+          
+
+          
+  //       } 
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     })
+
+
+
+  //   },
+  //   onClose: function() {
+  //     alert('Transaction was not completed, window closed.');
+  //   },
+  // });
+  // handler.openIframe();
+
+
+
+    
+  // }
   const notify = () => toast.error("Unrecognised Authentication Token!");
 
   // const sendToPage = () =>{
   //   navigate.push("/payment",{emailAddressHolder})
   // }
 
+  const items = emailAddressHolder;
+
+  useEffect(()=>{
+      localStorage.setItem('items', JSON.stringify(items));
+  },[items])
+  
 
 return (
   <div>
@@ -161,7 +269,7 @@ return (
       <Button className={classes.submitBtn}onClick={payLaterHandler}style={{backgroundColor:"#94949485", color:'#fff', textTransform:'capitalize'}}>
           Pay Later
         </Button>
-        <Button className={classes.submitBtn}onClick={proceedBtn}style={{backgroundColor:"#00a1f1", color:'#fff', textTransform:'capitalize'}}>
+        <Button className={classes.submitBtn}onClick={proceedToPayBtn}style={{backgroundColor:"#00a1f1", color:'#fff', textTransform:'capitalize'}}>
           Pay Now
         </Button>
      

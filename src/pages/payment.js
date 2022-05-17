@@ -9,7 +9,7 @@ import FormControl from "@material-ui/core/FormControl";
 import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
 import validators from "../utils/Validators";
-import {useLocation } from 'react-router-dom';
+import {useLocation, useHistory } from 'react-router-dom';
 
 
 const getMuiTheme = createTheme({
@@ -58,11 +58,12 @@ const useStyles = makeStyles((theme) => ({
    
 
 const Payment = (props) => {
-  debugger
     // const {emailAddressHolder} = props;
     // let { email } = useParams();
     const location = useLocation();
-    let email = location.state.emailAddressHolder
+    const history = useHistory();
+    let email = location.state.emailAddressHolder;
+    
     console.log(email,"Email Address");
     const classes = useStyles();
     const initialFormValues = {
@@ -70,7 +71,7 @@ const Payment = (props) => {
       accountName: "",
       accountEmail:  "",
       amount :30000,
-      url:"https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment"
+      url:""
     };
     
      // Form Values
@@ -190,6 +191,40 @@ const Payment = (props) => {
     }
    },[formValues.accountName, email])
 
+
+   
+   const myfunc = (responseData)=>{
+    axios
+    .post(
+      `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/ProcessPayment`, {
+          accountName: formValues.accountName,
+          amount: formValues.amount,
+          accountEmail:email,
+          url: `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment?reference=${responseData}&emailAddress=${email}`,
+      }
+    )
+    .then(function (response) {
+      if(response.data.State === 1){
+      setResponseData(response.data.Data);
+      verifyPayment(responseData); 
+        window.location.href=`${response.data.Msg}`;
+        
+      } 
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .then(function () {
+      debugger
+      setIsButtonClicked(!isButtonClicked);
+    
+    });
+   }
+
+
+
+
+
     const proceedToPaymentHandler = () => {
      debugger
       if (
@@ -198,53 +233,75 @@ const Payment = (props) => {
       ) {
         axios
           .post(
-            `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/ProcessPayment`,{
+            `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/ProcessPayment`, {
                 accountName: formValues.accountName,
                 amount: formValues.amount,
                 accountEmail:email,
-                url: formValues.url,
-          }
+                url: "",
+            }
           )
           .then(function (response) {
             debugger
+            console.log(response)
             if(response.data){
-              setPaymentProcessed(true);
-              setResponseMsg(response.data.Msg);
               setResponseData(response.data.Data);
-            
+              // verifyPayment(response.data.Data); 
+              // myfunc(response.data.Data);
+              // setPaymentProcessed(true);
+              // setResponseMsg(response.data.Msg);
+          
+              // proceedToPaymentHandler();
+
+              window.location.href=`${response.data.Msg}`;
+              
+
+              
             } 
           })
           .catch(function (error) {
             console.log(error);
           })
-          .then(function () {
+          .then(function (response) {
             debugger
             setIsButtonClicked(!isButtonClicked);
+            if(response.data.Data){
+
+            verifyPayment(response.data.Data); 
+
+                  
+            }
+          
+            // history.push("/success",{responseData,email})
           });
+          
       } else {
         alert("something")
       }
     };
 
    
-    useEffect(()=>{
-      debugger
-      if(paymentProcessed === true && responseData !==""){
-        window.location.href=`${responseMsg}`;
-        // window.location.href='https://www.google.com';
-      }
-    },[paymentProcessed, isButtonClicked, responseMsg, responseData])
+    // useEffect(()=>{
+    //   debugger
+    //   if(paymentProcessed === true && responseData !==""){
+    //     window.location.href=`${responseMsg}`;
+    //   }
+    // },[paymentProcessed, isButtonClicked, responseMsg, responseData])
 
-
-    useEffect(()=> {
-      debugger
-      if(paymentProcessed && responseData !==""){
-        axios
+    const verifyPayment = async(reference) =>{
+      // const data = {
+      //   reference: reference,
+      //   emailAdress: email
+      // }
+      
+      try {
+       await axios
           .post(
-            `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment?reference=${responseData}&emailAddress=${email}`
+            `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment?reference=${reference}&emailAddress=${email}`
+            // `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment`,
+            // data
           )
           .then(function (response) {
-            debugger
+            console.log(response)
             if(response.data){
               
             } 
@@ -255,8 +312,32 @@ const Payment = (props) => {
           .then(function () {
             setPaymentProcessed(false);
           });
+      } catch (error) {
+        console.log(error)
       }
-    },[paymentProcessed, isButtonClicked,responseData, email])
+    }
+
+    // useEffect(()=> {
+    //   debugger
+    //   if(paymentProcessed && responseData !==""){
+    //     axios
+    //       .post(
+    //         `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/VerifyPayment?reference=${responseData}&emailAddress=${email}`
+    //       )
+    //       .then(function (response) {
+    //         console.log(response)
+    //         if(response.data){
+              
+    //         } 
+    //       })
+    //       .catch(function (error) {
+    //         console.log(error);
+    //       })
+    //       .then(function () {
+    //         setPaymentProcessed(false);
+    //       });
+    //   }
+    // },[setPaymentProcessed, setResponseData])
 
 
     

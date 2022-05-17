@@ -7,6 +7,7 @@ import {
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import {Paper } from "@material-ui/core";
+import {useLocation} from 'react-router-dom'; 
 // import success from "../assets/success.png";
 // import success1 from "../assets/success1.png";
 // import success3 from "../assets/success3.gif";
@@ -86,6 +87,10 @@ const getMuiTheme = createTheme({
 
 const SuccessfulPayment = () =>{
     // const classes = useStyles();
+    const location = useLocation();
+    const refcode = location.responseData;
+    const emailAddress = location.email;
+
     return(
         <MuiThemeProvider theme={getMuiTheme}>
             <CssBaseline/>
@@ -94,7 +99,8 @@ const SuccessfulPayment = () =>{
            
                 <Paper elevation={0} style={{textAlign:'center', paddingTop:'50px'}}>
                 <h1 style={{color:'#4BB543'}}>Congratulations!</h1>
-                <h3 style={{color:'#1a1a1a95', fontWeight:'500'}}>Your Payment is successful, check the <span style={{color:'#1a1a1a',fontWeight:'700'}}>email address</span> you used to register to get your registration code.</h3>
+                <h3 style={{color:'#1a1a1a95', fontWeight:'500'}}>Your Payment {refcode} {emailAddress} is successful, check the <span style={{color:'#1a1a1a',fontWeight:'700'}}>email address</span> you used to register to get your registration code.</h3>
+              
                 </Paper>
         </Box>
         </Container>

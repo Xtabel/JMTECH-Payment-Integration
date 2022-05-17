@@ -664,7 +664,7 @@ export default function BackToTop(props) {
     const NewCV = e.target.files[0];
     if (NewCV && NewCV != null) {
       if (!NewCV.name.match(/\.(pdf)$/)) {
-        setCvFormatMsg("CV format must be in pdf, doc or docx");
+        setCvFormatMsg("CV format must be in pdf");
         return false;
       } else {
         setCvFormatMsg("");
@@ -742,6 +742,7 @@ export default function BackToTop(props) {
     if (e) {
       e.preventDefault();
       let lastNameValue = e.target.value;
+      
       setFormValues({ ...formValues, lastName: lastNameValue });
       return SetIsRequiredError(
         lastNameValue,
@@ -1081,8 +1082,7 @@ export default function BackToTop(props) {
   };
 
   useEffect(()=>{
-    debugger
-    if(submitSuccess ===true && responseMsg !== "" ){
+    if(submitSuccess ===true && responseMsg !== "" && submitLoader===true ){
       toast.success(responseMsg);
       setOpenPay(true);
     }
@@ -1090,7 +1090,6 @@ export default function BackToTop(props) {
   },[submitSuccess,submitLoader,responseMsg])
 
   useEffect(()=>{
-    debugger
     if(submitFailure === true && responseMsg !=="" && submitSuccess===false){
     // toast.error(responseMsg);
     }
@@ -1644,6 +1643,7 @@ export default function BackToTop(props) {
                       </div>
 
                       <TextField
+                        type="text"
                         color="secondary"
                         id="outlined-disabled"
                         label="First Name"
@@ -1657,10 +1657,11 @@ export default function BackToTop(props) {
                       />
                       <br />
                       <TextField
+                      type="text"
                         color="secondary"
                         id="outlined-disabled"
                         label="Middle Name (if applicable)"
-                        value={toTitleCase(formValues.middleName)}
+                        value={(toTitleCase(formValues.middleName))}
                         onChange={(event) => {
                           middleNameHandler(event);
                         }}
@@ -1668,6 +1669,8 @@ export default function BackToTop(props) {
                       />
                       <br />
                       <TextField
+                       onkeyup="this.value = this.value.replace(/[^a-z]/, '')" 
+                      type="text"
                         color="secondary"
                         id="outlined-disabled"
                         label="Last Name"
