@@ -2313,6 +2313,8 @@ export default function PayLater(props) {
           </ScrollTop>
           <ProceedToPayForm
             emailAddressHolder={emailAddressHolder}
+            responseFirstName ={responseFirstName}
+            responseLastName={responseLastName}
             openPay={openPay}
             handleClosePay={handleClosePay}
             handleClickPayLater={handleClickPayLater}

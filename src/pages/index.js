@@ -85,6 +85,7 @@ const getMuiTheme = createTheme({
         // marging:'0px 100px'
       },
     },
+   
   },
 });
 
@@ -99,6 +100,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     color: theme.palette.text.secondary,
     transition: "all easein 1s",
+    [theme.breakpoints.only("xs")]: {
+      padding: "0px !important",
+    },
   },
   papers: {
     padding: theme.spacing(5),
@@ -141,6 +145,9 @@ const useStyles = makeStyles((theme) => ({
   applyNow: {
     marginBottom: "10px",
     marginTop: "20px",
+    [theme.breakpoints.only("xs")]: {
+      fontSize:'12px'
+    },
   },
   buttonUploadPhoto: {
     [theme.breakpoints.only("xs")]: {
@@ -1730,7 +1737,7 @@ export default function BackToTop(props) {
                       >
                         <Grid
                           item
-                          xs={3}
+                          xs={4}
                           sm={4}
                           md={3}
                           style={{ margin: "0px 10px 0px 0px" }}
@@ -1741,7 +1748,7 @@ export default function BackToTop(props) {
                             style={{ textAlign: "left", marginRight: "30px" }}
                             id="outlined-select-currency"
                             select
-                            label="Country Code1"
+                            label="Country Code"
                             value={formValues.countryId}
                             error={formStates.countryCodeError}
                             helperText={formStates.countryCodeErrorMsg}
@@ -1804,7 +1811,7 @@ export default function BackToTop(props) {
                       >
                         <Grid
                           item
-                          xs={3}
+                          xs={4}
                           sm={4}
                           md={3}
                           style={{ margin: "0px 10px 0px 0px" }}
@@ -1816,7 +1823,7 @@ export default function BackToTop(props) {
                             id="outlined-select-currency"
                             select
                             fullWidth
-                            label="Country Code2"
+                            label="Country Code"
                             value={formValues.countryId}
                             error={formStates.countryCodeError}
                             helperText={formStates.countryCodeErrorMsg}

@@ -10,10 +10,7 @@ const TestWebPage = () =>{
    const searchParams = new URLSearchParams(search)
    const refcode = searchParams.get('reference')
    const [items, setItems] = useState([]);
-    const theitems = JSON.parse(localStorage.getItem('items'));
-    if(items){setItems(theitems)}
-   console.log(refcode,"test")
-   console.log(localStorage)
+
     return(
         <div>
         {refcode}

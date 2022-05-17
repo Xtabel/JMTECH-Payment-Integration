@@ -32,7 +32,7 @@ export default function App() {
         {/* <Route path= "/payment/:email" component={Payment} /> */}
         <Route path= "/payment" component={Payment} />
         <Route path= "/resumeApplication" component={PayLater} />
-        <Route path="/success" component={SuccessfulPayment}/>
+        <Route path="/paymentresponse" component={SuccessfulPayment}/>
         <Route path="/payLater" component={PayLaterResponse}/>
         <Route path="/404"  component={NotFoundPage} />
         <Route path="/testpage"  component={TestWebPage} />

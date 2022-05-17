@@ -101,6 +101,10 @@ const ProceedToPayment = (props)=> {
   }
 
 
+  const handleClosePayLater=()=>{
+    history.push("/paylater",{fullname,emailAddressHolder})
+  } 
+
   const payLaterHandler = () =>{
     debugger
     let formData = new FormData();
@@ -124,22 +128,22 @@ const ProceedToPayment = (props)=> {
         debugger
       });
   } else {
-    alert("something")
-  
+ 
     }
 
 
  
   }
 
+ 
   const proceedToPayBtn = () =>{
     axios
     .post(
       `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/ProcessPayment`, {
-          accountName: responseFirstName,
+          accountName: fullname,
           amount: formValue.amount,
           accountEmail:emailAddressHolder,
-          url: "http://localhost:3000/testpage/",
+          url: "https://application.jmtechcenter.org/paymentresponse",
       }
     )
     .then(function (response) {
@@ -147,7 +151,7 @@ const ProceedToPayment = (props)=> {
       console.log(response)
       if(response.data){
         setResponseData(response.data.Data);
-        window.location.href=`${response.data.Msg}`;
+         window.location.href=`${response.data.Msg}`;
         
       } 
     })
@@ -256,7 +260,7 @@ return (
       aria-labelledby="customized-dialog-title"
       open={openPay}
     >
-      <DialogTitle id="customized-dialog-title" onClose={handleClosePay}>
+      <DialogTitle id="customized-dialog-title" onClose={handleClosePayLater}>
        Proceed To Payment
       </DialogTitle>
       <DialogContent dividers>
