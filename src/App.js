@@ -5,7 +5,7 @@ import Applicants from "./pages/Table";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import AuthenticationForm from "./AuthenticationForm";
 import ApplicationClosed from "./pages/ApplicationClosed";
-import Payment from "./pages/Payment";
+// import Payment from "./pages/Payment";
 import PayLater from "./pages/PayLater";
 import SuccessfulPayment from "./pages/SuccessfulPayment";
 import PayLaterResponse from "./pages/PayLaterResponse";
