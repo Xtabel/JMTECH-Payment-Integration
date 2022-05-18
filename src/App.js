@@ -30,7 +30,7 @@ export default function App() {
         <ProtectedRoute path="/applicants" component={Applicants} isAuth = {isAuth}/>
         <Route path="/applicationClosed" exact component={ApplicationClosed} />
         {/* <Route path= "/payment/:email" component={Payment} /> */}
-        <Route path= "/payment" component={Payment} />
+        {/* <Route path= "/payment" component={Payment} /> */}
         <Route path= "/resumeApplication" component={PayLater} />
         <Route path="/paymentresponse" component={SuccessfulPayment}/>
         <Route path="/payLater" component={PayLaterResponse}/>
