@@ -275,7 +275,7 @@ const Payment = (props) => {
           });
           
       } else {
-        alert("something")
+        // alert("something")
       }
     };
 

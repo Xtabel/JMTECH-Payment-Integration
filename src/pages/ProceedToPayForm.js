@@ -144,6 +144,7 @@ const ProceedToPayment = (props)=> {
           amount: formValue.amount,
           accountEmail:emailAddressHolder,
           url: "https://application.jmtechcenter.org/paymentresponse",
+          // url: "http://localhost:3000/paymentresponse"
       }
     )
     .then(function (response) {

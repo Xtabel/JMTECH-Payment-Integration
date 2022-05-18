@@ -164,7 +164,7 @@ const PayLaterResponse = () =>{
           debugger
         });
     } else {
-      alert("something")
+      // alert("something")
     
       }
   

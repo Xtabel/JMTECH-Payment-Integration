@@ -1129,10 +1129,10 @@ export default function PayLater(props) {
   useEffect(()=>{
     debugger
       if(checkEmailBtn === true  && responseEmail !==""){
-       alert(responseCourseChoice)
-       alert(pictureContainer)
-       alert(displayPicture)
-       alert(fileCV)
+      //  alert(responseCourseChoice)
+      //  alert(pictureContainer)
+      //  alert(displayPicture)
+      //  alert(fileCV)
         applicationDivWithCourse(applicationForm)
       }
   },[responseEmail, checkEmailBtn])
@@ -1140,14 +1140,14 @@ export default function PayLater(props) {
   useEffect(()=>{
     if(pictureContainer !=="" && checkEmailBtn === true &&responseEmail !==""){
       setPictureExists(true);
-      alert(pictureExists);
+      // alert(pictureExists);
     }
   },[pictureContainer,checkEmailBtn,responseEmail])
  
   useEffect(()=>{
     if(responseInstitution!==""  && responseEmail !=="" && checkEmailBtn === true && defaultValueAnswer !==""){
       setAnswer("yes");
-      alert(defaultValueAnswer)
+      // alert(defaultValueAnswer)
     }
    
 },[responseInstitution,responseEmail, checkEmailBtn, defaultValueAnswer, answer])
@@ -1166,7 +1166,7 @@ useEffect(()=>{
   if(responseEmail !=="" && checkEmailBtn === true && fileCV !==""){
   
   console.log(fileCV.name,"munchit")
-  alert("Resume:"+CVName);
+  // alert("Resume:"+CVName);
   }
  
 },[responseEmail, checkEmailBtn, fileCV]);

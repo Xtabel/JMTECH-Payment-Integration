@@ -1899,7 +1899,7 @@ export default function PayLater(props) {
                         color="secondary"
                         id="outlined-disabled"
                         label="Middle Name (if applicable)"
-                        value={toTitleCase(responseMiddleName)}
+                        value={responseMiddleName === null? responseMiddleName :toTitleCase(responseMiddleName)}
                         onChange={(event) => {
                           middleNameHandler(event);
                         }}
