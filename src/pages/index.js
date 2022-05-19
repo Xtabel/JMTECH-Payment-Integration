@@ -356,7 +356,7 @@ export default function BackToTop(props) {
   const [openPay,setOpenPay]= useState(false);
 
   const handleClickPayLater = ()=>{
-    submitBtnHandler();
+    // submitBtnHandler();
     setIsSubmitted(true);
     handleClosePay();
     setIsPayLater(true);
@@ -1054,6 +1054,8 @@ export default function BackToTop(props) {
           formData
         )
         .then(function (response) {
+          // alert("success")
+          toast.success(response.data.Msg);
           debugger
           setSubmitSuccess(true);
           setResponseFirstName(response.data.Data.FirstName);
@@ -1062,19 +1064,19 @@ export default function BackToTop(props) {
           setEmailAddressHolder(response.data.Data.EmailAddress)
           setResponseMsg(response.data.Msg);
           setSubmitLoader(false);
-          submitBtnHandler();
-          isSubmitted(true);
-          setOpenPay(true);
+          // submitBtnHandler();
        
+          setOpenPay(true);
+         
           // setSubmit(response.data.data);
           // setFile(null);
           // setFileCV(null);
         })
         .catch(function (error) {
           debugger
-          console.log(error);
-          setSubmitFailure(true);
-          setSubmitSuccess(false);
+          // console.log(error.response);
+         
+          toast.error("email address or phone number has been used")
          
         })
         .then(function () { setSubmitLoader(false) });
@@ -1090,7 +1092,7 @@ export default function BackToTop(props) {
 
   useEffect(()=>{
     if(submitSuccess ===true && responseMsg !== "" && submitLoader===true ){
-      toast.success(responseMsg);
+      // toast.success(responseMsg);
       setOpenPay(true);
     }
     

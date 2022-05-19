@@ -342,6 +342,8 @@ export default function PayLater(props) {
   const [lgaDisable, setLgaDisable] = useState(false);
   const [loader, setLoader] = useState(true);
   const [submitLoader, setSubmitLoader] = useState(false);
+  const [responseDataState, setResponseDataState] = useState("");
+  const [responseDataMsg, setResponseDataMsg] = useState("");
   // const [btnLoader, setBtnLoader] = useState(false);
   const [imageFormatMsg, setImageFormatMsg] = useState("");
   const [cvFormatMsg, setCvFormatMsg] = useState("");
@@ -1148,6 +1150,8 @@ export default function PayLater(props) {
           `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetApplicantsByEmailAddress?emailAddress=${formValues.emailAddressLogin}`
         )
         .then(function (response) {
+          setResponseDataState(response.data.State);
+          setResponseDataMsg(response.data.Msg);
           setSubmitLoader(false);
           setCheckEmailBtn(true);
           if(newImage === null){
@@ -1173,36 +1177,14 @@ export default function PayLater(props) {
             const contentType = 'image/pdf';
             const blobCV = base64StringToBlob(response.data.Data.Resume, contentType);
             setFileCV(blobCV)
-            // blobToBinaryString(blobCV).then(function (binaryString) {
-            
-            //   setFileCV(blobCV)
-              
-            //   }).catch(function (err) {
-            //     // error
-            //   });
-        
-          }
          
-          // setFile(response.data.Data.Passport);
-          // setFileCV(`data:application/pdf;base64,${response.data.Data.Resume}`);
+          }
+        
           setFileExtension(response.data.Data.ResumeExtension);
-          // setCVName(`Resume${fileExtension}`)
-       
-          // var docblock = fileCV.split(";");
-          // // Get the content type of the image
-          // var contentDocType = docblock[0].split(":")[1]; // In this case "image/gif"
-          // // get the real base64 content of the file
-          // var realDocData = docblock[1].split(",")[1]; // In this case "R0lGODlhPQBEAPeoAJosM...."
-
-          // // Convert it to a blob to upload
-          // setDocBlob(b64toBlob(realDocData, contentDocType));
+         
 
           setCVName(`Resume${response.data.Data.ResumeExtension}`);
-          // setCVName(`${fileCV}${response.data.Data[0].ResumeExtension}`)
-          // setCVName(fileCV.name="hello")
-          // setCVName(fileCV.name)
-          // setDisplayPicture(pictureContainer);
-          // setPictureContainer(`data:image/png;base64,${displayPicture}`)
+         
           setOpenPictureSection(true);
 
           setResponseCourseChoice(response.data.Data.CourseId);
@@ -1227,25 +1209,19 @@ export default function PayLater(props) {
           );
           setResponseEmailMsg(response.data.Msg);
 
-          //   setResponseRegistrationCode(response.data.Data.RegistrationCode);
-          //   setEmailAddressHolder(response.data.Data.EmailAddress)
-          //   setResponseMsg(response.data.Msg);
-          //   submitBtnHandler();
-          //   isSubmitted(true);
-          //   setOpenPay(true);
-
-          // setSubmit(response.data.data);
-          // setFile(null);
-          // setFileCV(null);
+      
         })
         .catch(function (error) {
-          console.log(error);
-          // toast.error(
-          //   responseEmailMsg
-          // );
+          console.log(error.response)
+         
+         toast.error(
+            // error.response.data.Msg
+            "Kindly start a new application"
+          );
         })
         .then(function () {
           setSubmitLoader(false);
+          
         });
     } else {
       //   setSubmitLoader(false);
@@ -1278,6 +1254,9 @@ export default function PayLater(props) {
     console.log()
    
   }, [responseInstitution]);
+
+
+
 
   useEffect(() => {
     if (checkEmailBtn === true && responseEmail !== "") {
@@ -1709,6 +1688,7 @@ export default function PayLater(props) {
                                   " Resume Application"
                                 )}
                               </Button>
+                              <ToastContainer />
                             </FormControl>
                           </>
                         ) : (

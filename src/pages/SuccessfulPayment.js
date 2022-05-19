@@ -93,6 +93,7 @@ const SuccessfulPayment = () =>{
     const refcode = searchParams.get('reference');
     const [state, setState] = useState(null);
     const [loader, setLoader] = useState(true);
+    const [triggerVerify, setTriggerVerify] = useState(false);
     const verifyPayment = async(reference) =>{
       setLoader(true)
       try {
@@ -102,6 +103,7 @@ const SuccessfulPayment = () =>{
 
           )
           .then(function (response) {
+            setTriggerVerify(true)
             setLoader(false)
             console.log(response)
             if(response.data){
@@ -121,10 +123,11 @@ const SuccessfulPayment = () =>{
     useEffect(()=>{
       if(refcode !== null || refcode !=="" && state !== null){
         verifyPayment();
+        
       }
    
   
-    },[refcode, state])
+    },[setState])
     return(
         <MuiThemeProvider theme={getMuiTheme}>
           {setLoader === true?(<CircularProgress color="secondary" />):<><CssBaseline/>
