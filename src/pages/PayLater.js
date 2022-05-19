@@ -682,7 +682,7 @@ export default function PayLater(props) {
   
 
   const validateImage = (e) => {
-    debugger
+    
     setDisplayPicture(null);
     setFile(null);
     setPictureFile(null);
@@ -728,7 +728,7 @@ export default function PayLater(props) {
   };
 
   const validateCV = (e) => {
-    debugger
+    
     setCVName(null);
     setFileCV(null);
     setOpenCVSection(true);
@@ -779,7 +779,7 @@ export default function PayLater(props) {
   }, [file]);
 
   // useEffect(() => {
-  //   debugger
+  //   
   //   if (fileCV !== null && fileCV !== undefined) {
   //     setCVName(fileCV.name);
   //     // console.log(fileCV);
@@ -1212,7 +1212,7 @@ export default function PayLater(props) {
       
         })
         .catch(function (error) {
-          console.log(error.response)
+          // console.log(error.response)
          
          toast.error(
             // error.response.data.Msg

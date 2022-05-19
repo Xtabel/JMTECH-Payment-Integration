@@ -532,7 +532,7 @@ export default function BackToTop(props) {
     }
   };
   const countryCodeHandler = (e) => {
-    debugger;
+    ;
     if (e) {
       let countryCodeValue = e.target.value;
       e.preventDefault();
@@ -1002,7 +1002,7 @@ export default function BackToTop(props) {
   
 
   const registerHandler = () => {
-    debugger
+    
     setSubmitLoader(true);
     setGeneralErrorMsg("");
     setIsSubmitted(true);
@@ -1056,7 +1056,7 @@ export default function BackToTop(props) {
         .then(function (response) {
           // alert("success")
           toast.success(response.data.Msg);
-          debugger
+          
           setSubmitSuccess(true);
           setResponseFirstName(response.data.Data.FirstName);
           setResponseLastName(response.data.Data.LastName);
@@ -1073,7 +1073,7 @@ export default function BackToTop(props) {
           // setFileCV(null);
         })
         .catch(function (error) {
-          debugger
+          
           // console.log(error.response);
          
           toast.error("email address or phone number has been used")
