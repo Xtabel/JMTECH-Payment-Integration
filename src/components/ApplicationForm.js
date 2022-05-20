@@ -520,7 +520,7 @@ export default function PayLater(props) {
     }
   };
   const countryCodeHandler = (e) => {
-    debugger;
+    ;
     if (e) {
       let countryCodeValue = e.target.value;
       e.preventDefault();
@@ -695,7 +695,7 @@ export default function PayLater(props) {
   }, [file]);
 
   useEffect(() => {
-    debugger
+    
     if (fileCV !== null && fileCV !== undefined) {
       setCVName(fileCV.name);
       console.log(fileCV)
@@ -1055,7 +1055,7 @@ export default function PayLater(props) {
   
 
   const checkValidEmail = () => {
-    debugger
+    
     setSubmitLoader(true);
     if(formValues.emailAddressLogin!=="")
    {
@@ -1065,7 +1065,7 @@ export default function PayLater(props) {
          
         )
         .then(function (response) {
-          debugger
+          
      
         
         //   setSubmitSuccess(true);
@@ -1109,7 +1109,7 @@ export default function PayLater(props) {
           // setFileCV(null);
         })
         .catch(function (error) {
-          debugger
+          
         //   console.log(error);
         //   setSubmitFailure(true);
         //   setSubmitSuccess(false);
@@ -1127,7 +1127,7 @@ export default function PayLater(props) {
   };
 
   useEffect(()=>{
-    debugger
+    
       if(checkEmailBtn === true  && responseEmail !==""){
       //  alert(responseCourseChoice)
       //  alert(pictureContainer)
@@ -1173,7 +1173,7 @@ useEffect(()=>{
 
 
   const registerHandler = () => {
-    debugger
+    
     setSubmitLoader(true);
     setGeneralErrorMsg("");
     setIsSubmitted(true);
@@ -1224,7 +1224,7 @@ useEffect(()=>{
           formData
         )
         .then(function (response) {
-          debugger
+          
           setSubmitSuccess(true);
           setResponseFirstName(response.data.Data.FirstName);
           setResponseRegistrationCode(response.data.Data.RegistrationCode);
@@ -1240,7 +1240,7 @@ useEffect(()=>{
           // setFileCV(null);
         })
         .catch(function (error) {
-          debugger
+          
           console.log(error);
           setSubmitFailure(true);
           setSubmitSuccess(false);
@@ -1258,7 +1258,7 @@ useEffect(()=>{
   };
 
   useEffect(()=>{
-    debugger
+    
     if(submitSuccess ===true && responseMsg !== "" ){
       toast.success(responseMsg);
       setOpenPay(true);
@@ -1267,7 +1267,7 @@ useEffect(()=>{
   },[submitSuccess,submitLoader,responseMsg])
 
   useEffect(()=>{
-    debugger
+    
     if(submitFailure === true && responseMsg !=="" && submitSuccess===false){
     toast.error(responseMsg);
     }

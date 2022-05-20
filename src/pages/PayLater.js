@@ -1212,12 +1212,20 @@ export default function PayLater(props) {
       
         })
         .catch(function (error) {
-          // console.log(error.response)
-         
-         toast.error(
-            // error.response.data.Msg
-            "Kindly start a new application"
+          console.log(error.response.data)
+        if(error.response.data.State === 0){
+          toast.error(
+           "Your application does not exist. Kindly start a new application"
+           
           );
+        }
+        else if(error.response.data.State === 2){
+          toast.error(
+          "Your registration and payment has already been confirmed and received. Kindly check your email address."
+          );
+        }
+         
+       
         })
         .then(function () {
           setSubmitLoader(false);

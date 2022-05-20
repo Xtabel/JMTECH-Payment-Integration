@@ -331,7 +331,7 @@ const GetAllApplicantTable = () => {
     
   }
   const openView =(val)=>{
-      debugger
+      
       setFirstName(val.FirstName)
       setLastName(val.LastName)
       setMiddleName(val.MiddleName)
@@ -410,7 +410,7 @@ const GetAllApplicantTable = () => {
   const [applicant,setApplicant] = useState([]);
 
   const fetchAllApplicantTable = (body) => {
-    debugger;
+    ;
     axios
       .post(
         `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetAllApplicants`,
@@ -438,10 +438,10 @@ const GetAllApplicantTable = () => {
   }, [searchText]);
 
   const fetchApplicantById = (id)=>{
-      debugger
+      
     axios.post(`https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetApplicantsById?applicantId=${id}`)
     .then(function (response) {
-      debugger
+      
         setApplicant(response.data.Data);
         setPassport(response.data.Data[0].Passport)
         setResume(response.data.Data[0].Resume)

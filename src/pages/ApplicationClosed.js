@@ -27,7 +27,7 @@ const ApplicationClosed = () =>{
     return(
         <div className={classes.bodyWrap}>
               <div className={classes.container}>
-          <img src={closed}/>
+          <img src={closed} alt="Closed Application"/>
         </div>
         <h1 className={classes.headerOneText}>Sorry, this application is now closed</h1>
         <h3 className={classes.headerTwoText}>For more enquires, visit <a className={classes.Link}href="https://jmtechcenter.org/">JMTech Website</a></h3>

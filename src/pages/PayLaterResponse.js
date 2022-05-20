@@ -148,12 +148,12 @@ const PayLaterResponse = () =>{
     }
     const resendLink = () =>{
       if(fullname !=="" && email!==""){
-        debugger
+        
         axios
         .post(
           `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/PayLater?emailAddress=${email}&fullName=${fullname}`)
         .then(function (response) {
-          debugger
+          
           setResponseMsg(response.data.Msg)
          
         })
@@ -161,7 +161,7 @@ const PayLaterResponse = () =>{
         toast.error(responseMsg)
         })
         .then(function () {
-          debugger
+          
         });
     } else {
       // alert("something")

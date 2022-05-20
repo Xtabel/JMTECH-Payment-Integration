@@ -1,4 +1,4 @@
-import { Route, BrowserRouter, Redirect } from "react-router-dom";
+import { Route, BrowserRouter, Redirect, Switch } from "react-router-dom";
 import {React, useState} from 'react';
 import Home from "./pages/index";
 import Applicants from "./pages/Table";
@@ -26,18 +26,21 @@ export default function App() {
     >
       <AuthenticationForm  isAuth = {isAuth} setIsAuth = {setIsAuth}/>
       <BrowserRouter>
+      <Switch>
         <Route exact path="/"  component={Home} />
-        <ProtectedRoute path="/applicants" component={Applicants} isAuth = {isAuth}/>
-        <Route path="/applicationClosed" exact component={ApplicationClosed} />
-        {/* <Route path= "/payment/:email" component={Payment} /> */}
-        {/* <Route path= "/payment" component={Payment} /> */}
-        <Route path= "/resumeApplication" component={PayLater} />
-        <Route path="/paymentresponse" component={SuccessfulPayment}/>
-        <Route path="/payLater" component={PayLaterResponse}/>
-        <Route path="/404"  component={NotFoundPage} />
-        <Route path="/testpage"  component={TestWebPage} />
-        {/* <Redirect from='/' to = '/404' exact/>
-          <Route path="/404"  component={NotFoundPage} /> */}
+          <ProtectedRoute path="/applicants" component={Applicants} isAuth = {isAuth}/>
+          <Route path="/applicationClosed" exact component={ApplicationClosed} />
+          {/* <Route path= "/payment/:email" component={Payment} /> */}
+          {/* <Route path= "/payment" component={Payment} /> */}
+          <Route path= "/resumeApplication" component={PayLater} />
+          <Route path="/paymentresponse" component={SuccessfulPayment}/>
+          <Route path="/payLater" component={PayLaterResponse}/>
+          <Route path="/404"  component={NotFoundPage} />
+          <Route path="/testpage"  component={TestWebPage} />
+          {/* <Redirect from='/' to = '/404' exact/> */}
+          <Route path="*"  component={NotFoundPage} /> 
+      </Switch>
+       
       </BrowserRouter>
     </div>
   

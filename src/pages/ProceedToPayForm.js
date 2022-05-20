@@ -106,17 +106,17 @@ const ProceedToPayment = (props)=> {
   } 
 
   const payLaterHandler = () =>{
-    debugger
+    
     let formData = new FormData();
     formData.append("emailAddress", emailAddressHolder);
     formData.append("fullName", responseFirstName);
     if(responseFirstName !=="" && responseLastName!=="" && emailAddressHolder !==""){
-      debugger
+      
       axios
       .post(
         `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/PayLater?emailAddress=${emailAddressHolder}&fullName=${fullname}`)
       .then(function (response) {
-        debugger
+        
         setResponseMsg(response.data.Msg)
         goToPayLater()
        
@@ -125,7 +125,7 @@ const ProceedToPayment = (props)=> {
         toast.error(responseMsg);
       })
       .then(function () {
-        debugger
+        
       });
   } else {
  
@@ -148,7 +148,7 @@ const ProceedToPayment = (props)=> {
       }
     )
     .then(function (response) {
-      debugger
+      
       console.log(response)
       if(response.data){
         setResponseData(response.data.Data);

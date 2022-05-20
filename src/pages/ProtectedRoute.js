@@ -7,7 +7,7 @@ function ProtectedRoute({isAuth: isAuth, component:Component, ...rest}){
         <Route 
         {...rest} 
          render={props=>{
-             debugger
+             
             if (isAuth){
                 return <Component {...props}/>
             }else{
