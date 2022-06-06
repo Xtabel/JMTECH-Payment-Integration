@@ -1,4 +1,4 @@
-import { Route, BrowserRouter, Redirect, Switch } from "react-router-dom";
+import { Route, BrowserRouter, Switch } from "react-router-dom";
 import {React, useState} from 'react';
 import Home from "./pages/index";
 import Applicants from "./pages/Table";

@@ -9,10 +9,9 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import {useHistory, useParams} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import PaystackPop from '@paystack/inline-js';
 
 
 
@@ -76,15 +75,15 @@ const DialogActions = withStyles((theme) => ({
 
 const ProceedToPayment = (props)=> {
   
-  const { openPay, handleClosePay,handleClickPayLater,emailAddressHolder,responseFirstName, responseLastName} = props
+  const { openPay, handleClosePay,emailAddressHolder,responseFirstName, responseLastName} = props
  
   const [responseMsg, setResponseMsg] = useState("");
-  const [responseData, setResponseData] = useState("");
-  const [refNumber, setRefNumber] = useState(null);
+  // const [responseData, setResponseData] = useState("");
+  // const [refNumber, setRefNumber] = useState(null);
 
   const classes = useStyles();
   const fullname = responseFirstName+ " "+responseLastName;
-  const[toPage,setToPage]=useState("/payment/");
+  // const[toPage,setToPage]=useState("/payment/");
   const initialFormValue = {
       initialtoken:"1A2B5E",
       token:"",
@@ -151,7 +150,7 @@ const ProceedToPayment = (props)=> {
       
       console.log(response)
       if(response.data){
-        setResponseData(response.data.Data);
+        // setResponseData(response.data.Data);
          window.location.href=`${response.data.Msg}`;
         
       } 
@@ -238,7 +237,7 @@ const ProceedToPayment = (props)=> {
 
     
   // }
-  const notify = () => toast.error("Unrecognised Authentication Token!");
+  // const notify = () => toast.error("Unrecognised Authentication Token!");
 
   // const sendToPage = () =>{
   //   navigate.push("/payment",{emailAddressHolder})

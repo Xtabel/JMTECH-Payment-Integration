@@ -11,6 +11,7 @@ import paylater from "../assets/paylater.png";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {useLocation } from 'react-router-dom';
 import axios from 'axios';
+import NotFoundPage from "./NotFound";
 import { ToastContainer, toast } from 'react-toastify';
 
 
@@ -135,7 +136,7 @@ const PayLaterResponse = () =>{
   let email ="";
     const classes = useStyles();
     const location = useLocation();
-    const [show404, setShow404]= useState(false);
+    // const [show404, setShow404]= useState(false);
     const [responseMsg, setResponseMsg]=useState("")
     if(location.state.fullname !=="" && location.state.fullname !=="" && location.state.fullname !==undefined && location.state.fullname !== undefined){
 
@@ -144,7 +145,7 @@ const PayLaterResponse = () =>{
     email=location.state.emailAddressHolder;
     }
     else{
-      setShow404(true);
+     <NotFoundPage/>
     }
     const resendLink = () =>{
       if(fullname !=="" && email!==""){

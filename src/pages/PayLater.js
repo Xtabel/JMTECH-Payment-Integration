@@ -36,7 +36,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { base64StringToBlob, blobToBinaryString} from 'blob-util';
+import { base64StringToBlob} from 'blob-util';
 
 
 // axios.defaults.baseURL = "http://jmtechcentre.azurewebsites.net/api/Applicant/";
@@ -333,26 +333,21 @@ export default function PayLater(props) {
     useState("");
   const [responseRegistrationCode, setResponseRegistrationCode] = useState("");
   const [responseMsg, setResponseMsg] = useState("");
-  const [responseEmailMsg, setResponseEmailMsg] = useState("");
+  // const [responseEmailMsg, setResponseEmailMsg] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [checkEmailBtn, setCheckEmailBtn] = useState(false);
-  // const [submitFailure, setSubmitFailure] = useState(false);
   const [emailAddressHolder, setEmailAddressHolder] = useState("Akan");
   const [formStates, setFormStates] = React.useState(initialFormState);
   const [lgaDisable, setLgaDisable] = useState(false);
   const [loader, setLoader] = useState(true);
   const [submitLoader, setSubmitLoader] = useState(false);
-  const [responseDataState, setResponseDataState] = useState("");
-  const [responseDataMsg, setResponseDataMsg] = useState("");
-  // const [btnLoader, setBtnLoader] = useState(false);
   const [imageFormatMsg, setImageFormatMsg] = useState("");
   const [cvFormatMsg, setCvFormatMsg] = useState("");
   const [generalErrorMsg, setGeneralErrorMsg] = useState("");
   const [file, setFile] = useState(null);
   const [fileCV, setFileCV] = useState(null);
   const [displayPicture, setDisplayPicture] = useState("");
-  const [fileExtension, setFileExtension] = useState("");
-  // const [pictureContainer, setPictureContainer] = useState("");
+  // const [fileExtension, setFileExtension] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPayLater, setIsPayLater] = useState(false);
   const [theState, setTheState] = useState([]);
@@ -368,8 +363,7 @@ export default function PayLater(props) {
   const [newImage, setNewImage] = useState(null)
   const [newCvState,setNewCvState] = useState(null);
   // const [newCV,setnewCV]=  useState(null);
-  const [theCVFile, setTheCVFile]= useState(null);
-  const [pictureFile, setPictureFile] = useState(null);
+  // const [pictureFile, setPictureFile] = useState(null);
 
   const handleChangeValue=(e)=>{
     let ans = e.target.value;
@@ -685,7 +679,7 @@ export default function PayLater(props) {
     
     setDisplayPicture(null);
     setFile(null);
-    setPictureFile(null);
+    // setPictureFile(null);
     const newImag = e.target.files[0] 
     setNewImage(newImag)
 
@@ -1143,6 +1137,7 @@ export default function PayLater(props) {
 
   
   const checkValidEmail = () => {
+    debugger
     setSubmitLoader(true);
     if (formValues.emailAddressLogin !== "") {
       axios
@@ -1150,8 +1145,6 @@ export default function PayLater(props) {
           `https://www.waeconline.org.ng/JMTechAPI/api/Applicant/GetApplicantsByEmailAddress?emailAddress=${formValues.emailAddressLogin}`
         )
         .then(function (response) {
-          setResponseDataState(response.data.State);
-          setResponseDataMsg(response.data.Msg);
           setSubmitLoader(false);
           setCheckEmailBtn(true);
           if(newImage === null){
@@ -1180,7 +1173,7 @@ export default function PayLater(props) {
          
           }
         
-          setFileExtension(response.data.Data.ResumeExtension);
+          // setFileExtension(response.data.Data.ResumeExtension);
          
 
           setCVName(`Resume${response.data.Data.ResumeExtension}`);
@@ -1207,11 +1200,12 @@ export default function PayLater(props) {
           setResponseCourseQualification(
             response.data.Data.CourseOfHighestQualification
           );
-          setResponseEmailMsg(response.data.Msg);
+          // setResponseEmailMsg(response.data.Msg);
 
       
         })
         .catch(function (error) {
+          debugger
           console.log(error.response.data)
         if(error.response.data.State === 0){
           toast.error(

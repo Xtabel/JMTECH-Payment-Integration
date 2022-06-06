@@ -2,31 +2,23 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import "./style.css";
-import AppBar from "@material-ui/core/AppBar";
 import validators from "../utils/Validators";
-import Toolbar from "@material-ui/core/Toolbar";
 import {
   makeStyles,
   createTheme,
   MuiThemeProvider,
 } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import Fab from "@material-ui/core/Fab";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Zoom from "@material-ui/core/Zoom";
 import { Button, Grid, Paper, TextField } from "@material-ui/core";
-import newlogo from "../assets/newlogo.png";
-import image2 from "../assets/image2.gif";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { CircularProgress } from "@material-ui/core";
-import AuthenticationForm from "../AuthenticationForm";
 import ProceedToPayForm from "./ProceedToPayForm";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";

@@ -350,20 +350,15 @@ export default function BackToTop(props) {
   const [isPayLater, setIsPayLater] = useState(false);
   const [theState, setTheState] = useState([]);
   const [theLga, setTheLga] = useState([]);
-  // const [disable, setDisable] = useState(true);
   const [answer, setAnswer] = React.useState("");
-  // const [hideSchool, setHideSchool] = useState(true);
   const [openPay,setOpenPay]= useState(false);
 
   const handleClickPayLater = ()=>{
-    // submitBtnHandler();
     setIsSubmitted(true);
     handleClosePay();
     setIsPayLater(true);
   }
-  // const handleClickPay = ()=>{
-  //   setOpenPay(true)
-  // };
+
   const handleClosePay = () =>{
     setOpenPay(false);
   }
@@ -593,14 +588,7 @@ export default function BackToTop(props) {
       // setFormValues({})
     }
   };
-  const submitBtnHandler = () => {
-    var HomePageArea = document.getElementById("HomePage");
-    var applicationForms = document.getElementById("forms");
-    var applyhere = document.getElementById("ApplyHereBtn");
-    applyhere.style = "display:block";
-    HomePageArea.style = "display:flex";
-    applicationForms.style = "display:none";
-  };
+
 
   const CancelBtnHandler = () => {
     var HomePageArea = document.getElementById("HomePage");
@@ -1054,7 +1042,6 @@ export default function BackToTop(props) {
           formData
         )
         .then(function (response) {
-          // alert("success")
           toast.success(response.data.Msg);
           
           setSubmitSuccess(true);
@@ -1064,17 +1051,10 @@ export default function BackToTop(props) {
           setEmailAddressHolder(response.data.Data.EmailAddress)
           setResponseMsg(response.data.Msg);
           setSubmitLoader(false);
-          // submitBtnHandler();
-       
           setOpenPay(true);
-         
-          // setSubmit(response.data.data);
-          // setFile(null);
-          // setFileCV(null);
         })
         .catch(function (error) {
           
-          // console.log(error.response);
          
           toast.error("email address or phone number has been used")
          
